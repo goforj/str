@@ -49,8 +49,6 @@
 
 ChopEnd removes the first matching suffix if present.
 
-_Example: chop end_
-
 ```go
 v := str.Of("file.txt").ChopEnd(".txt", ".md").String()
 godump.Dump(v)
@@ -60,8 +58,6 @@ godump.Dump(v)
 ### <a id="chopstart"></a>ChopStart
 
 ChopStart removes the first matching prefix if present.
-
-_Example: chop start_
 
 ```go
 v := str.Of("https://goforj.dev").ChopStart("https://", "http://").String()
@@ -73,8 +69,6 @@ godump.Dump(v)
 
 EnsurePrefix ensures the string starts with prefix, adding it if missing.
 
-_Example: ensure prefix_
-
 ```go
 v := str.Of("path/to").EnsurePrefix("/").String()
 godump.Dump(v)
@@ -84,8 +78,6 @@ godump.Dump(v)
 ### <a id="ensuresuffix"></a>EnsureSuffix
 
 EnsureSuffix ensures the string ends with suffix, adding it if missing.
-
-_Example: ensure suffix_
 
 ```go
 v := str.Of("path/to").EnsureSuffix("/").String()
@@ -97,8 +89,6 @@ godump.Dump(v)
 
 Unwrap removes matching before and after strings if present.
 
-_Example: unwrap string_
-
 ```go
 v := str.Of("\"GoForj\"")
 godump.Dump(v.Unwrap("\"", "\"").String())
@@ -108,8 +98,6 @@ godump.Dump(v.Unwrap("\"", "\"").String())
 ### <a id="wrap"></a>Wrap
 
 Wrap surrounds the string with before and after (after defaults to before).
-
-_Example: wrap string_
 
 ```go
 v := str.Of("GoForj")
@@ -123,8 +111,6 @@ godump.Dump(v.Wrap("\"", "").String())
 
 Camel converts the string to camelCase.
 
-_Example: camel case_
-
 ```go
 v := str.Of("foo_bar baz").Camel().String()
 godump.Dump(v)
@@ -134,8 +120,6 @@ godump.Dump(v)
 ### <a id="kebab"></a>Kebab
 
 Kebab converts the string to kebab-case.
-
-_Example: kebab case_
 
 ```go
 v := str.Of("fooBar baz")
@@ -147,8 +131,6 @@ godump.Dump(v.Kebab().String())
 
 LcFirst returns the string with the first rune lower-cased.
 
-_Example: lowercase first rune_
-
 ```go
 v := str.Of("Gopher")
 godump.Dump(v.LcFirst().String())
@@ -158,8 +140,6 @@ godump.Dump(v.LcFirst().String())
 ### <a id="pascal"></a>Pascal
 
 Pascal converts the string to PascalCase.
-
-_Example: pascal case_
 
 ```go
 v := str.Of("foo_bar baz")
@@ -171,8 +151,6 @@ godump.Dump(v.Pascal().String())
 
 Snake converts the string to snake_case using the provided separator (default "_").
 
-_Example: snake case_
-
 ```go
 v := str.Of("fooBar baz")
 godump.Dump(v.Snake("_").String())
@@ -182,8 +160,6 @@ godump.Dump(v.Snake("_").String())
 ### <a id="title"></a>Title
 
 Title converts the string to title case (first letter of each word upper, rest lower) using Unicode rules.
-
-_Example: title case words_
 
 ```go
 v := str.Of("a nice title uses the correct case")
@@ -195,8 +171,6 @@ godump.Dump(v.Title().String())
 
 ToLower returns a lowercase copy of the string using Unicode rules.
 
-_Example: lowercase text_
-
 ```go
 v := str.Of("GoLang")
 godump.Dump(v.ToLower().String())
@@ -206,8 +180,6 @@ godump.Dump(v.ToLower().String())
 ### <a id="totitle"></a>ToTitle
 
 ToTitle returns a title-cased copy where all letters are mapped using Unicode title case.
-
-_Example: title map runes_
 
 ```go
 v := str.Of("ß")
@@ -219,8 +191,6 @@ godump.Dump(v.ToTitle().String())
 
 ToUpper returns an uppercase copy of the string using Unicode rules.
 
-_Example: uppercase text_
-
 ```go
 v := str.Of("GoLang")
 godump.Dump(v.ToUpper().String())
@@ -230,8 +200,6 @@ godump.Dump(v.ToUpper().String())
 ### <a id="ucfirst"></a>UcFirst
 
 UcFirst returns the string with the first rune upper-cased.
-
-_Example: uppercase first rune_
 
 ```go
 v := str.Of("gopher")
@@ -245,8 +213,6 @@ godump.Dump(v.UcFirst().String())
 
 IsBlank reports whether the string contains only Unicode whitespace.
 
-_Example: blank check_
-
 ```go
 v := str.Of("  \\t\\n")
 godump.Dump(v.IsBlank())
@@ -256,8 +222,6 @@ godump.Dump(v.IsBlank())
 ### <a id="isempty"></a>IsEmpty
 
 IsEmpty reports whether the string has zero length.
-
-_Example: empty check_
 
 ```go
 v := str.Of("")
@@ -272,8 +236,6 @@ godump.Dump(v.IsEmpty())
 Deduplicate collapses consecutive instances of char into a single instance.
 If char is zero, space is used.
 
-_Example: collapse spaces_
-
 ```go
 v := str.Of("The   Go   Playground").Deduplicate(' ').String()
 godump.Dump(v)
@@ -283,8 +245,6 @@ godump.Dump(v)
 ### <a id="squish"></a>Squish
 
 Squish trims leading/trailing whitespace and collapses internal whitespace to single spaces.
-
-_Example: squish whitespace_
 
 ```go
 v := str.Of("   go   forj  ")
@@ -296,8 +256,6 @@ godump.Dump(v.Squish().String())
 
 Trim trims leading and trailing characters. If cutset is empty, trims Unicode whitespace.
 
-_Example: trim whitespace_
-
 ```go
 v := str.Of("  GoForj  ")
 godump.Dump(v.Trim("").String())
@@ -308,8 +266,6 @@ godump.Dump(v.Trim("").String())
 
 TrimLeft trims leading characters. If cutset is empty, trims Unicode whitespace.
 
-_Example: trim left_
-
 ```go
 v := str.Of("  GoForj  ")
 godump.Dump(v.TrimLeft("").String())
@@ -319,8 +275,6 @@ godump.Dump(v.TrimLeft("").String())
 ### <a id="trimright"></a>TrimRight
 
 TrimRight trims trailing characters. If cutset is empty, trims Unicode whitespace.
-
-_Example: trim right_
 
 ```go
 v := str.Of("  GoForj  ")
@@ -334,8 +288,6 @@ godump.Dump(v.TrimRight("").String())
 
 Equals reports whether the string exactly matches other (case-sensitive).
 
-_Example: exact match_
-
 ```go
 v := str.Of("gopher").Equals("gopher")
 godump.Dump(v)
@@ -345,8 +297,6 @@ godump.Dump(v)
 ### <a id="equalsfold"></a>EqualsFold
 
 EqualsFold reports whether the string matches other using Unicode case folding.
-
-_Example: case-insensitive match_
 
 ```go
 v := str.Of("gopher").EqualsFold("GOPHER")
@@ -360,8 +310,6 @@ godump.Dump(v)
 
 Len returns the number of runes in the string.
 
-_Example: count runes instead of bytes_
-
 ```go
 v := str.Of("gophers 🦫").Len()
 godump.Dump(v)
@@ -371,8 +319,6 @@ godump.Dump(v)
 ### <a id="runecount"></a>RuneCount
 
 RuneCount is an alias for Len to make intent explicit in mixed codebases.
-
-_Example: alias for Len_
 
 ```go
 v := str.Of("naïve").RuneCount()
@@ -400,8 +346,6 @@ String returns the underlying raw string value.
 
 PadBoth pads the string on both sides to reach length runes using pad (defaults to space).
 
-_Example: pad both_
-
 ```go
 v := str.Of("go")
 godump.Dump(v.PadBoth(6, "-").String())
@@ -412,8 +356,6 @@ godump.Dump(v.PadBoth(6, "-").String())
 
 PadLeft pads the string on the left to reach length runes using pad (defaults to space).
 
-_Example: pad left_
-
 ```go
 v := str.Of("go")
 godump.Dump(v.PadLeft(5, " ").String())
@@ -423,8 +365,6 @@ godump.Dump(v.PadLeft(5, " ").String())
 ### <a id="padright"></a>PadRight
 
 PadRight pads the string on the right to reach length runes using pad (defaults to space).
-
-_Example: pad right_
 
 ```go
 v := str.Of("go")
@@ -438,8 +378,6 @@ godump.Dump(v.PadRight(5, ".").String())
 
 Remove deletes all occurrences of provided substrings.
 
-_Example: remove substrings_
-
 ```go
 v := str.Of("The Go Toolkit")
 godump.Dump(v.Remove("Go ").String())
@@ -449,8 +387,6 @@ godump.Dump(v.Remove("Go ").String())
 ### <a id="replacearray"></a>ReplaceArray
 
 ReplaceArray replaces all occurrences of each old in olds with repl.
-
-_Example: replace many_
 
 ```go
 v := str.Of("The---Go---Toolkit")
@@ -462,8 +398,6 @@ godump.Dump(v.ReplaceArray([]string{"---"}, "-").String())
 
 ReplaceFirst replaces the first occurrence of old with repl.
 
-_Example: replace first_
-
 ```go
 v := str.Of("gopher gopher")
 godump.Dump(v.ReplaceFirst("gopher", "go").String())
@@ -473,8 +407,6 @@ godump.Dump(v.ReplaceFirst("gopher", "go").String())
 ### <a id="replacelast"></a>ReplaceLast
 
 ReplaceLast replaces the last occurrence of old with repl.
-
-_Example: replace last_
 
 ```go
 v := str.Of("gopher gopher")
@@ -486,8 +418,6 @@ godump.Dump(v.ReplaceLast("gopher", "go").String())
 
 ReplaceMatches applies repl to each regex match and returns the result.
 
-_Example: regex replace with callback_
-
 ```go
 v := str.Of("Hello 123 World")
 re := regexp.MustCompile(`\d+`)
@@ -498,8 +428,6 @@ godump.Dump(v.ReplaceMatches(re, func(m string) string { return "[" + m + "]" })
 ### <a id="swap"></a>Swap
 
 Swap replaces multiple values using strings.Replacer built from a map.
-
-_Example: swap map_
 
 ```go
 v := str.Of("Gophers are great!")
@@ -515,8 +443,6 @@ godump.Dump(v.Swap(pairs).String())
 Contains reports whether the string contains any of the provided substrings (case-sensitive).
 Empty substrings return true to match strings.Contains semantics.
 
-_Example: contains any_
-
 ```go
 v := str.Of("Go means gophers").Contains("rust", "gopher")
 godump.Dump(v)
@@ -527,8 +453,6 @@ godump.Dump(v)
 
 ContainsAll reports whether the string contains all provided substrings (case-sensitive).
 Empty substrings are ignored.
-
-_Example: contains all_
 
 ```go
 v := str.Of("Go means gophers").ContainsAll("Go", "gopher")
@@ -542,8 +466,6 @@ ContainsAllFold reports whether the string contains all provided substrings, usi
 case folding for comparisons.
 Empty substrings are ignored.
 
-_Example: contains all (case-insensitive)_
-
 ```go
 v := str.Of("Go means gophers").ContainsAllFold("go", "GOPHER")
 godump.Dump(v)
@@ -556,8 +478,6 @@ ContainsFold reports whether the string contains any of the provided substrings,
 case folding for comparisons.
 Empty substrings return true.
 
-_Example: contains any (case-insensitive)_
-
 ```go
 v := str.Of("Go means gophers").ContainsFold("GOPHER", "rust")
 godump.Dump(v)
@@ -567,8 +487,6 @@ godump.Dump(v)
 ### <a id="count"></a>Count
 
 Count returns the number of non-overlapping occurrences of sub.
-
-_Example: count substring_
 
 ```go
 v := str.Of("gogophergo").Count("go")
@@ -580,8 +498,6 @@ godump.Dump(v)
 
 EndsWith reports whether the string ends with any of the provided suffixes (case-sensitive).
 
-_Example: ends with any_
-
 ```go
 v := str.Of("gopher").EndsWith("her", "cat")
 godump.Dump(v)
@@ -591,8 +507,6 @@ godump.Dump(v)
 ### <a id="endswithfold"></a>EndsWithFold
 
 EndsWithFold reports whether the string ends with any of the provided suffixes using Unicode case folding.
-
-_Example: ends with (case-insensitive)_
 
 ```go
 v := str.Of("gopher").EndsWithFold("HER")
@@ -604,8 +518,6 @@ godump.Dump(v)
 
 Index returns the rune index of the first occurrence of sub, or -1 if not found.
 
-_Example: first rune index_
-
 ```go
 v := str.Of("héllo")
 godump.Dump(v.Index("llo"))
@@ -615,8 +527,6 @@ godump.Dump(v.Index("llo"))
 ### <a id="lastindex"></a>LastIndex
 
 LastIndex returns the rune index of the last occurrence of sub, or -1 if not found.
-
-_Example: last rune index_
 
 ```go
 v := str.Of("go gophers go")
@@ -628,8 +538,6 @@ godump.Dump(v.LastIndex("go"))
 
 StartsWith reports whether the string starts with any of the provided prefixes (case-sensitive).
 
-_Example: starts with any_
-
 ```go
 v := str.Of("gopher")
 godump.Dump(v.StartsWith("go", "rust"))
@@ -639,8 +547,6 @@ godump.Dump(v.StartsWith("go", "rust"))
 ### <a id="startswithfold"></a>StartsWithFold
 
 StartsWithFold reports whether the string starts with any of the provided prefixes using Unicode case folding.
-
-_Example: starts with (case-insensitive)_
 
 ```go
 v := str.Of("gopher")
@@ -655,8 +561,6 @@ godump.Dump(v.StartsWithFold("GO"))
 Slug produces an ASCII slug using the provided separator (default "-"), stripping accents where possible.
 Not locale-aware; intended for identifiers/URLs.
 
-_Example: build slug_
-
 ```go
 v := str.Of("Go Forj Toolkit")
 godump.Dump(v.Slug("-").String())
@@ -670,8 +574,6 @@ godump.Dump(v.Slug("-").String())
 After returns the substring after the first occurrence of sep.
 If sep is empty or not found, the original string is returned.
 
-_Example: slice after marker_
-
 ```go
 v := str.Of("gopher::go").After("::").String()
 godump.Dump(v)
@@ -682,8 +584,6 @@ godump.Dump(v)
 
 AfterLast returns the substring after the last occurrence of sep.
 If sep is empty or not found, the original string is returned.
-
-_Example: slice after last separator_
 
 ```go
 v := str.Of("pkg/path/file.txt").AfterLast("/").String()
@@ -696,8 +596,6 @@ godump.Dump(v)
 Before returns the substring before the first occurrence of sep.
 If sep is empty or not found, the original string is returned.
 
-_Example: slice before marker_
-
 ```go
 v := str.Of("gopher::go").Before("::").String()
 godump.Dump(v)
@@ -708,8 +606,6 @@ godump.Dump(v)
 
 BeforeLast returns the substring before the last occurrence of sep.
 If sep is empty or not found, the original string is returned.
-
-_Example: slice before last separator_
 
 ```go
 v := str.Of("pkg/path/file.txt").BeforeLast("/").String()
@@ -722,8 +618,6 @@ godump.Dump(v)
 Between returns the substring between the first occurrence of start and the last occurrence of end.
 Returns an empty string if either marker is missing or overlapping.
 
-_Example: between first and last_
-
 ```go
 v := str.Of("This is my name").Between("This", "name").String()
 godump.Dump(v)
@@ -735,8 +629,6 @@ godump.Dump(v)
 BetweenFirst returns the substring between the first occurrence of start and the first occurrence of end after it.
 Returns an empty string if markers are missing.
 
-_Example: minimal span between markers_
-
 ```go
 v := str.Of("[a] bc [d]").BetweenFirst("[", "]").String()
 godump.Dump(v)
@@ -746,8 +638,6 @@ godump.Dump(v)
 ### <a id="charat"></a>CharAt
 
 CharAt returns the rune at the given index and true if within bounds.
-
-_Example: rune lookup_
 
 ```go
 v, ok := str.Of("gopher").CharAt(2)
@@ -760,8 +650,6 @@ godump.Dump(string(v), ok)
 
 Limit truncates the string to length runes, appending suffix if truncation occurs.
 
-_Example: limit with suffix_
-
 ```go
 v := str.Of("Perfectly balanced, as all things should be.")
 godump.Dump(v.Limit(10, "...").String())
@@ -773,8 +661,6 @@ godump.Dump(v.Limit(10, "...").String())
 Slice returns the substring between rune offsets [start:end).
 Indices are clamped; if start >= end the result is empty.
 
-_Example: rune-safe slice_
-
 ```go
 v := str.Of("naïve café")
 godump.Dump(v.Slice(3, 7).String())
@@ -785,8 +671,6 @@ godump.Dump(v.Slice(3, 7).String())
 
 Take returns the first length runes of the string (clamped).
 
-_Example: take head_
-
 ```go
 v := str.Of("gophers")
 godump.Dump(v.Take(3).String())
@@ -796,8 +680,6 @@ godump.Dump(v.Take(3).String())
 ### <a id="takelast"></a>TakeLast
 
 TakeLast returns the last length runes of the string (clamped).
-
-_Example: take tail_
 
 ```go
 v := str.Of("gophers")
@@ -811,8 +693,6 @@ godump.Dump(v.TakeLast(4).String())
 
 Repeat repeats the string count times (non-negative).
 
-_Example: repeat string_
-
 ```go
 v := str.Of("go")
 godump.Dump(v.Repeat(3).String())
@@ -822,8 +702,6 @@ godump.Dump(v.Repeat(3).String())
 ### <a id="reverse"></a>Reverse
 
 Reverse returns a rune-safe reversed string.
-
-_Example: reverse_
 
 ```go
 v := str.Of("naïve")
@@ -837,8 +715,6 @@ godump.Dump(v.Reverse().String())
 
 FirstWord returns the first word token or empty string.
 
-_Example: first word_
-
 ```go
 v := str.Of("Hello world")
 godump.Dump(v.FirstWord().String())
@@ -848,8 +724,6 @@ godump.Dump(v.FirstWord().String())
 ### <a id="join"></a>Join
 
 Join joins the provided words with sep.
-
-_Example: join words_
 
 ```go
 v := str.Of("unused")
@@ -861,8 +735,6 @@ godump.Dump(v.Join([]string{"foo", "bar"}, "-").String())
 
 LastWord returns the last word token or empty string.
 
-_Example: last word_
-
 ```go
 v := str.Of("Hello world")
 godump.Dump(v.LastWord().String())
@@ -872,8 +744,6 @@ godump.Dump(v.LastWord().String())
 ### <a id="splitwords"></a>SplitWords
 
 SplitWords splits the string into words (Unicode letters/digits runs).
-
-_Example: split words_
 
 ```go
 v := str.Of("one, two, three")
@@ -885,8 +755,6 @@ godump.Dump(v.SplitWords())
 
 WordCount returns the number of word tokens (letters/digits runs).
 
-_Example: count words_
-
 ```go
 v := str.Of("Hello, world!")
 godump.Dump(v.WordCount())
@@ -897,8 +765,6 @@ godump.Dump(v.WordCount())
 
 Words limits the string to count words, appending suffix if truncated.
 
-_Example: limit words_
-
 ```go
 v := str.Of("Perfectly balanced, as all things should be.")
 godump.Dump(v.Words(3, " >>>").String())
@@ -908,8 +774,6 @@ godump.Dump(v.Words(3, " >>>").String())
 ### <a id="wrapwords"></a>WrapWords
 
 WrapWords wraps the string to the given width on word boundaries, using breakStr between lines.
-
-_Example: wrap words_
 
 ```go
 v := str.Of("The quick brown fox jumped over the lazy dog.")

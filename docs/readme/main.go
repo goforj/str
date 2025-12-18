@@ -380,7 +380,7 @@ func renderAPI(funcs []*FuncDoc) string {
 			}
 
 			for _, ex := range fn.Examples {
-				if ex.Label != "" {
+				if ex.Label != "" && len(fn.Examples) > 1 {
 					buf.WriteString(fmt.Sprintf("_Example: %s_\n\n", ex.Label))
 				}
 
