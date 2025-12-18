@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-113-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-116-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -32,8 +32,8 @@
 | **Checks** | [IsBlank](#isblank) [IsEmpty](#isempty) |
 | **Cleanup** | [Deduplicate](#deduplicate) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) |
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
+| **Fluent** | [GoString](#gostring) [Of](#of) [String](#string) |
 | **Length** | [Len](#len) [RuneCount](#runecount) |
-| **Other** | [GoString](#gostring) [Of](#of) [String](#string) |
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
 | **Replace** | [Remove](#remove) [ReplaceArray](#replacearray) [ReplaceFirst](#replacefirst) [ReplaceLast](#replacelast) [ReplaceMatches](#replacematches) [Swap](#swap) |
 | **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
@@ -304,6 +304,38 @@ godump.Dump(v)
 // #bool true
 ```
 
+## Fluent
+
+### <a id="gostring"></a>GoString
+
+GoString allows %#v formatting to print the raw string.
+
+```go
+v := str.Of("go")
+godump.Dump(fmt.Sprintf("%#v", v))
+// #string go
+```
+
+### <a id="of"></a>Of
+
+Of wraps a raw string with fluent helpers.
+
+```go
+v := str.Of("gopher")
+godump.Dump(v.String())
+// #string gopher
+```
+
+### <a id="string"></a>String
+
+String returns the underlying raw string value.
+
+```go
+v := str.Of("go").String()
+godump.Dump(v)
+// #string go
+```
+
 ## Length
 
 ### <a id="len"></a>Len
@@ -325,20 +357,6 @@ v := str.Of("naïve").RuneCount()
 godump.Dump(v)
 // #int 5
 ```
-
-## Other
-
-### <a id="gostring"></a>GoString
-
-GoString allows %#v formatting to print the raw string.
-
-### <a id="of"></a>Of
-
-Of wraps a raw string with fluent helpers.
-
-### <a id="string"></a>String
-
-String returns the underlying raw string value.
 
 ## Padding
 
