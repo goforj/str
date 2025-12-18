@@ -15,11 +15,21 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-116-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-152-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
 
+
+## Runnable examples
+
+Every function has a corresponding runnable example under [`./examples`](./examples).
+
+These examples are **generated directly from the documentation blocks** of each function, ensuring the docs and code never drift. These are the same examples you see here in the README and GoDoc.
+
+An automated test executes **every example** to verify it builds and runs successfully.
+
+This guarantees all examples are valid, up-to-date, and remain functional as the API evolves.
 
 <!-- api:embed:start -->
 
@@ -28,16 +38,22 @@
 | Group | Functions |
 |------:|-----------|
 | **Affixes** | [ChopEnd](#chopend) [ChopStart](#chopstart) [EnsurePrefix](#ensureprefix) [EnsureSuffix](#ensuresuffix) [Unwrap](#unwrap) [Wrap](#wrap) |
-| **Case** | [Camel](#camel) [Kebab](#kebab) [LcFirst](#lcfirst) [Pascal](#pascal) [Snake](#snake) [Title](#title) [ToLower](#tolower) [ToTitle](#totitle) [ToUpper](#toupper) [UcFirst](#ucfirst) |
-| **Checks** | [IsBlank](#isblank) [IsEmpty](#isempty) |
+| **Case** | [Camel](#camel) [Headline](#headline) [Kebab](#kebab) [LcFirst](#lcfirst) [Pascal](#pascal) [Snake](#snake) [Title](#title) [ToLower](#tolower) [ToTitle](#totitle) [ToUpper](#toupper) [UcFirst](#ucfirst) [UcWords](#ucwords) |
+| **Checks** | [IsASCII](#isascii) [IsBlank](#isblank) [IsEmpty](#isempty) |
 | **Cleanup** | [Deduplicate](#deduplicate) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) |
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
+| **Compose** | [Append](#append) [NewLine](#newline) [Prepend](#prepend) |
+| **Encoding** | [FromBase64](#frombase64) [ToBase64](#tobase64) |
 | **Fluent** | [GoString](#gostring) [Of](#of) [String](#string) |
 | **Length** | [Len](#len) [RuneCount](#runecount) |
+| **Masking** | [Mask](#mask) |
+| **Match** | [Is](#is) [IsMatch](#ismatch) |
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
 | **Replace** | [Remove](#remove) [ReplaceArray](#replacearray) [ReplaceFirst](#replacefirst) [ReplaceLast](#replacelast) [ReplaceMatches](#replacematches) [Swap](#swap) |
-| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
+| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [DoesntContain](#doesntcontain) [DoesntContainFold](#doesntcontainfold) [DoesntEndWith](#doesntendwith) [DoesntEndWithFold](#doesntendwithfold) [DoesntStartWith](#doesntstartwith) [DoesntStartWithFold](#doesntstartwithfold) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
 | **Slug** | [Slug](#slug) |
+| **Snippet** | [Excerpt](#excerpt) |
+| **Split** | [Split](#split) [UcSplit](#ucsplit) |
 | **Substrings** | [After](#after) [AfterLast](#afterlast) [Before](#before) [BeforeLast](#beforelast) [Between](#between) [BetweenFirst](#betweenfirst) [CharAt](#charat) [Limit](#limit) [Slice](#slice) [Take](#take) [TakeLast](#takelast) |
 | **Transform** | [Repeat](#repeat) [Reverse](#reverse) |
 | **Words** | [FirstWord](#firstword) [Join](#join) [LastWord](#lastword) [SplitWords](#splitwords) [WordCount](#wordcount) [Words](#words) [WrapWords](#wrapwords) |
@@ -115,6 +131,17 @@ Camel converts the string to camelCase.
 v := str.Of("foo_bar baz").Camel().String()
 godump.Dump(v)
 // #string fooBarBaz
+```
+
+### <a id="headline"></a>Headline
+
+Headline converts the string into a human-friendly headline:
+splits on case/underscores/dashes/whitespace, title-cases words, and lowercases small words (except the first).
+
+```go
+v := str.Of("emailNotification_sent").Headline().String()
+godump.Dump(v)
+// #string Email Notification Sent
 ```
 
 ### <a id="kebab"></a>Kebab
@@ -207,7 +234,28 @@ godump.Dump(v)
 // #string Gopher
 ```
 
+### <a id="ucwords"></a>UcWords
+
+UcWords uppercases the first rune of each word, leaving the rest unchanged.
+Words are sequences of letters/digits.
+
+```go
+v := str.Of("hello WORLD").UcWords().String()
+godump.Dump(v)
+// #string Hello WORLD
+```
+
 ## Checks
+
+### <a id="isascii"></a>IsASCII
+
+IsASCII reports whether the string consists solely of 7-bit ASCII runes.
+
+```go
+v := str.Of("gopher").IsASCII()
+godump.Dump(v)
+// #bool true
+```
 
 ### <a id="isblank"></a>IsBlank
 
@@ -304,6 +352,61 @@ godump.Dump(v)
 // #bool true
 ```
 
+## Compose
+
+### <a id="append"></a>Append
+
+Append concatenates the provided parts to the end of the string.
+
+```go
+v := str.Of("Go").Append("Forj", "!").String()
+godump.Dump(v)
+// #string GoForj!
+```
+
+### <a id="newline"></a>NewLine
+
+NewLine appends a newline character to the string.
+
+```go
+v := str.Of("hello").NewLine().Append("world").String()
+godump.Dump(v)
+// #string hello\nworld
+```
+
+### <a id="prepend"></a>Prepend
+
+Prepend concatenates the provided parts to the beginning of the string.
+
+```go
+v := str.Of("World").Prepend("Hello ", "Go ").String()
+godump.Dump(v)
+// #string Hello Go World
+```
+
+## Encoding
+
+### <a id="frombase64"></a>FromBase64
+
+FromBase64 decodes a standard Base64 string.
+
+```go
+v, err := str.Of("Z29waGVy").FromBase64()
+godump.Dump(v.String(), err)
+// #string gopher
+// #error <nil>
+```
+
+### <a id="tobase64"></a>ToBase64
+
+ToBase64 encodes the string using standard Base64.
+
+```go
+v := str.Of("gopher").ToBase64().String()
+godump.Dump(v)
+// #string Z29waGVy
+```
+
 ## Fluent
 
 ### <a id="gostring"></a>GoString
@@ -356,6 +459,43 @@ RuneCount is an alias for Len to make intent explicit in mixed codebases.
 v := str.Of("naïve").RuneCount()
 godump.Dump(v)
 // #int 5
+```
+
+## Masking
+
+### <a id="mask"></a>Mask
+
+Mask replaces the middle of the string with the given rune, revealing revealLeft runes
+at the start and revealRight runes at the end. Negative reveal values count from the end.
+If the reveal counts cover the whole string, the original string is returned.
+
+```go
+v := str.Of("gopher@example.com").Mask('*', 3, 4).String()
+godump.Dump(v)
+// #string gop***********.com
+```
+
+## Match
+
+### <a id="is"></a>Is
+
+Is reports whether the string matches any of the provided wildcard patterns.
+Patterns use '*' as a wildcard. Case-sensitive.
+
+```go
+v := str.Of("foo/bar").Is("foo/*")
+godump.Dump(v)
+// #bool true
+```
+
+### <a id="ismatch"></a>IsMatch
+
+IsMatch reports whether the string matches the provided regular expression.
+
+```go
+v := str.Of("abc123").IsMatch(regexp.MustCompile(`\d+`))
+godump.Dump(v)
+// #bool true
 ```
 
 ## Padding
@@ -512,6 +652,68 @@ godump.Dump(v)
 // #int 3
 ```
 
+### <a id="doesntcontain"></a>DoesntContain
+
+DoesntContain reports true if none of the substrings are found (case-sensitive).
+Empty substrings are ignored.
+
+```go
+v := str.Of("gophers are great")
+godump.Dump(v.DoesntContain("rust", "beam"))
+// #bool true
+```
+
+### <a id="doesntcontainfold"></a>DoesntContainFold
+
+DoesntContainFold reports true if none of the substrings are found using Unicode case folding.
+Empty substrings are ignored.
+
+```go
+v := str.Of("gophers are great")
+godump.Dump(v.DoesntContainFold("GOPHER"))
+// #bool false
+```
+
+### <a id="doesntendwith"></a>DoesntEndWith
+
+DoesntEndWith reports true if the string ends with none of the provided suffixes (case-sensitive).
+
+```go
+v := str.Of("gopher")
+godump.Dump(v.DoesntEndWith("her", "cat"))
+// #bool false
+```
+
+### <a id="doesntendwithfold"></a>DoesntEndWithFold
+
+DoesntEndWithFold reports true if the string ends with none of the provided suffixes using Unicode case folding.
+
+```go
+v := str.Of("gopher")
+godump.Dump(v.DoesntEndWithFold("HER"))
+// #bool false
+```
+
+### <a id="doesntstartwith"></a>DoesntStartWith
+
+DoesntStartWith reports true if the string starts with none of the provided prefixes (case-sensitive).
+
+```go
+v := str.Of("gopher")
+godump.Dump(v.DoesntStartWith("go", "rust"))
+// #bool false
+```
+
+### <a id="doesntstartwithfold"></a>DoesntStartWithFold
+
+DoesntStartWithFold reports true if the string starts with none of the provided prefixes using Unicode case folding.
+
+```go
+v := str.Of("gopher")
+godump.Dump(v.DoesntStartWithFold("GO"))
+// #bool false
+```
+
 ### <a id="endswith"></a>EndsWith
 
 EndsWith reports whether the string ends with any of the provided suffixes (case-sensitive).
@@ -583,6 +785,42 @@ Not locale-aware; intended for identifiers/URLs.
 v := str.Of("Go Forj Toolkit").Slug("-").String()
 godump.Dump(v)
 // #string go-forj-toolkit
+```
+
+## Snippet
+
+### <a id="excerpt"></a>Excerpt
+
+Excerpt returns a snippet around the first occurrence of needle with the given radius.
+If needle is not found, an empty string is returned. If radius <= 0, a default of 100 is used.
+Omission is used at the start/end when text is trimmed (default "...").
+
+```go
+v := str.Of("This is my name").Excerpt("my", 3, "...")
+godump.Dump(v.String())
+// #string ...is my na...
+```
+
+## Split
+
+### <a id="split"></a>Split
+
+Split splits the string by the given separator.
+
+```go
+v := str.Of("a,b,c").Split(",")
+godump.Dump(v)
+// #[]string [a b c]
+```
+
+### <a id="ucsplit"></a>UcSplit
+
+UcSplit splits the string on uppercase boundaries and delimiters, returning segments.
+
+```go
+v := str.Of("HTTPRequestID").UcSplit()
+godump.Dump(v)
+// #[]string [HTTP Request ID]
 ```
 
 ## Substrings
