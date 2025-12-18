@@ -11,9 +11,9 @@ import (
 //
 // Example: build slug
 //
-//	v := str.Of("Laravel Framework")
+//	v := str.Of("Go Forj Toolkit")
 //	godump.Dump(v.Slug("-").String())
-//	// #string laravel-framework
+//	// #string go-forj-toolkit
 func (s String) Slug(sep string) String {
 	if sep == "" {
 		sep = "-"

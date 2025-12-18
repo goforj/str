@@ -12,7 +12,7 @@ func main() {
 	// Unwrap removes matching before and after strings if present.
 
 	// Example: unwrap string
-	v := str.Of("\"Laravel\"")
+	v := str.Of("\"GoForj\"")
 	godump.Dump(v.Unwrap("\"", "\"").String())
-	// #string Laravel
+	// #string GoForj
 }

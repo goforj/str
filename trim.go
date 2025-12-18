@@ -10,9 +10,9 @@ import (
 //
 // Example: trim whitespace
 //
-//	v := str.Of("  Laravel  ")
+//	v := str.Of("  GoForj  ")
 //	godump.Dump(v.Trim("").String())
-//	// #string Laravel
+//	// #string GoForj
 func (s String) Trim(cutset string) String {
 	if cutset == "" {
 		return String{s: strings.TrimFunc(s.s, unicode.IsSpace)}
@@ -25,9 +25,9 @@ func (s String) Trim(cutset string) String {
 //
 // Example: trim left
 //
-//	v := str.Of("  Laravel  ")
+//	v := str.Of("  GoForj  ")
 //	godump.Dump(v.TrimLeft("").String())
-//	// #string Laravel
+//	// #string GoForj
 func (s String) TrimLeft(cutset string) String {
 	if cutset == "" {
 		return String{s: strings.TrimLeftFunc(s.s, unicode.IsSpace)}
@@ -40,9 +40,9 @@ func (s String) TrimLeft(cutset string) String {
 //
 // Example: trim right
 //
-//	v := str.Of("  Laravel  ")
+//	v := str.Of("  GoForj  ")
 //	godump.Dump(v.TrimRight("").String())
-//	// #string   Laravel
+//	// #string   GoForj
 func (s String) TrimRight(cutset string) String {
 	if cutset == "" {
 		return String{s: strings.TrimRightFunc(s.s, unicode.IsSpace)}

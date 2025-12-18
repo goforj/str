@@ -28,9 +28,6 @@ func (s String) WrapWords(width int, breakStr string) String {
 	currentLen := 0
 
 	flush := func() {
-		if len(current) == 0 {
-			return
-		}
 		lines = append(lines, strings.Join(current, " "))
 		current = current[:0]
 		currentLen = 0

@@ -32,6 +32,9 @@ func TestContainsAll(t *testing.T) {
 	if val.ContainsAll() {
 		t.Fatalf("empty subs should be false for ContainsAll")
 	}
+	if !val.ContainsAll("Go", "") {
+		t.Fatalf("ContainsAll should ignore empty substrings")
+	}
 }
 
 func TestContainsFold(t *testing.T) {
@@ -66,5 +69,8 @@ func TestContainsAllFold(t *testing.T) {
 	}
 	if val.ContainsAllFold() {
 		t.Fatalf("empty subs should be false for ContainsAllFold")
+	}
+	if !val.ContainsAllFold("go", "") {
+		t.Fatalf("ContainsAllFold should ignore empty substrings")
 	}
 }

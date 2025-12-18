@@ -12,7 +12,7 @@ func main() {
 	// Remove deletes all occurrences of provided substrings.
 
 	// Example: remove substrings
-	v := str.Of("The Laravel Framework")
-	godump.Dump(v.Remove("Laravel ").String())
-	// #string The Framework
+	v := str.Of("The Go Toolkit")
+	godump.Dump(v.Remove("Go ").String())
+	// #string The Toolkit
 }

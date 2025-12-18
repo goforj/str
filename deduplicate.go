@@ -6,9 +6,9 @@ package str
 //
 // Example: collapse spaces
 //
-//	v := str.Of("The   Laravel   Framework").Deduplicate(' ').String()
+//	v := str.Of("The   Go   Playground").Deduplicate(' ').String()
 //	godump.Dump(v)
-//	// #string The Laravel Framework
+//	// #string The Go Playground
 func (s String) Deduplicate(char rune) String {
 	if char == 0 {
 		char = ' '

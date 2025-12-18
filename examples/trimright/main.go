@@ -12,7 +12,7 @@ func main() {
 	// TrimRight trims trailing characters. If cutset is empty, trims Unicode whitespace.
 
 	// Example: trim right
-	v := str.Of("  Laravel  ")
+	v := str.Of("  GoForj  ")
 	godump.Dump(v.TrimRight("").String())
-	// #string   Laravel
+	// #string   GoForj
 }

@@ -44,9 +44,9 @@ func (s String) ReplaceLast(old, repl string) String {
 //
 // Example: replace many
 //
-//	v := str.Of("The---Laravel---Framework")
+//	v := str.Of("The---Go---Toolkit")
 //	godump.Dump(v.ReplaceArray([]string{"---"}, "-").String())
-//	// #string The-Laravel-Framework
+//	// #string The-Go-Toolkit
 func (s String) ReplaceArray(olds []string, repl string) String {
 	out := s.s
 	for _, old := range olds {
@@ -76,10 +76,10 @@ func (s String) ReplaceMatches(pattern *regexp.Regexp, repl func(string) string)
 //
 // Example: swap map
 //
-//	v := str.Of("Tacos are great!")
-//	pairs := map[string]string{"Tacos": "Burritos", "great": "fantastic"}
+//	v := str.Of("Gophers are great!")
+//	pairs := map[string]string{"Gophers": "GoForj", "great": "fantastic"}
 //	godump.Dump(v.Swap(pairs).String())
-//	// #string Burritos are fantastic!
+//	// #string GoForj are fantastic!
 func (s String) Swap(pairs map[string]string) String {
 	if len(pairs) == 0 {
 		return s

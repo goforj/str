@@ -16,9 +16,6 @@ import (
 func (s String) Camel() String {
 	words := splitWordsRunes(s.s)
 	for i, w := range words {
-		if w == "" {
-			continue
-		}
 		if i == 0 {
 			words[i] = strings.ToLower(w)
 			continue

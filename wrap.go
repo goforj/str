@@ -5,9 +5,9 @@ package str
 //
 // Example: wrap string
 //
-//	v := str.Of("Laravel")
+//	v := str.Of("GoForj")
 //	godump.Dump(v.Wrap("\"", "").String())
-//	// #string "Laravel"
+//	// #string "GoForj"
 func (s String) Wrap(before, after string) String {
 	if after == "" {
 		after = before
@@ -20,9 +20,9 @@ func (s String) Wrap(before, after string) String {
 //
 // Example: unwrap string
 //
-//	v := str.Of("\"Laravel\"")
+//	v := str.Of("\"GoForj\"")
 //	godump.Dump(v.Unwrap("\"", "\"").String())
-//	// #string Laravel
+//	// #string GoForj
 func (s String) Unwrap(before, after string) String {
 	if after == "" {
 		after = before

@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-104-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-113-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -100,9 +100,9 @@ Unwrap removes matching before and after strings if present.
 _Example: unwrap string_
 
 ```go
-v := str.Of("\"Laravel\"")
+v := str.Of("\"GoForj\"")
 godump.Dump(v.Unwrap("\"", "\"").String())
-// #string Laravel
+// #string GoForj
 ```
 
 ### <a id="wrap"></a>Wrap
@@ -112,9 +112,9 @@ Wrap surrounds the string with before and after (after defaults to before).
 _Example: wrap string_
 
 ```go
-v := str.Of("Laravel")
+v := str.Of("GoForj")
 godump.Dump(v.Wrap("\"", "").String())
-// #string "Laravel"
+// #string "GoForj"
 ```
 
 ## Case
@@ -275,9 +275,9 @@ If char is zero, space is used.
 _Example: collapse spaces_
 
 ```go
-v := str.Of("The   Laravel   Framework").Deduplicate(' ').String()
+v := str.Of("The   Go   Playground").Deduplicate(' ').String()
 godump.Dump(v)
-// #string The Laravel Framework
+// #string The Go Playground
 ```
 
 ### <a id="squish"></a>Squish
@@ -299,9 +299,9 @@ Trim trims leading and trailing characters. If cutset is empty, trims Unicode wh
 _Example: trim whitespace_
 
 ```go
-v := str.Of("  Laravel  ")
+v := str.Of("  GoForj  ")
 godump.Dump(v.Trim("").String())
-// #string Laravel
+// #string GoForj
 ```
 
 ### <a id="trimleft"></a>TrimLeft
@@ -311,9 +311,9 @@ TrimLeft trims leading characters. If cutset is empty, trims Unicode whitespace.
 _Example: trim left_
 
 ```go
-v := str.Of("  Laravel  ")
+v := str.Of("  GoForj  ")
 godump.Dump(v.TrimLeft("").String())
-// #string Laravel
+// #string GoForj
 ```
 
 ### <a id="trimright"></a>TrimRight
@@ -323,9 +323,9 @@ TrimRight trims trailing characters. If cutset is empty, trims Unicode whitespac
 _Example: trim right_
 
 ```go
-v := str.Of("  Laravel  ")
+v := str.Of("  GoForj  ")
 godump.Dump(v.TrimRight("").String())
-// #string   Laravel
+// #string   GoForj
 ```
 
 ## Comparison
@@ -441,9 +441,9 @@ Remove deletes all occurrences of provided substrings.
 _Example: remove substrings_
 
 ```go
-v := str.Of("The Laravel Framework")
-godump.Dump(v.Remove("Laravel ").String())
-// #string The Framework
+v := str.Of("The Go Toolkit")
+godump.Dump(v.Remove("Go ").String())
+// #string The Toolkit
 ```
 
 ### <a id="replacearray"></a>ReplaceArray
@@ -453,9 +453,9 @@ ReplaceArray replaces all occurrences of each old in olds with repl.
 _Example: replace many_
 
 ```go
-v := str.Of("The---Laravel---Framework")
+v := str.Of("The---Go---Toolkit")
 godump.Dump(v.ReplaceArray([]string{"---"}, "-").String())
-// #string The-Laravel-Framework
+// #string The-Go-Toolkit
 ```
 
 ### <a id="replacefirst"></a>ReplaceFirst
@@ -502,10 +502,10 @@ Swap replaces multiple values using strings.Replacer built from a map.
 _Example: swap map_
 
 ```go
-v := str.Of("Tacos are great!")
-pairs := map[string]string{"Tacos": "Burritos", "great": "fantastic"}
+v := str.Of("Gophers are great!")
+pairs := map[string]string{"Gophers": "GoForj", "great": "fantastic"}
 godump.Dump(v.Swap(pairs).String())
-// #string Burritos are fantastic!
+// #string GoForj are fantastic!
 ```
 
 ## Search
@@ -658,9 +658,9 @@ Not locale-aware; intended for identifiers/URLs.
 _Example: build slug_
 
 ```go
-v := str.Of("Laravel Framework")
+v := str.Of("Go Forj Toolkit")
 godump.Dump(v.Slug("-").String())
-// #string laravel-framework
+// #string go-forj-toolkit
 ```
 
 ## Substrings

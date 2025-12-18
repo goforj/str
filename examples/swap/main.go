@@ -12,8 +12,8 @@ func main() {
 	// Swap replaces multiple values using strings.Replacer built from a map.
 
 	// Example: swap map
-	v := str.Of("Tacos are great!")
-	pairs := map[string]string{"Tacos": "Burritos", "great": "fantastic"}
+	v := str.Of("Gophers are great!")
+	pairs := map[string]string{"Gophers": "GoForj", "great": "fantastic"}
 	godump.Dump(v.Swap(pairs).String())
-	// #string Burritos are fantastic!
+	// #string GoForj are fantastic!
 }
