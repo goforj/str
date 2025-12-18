@@ -1,0 +1,21 @@
+package str
+
+import "unicode"
+
+// LcFirst returns the string with the first rune lower-cased.
+// @group Case
+//
+// Example: lowercase first rune
+//
+//	val := str.Of("Gopher")
+//	godump.Dump(val.LcFirst().String())
+//
+//	// #string gopher
+func (s String) LcFirst() String {
+	runes := []rune(s.s)
+	if len(runes) == 0 {
+		return s
+	}
+	runes[0] = unicode.ToLower(runes[0])
+	return String{s: string(runes)}
+}
