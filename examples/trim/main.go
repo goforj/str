@@ -12,8 +12,7 @@ func main() {
 	// Trim trims leading and trailing characters. If cutset is empty, trims Unicode whitespace.
 
 	// Example: trim whitespace
-	val := str.Of("  Laravel  ")
-	godump.Dump(val.Trim("").String())
-
+	v := str.Of("  Laravel  ")
+	godump.Dump(v.Trim("").String())
 	// #string Laravel
 }

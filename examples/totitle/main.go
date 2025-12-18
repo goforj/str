@@ -12,8 +12,7 @@ func main() {
 	// ToTitle returns a title-cased copy where all letters are mapped using Unicode title case.
 
 	// Example: title map runes
-	val := str.Of("ß")
-	godump.Dump(val.ToTitle().String())
-
+	v := str.Of("ß")
+	godump.Dump(v.ToTitle().String())
 	// #string SS
 }

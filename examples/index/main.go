@@ -12,8 +12,7 @@ func main() {
 	// Index returns the rune index of the first occurrence of sub, or -1 if not found.
 
 	// Example: first rune index
-	val := str.Of("héllo")
-	godump.Dump(val.Index("llo"))
-
+	v := str.Of("héllo")
+	godump.Dump(v.Index("llo"))
 	// #int 2
 }

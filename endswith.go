@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: ends with any
 //
-//	val := str.Of("gopher")
-//	godump.Dump(val.EndsWith("her", "cat"))
-//
+//	v := str.Of("gopher").EndsWith("her", "cat")
+//	godump.Dump(v)
 //	// #bool true
 func (s String) EndsWith(suffixes ...string) bool {
 	if len(suffixes) == 0 {
@@ -28,9 +27,8 @@ func (s String) EndsWith(suffixes ...string) bool {
 //
 // Example: ends with (case-insensitive)
 //
-//	val := str.Of("gopher")
-//	godump.Dump(val.EndsWithFold("HER"))
-//
+//	v := str.Of("gopher").EndsWithFold("HER")
+//	godump.Dump(v)
 //	// #bool true
 func (s String) EndsWithFold(suffixes ...string) bool {
 	if len(suffixes) == 0 {

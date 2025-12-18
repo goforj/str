@@ -13,8 +13,7 @@ func main() {
 	// If sep is empty or not found, the original string is returned.
 
 	// Example: slice before marker
-	val := str.Of("gopher::go")
-	godump.Dump(val.Before("::").String())
-
+	v := str.Of("gopher::go").Before("::").String()
+	godump.Dump(v)
 	// #string gopher
 }

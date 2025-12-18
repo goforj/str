@@ -11,9 +11,8 @@ import (
 //
 // Example: build slug
 //
-//	val := str.Of("Laravel Framework")
-//	godump.Dump(val.Slug("-").String())
-//
+//	v := str.Of("Laravel Framework")
+//	godump.Dump(v.Slug("-").String())
 //	// #string laravel-framework
 func (s String) Slug(sep string) String {
 	if sep == "" {

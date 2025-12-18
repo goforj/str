@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: snake case
 //
-//	val := str.Of("fooBar baz")
-//	godump.Dump(val.Snake("_").String())
-//
+//	v := str.Of("fooBar baz")
+//	godump.Dump(v.Snake("_").String())
 //	// #string foo_bar_baz
 func (s String) Snake(sep string) String {
 	if sep == "" {

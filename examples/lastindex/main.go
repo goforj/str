@@ -12,8 +12,7 @@ func main() {
 	// LastIndex returns the rune index of the last occurrence of sub, or -1 if not found.
 
 	// Example: last rune index
-	val := str.Of("go gophers go")
-	godump.Dump(val.LastIndex("go"))
-
+	v := str.Of("go gophers go")
+	godump.Dump(v.LastIndex("go"))
 	// #int 10
 }

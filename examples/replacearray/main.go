@@ -12,8 +12,7 @@ func main() {
 	// ReplaceArray replaces all occurrences of each old in olds with repl.
 
 	// Example: replace many
-	val := str.Of("The---Laravel---Framework")
-	godump.Dump(val.ReplaceArray([]string{"---"}, "-").String())
-
+	v := str.Of("The---Laravel---Framework")
+	godump.Dump(v.ReplaceArray([]string{"---"}, "-").String())
 	// #string The-Laravel-Framework
 }

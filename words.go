@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: limit words
 //
-//	val := str.Of("Perfectly balanced, as all things should be.")
-//	godump.Dump(val.Words(3, " >>>").String())
-//
+//	v := str.Of("Perfectly balanced, as all things should be.")
+//	godump.Dump(v.Words(3, " >>>").String())
 //	// #string Perfectly balanced as >>>
 func (s String) Words(count int, suffix string) String {
 	if count <= 0 {

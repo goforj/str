@@ -12,8 +12,7 @@ func main() {
 	// Count returns the number of non-overlapping occurrences of sub.
 
 	// Example: count substring
-	val := str.Of("gogophergo")
-	godump.Dump(val.Count("go"))
-
+	v := str.Of("gogophergo").Count("go")
+	godump.Dump(v)
 	// #int 3
 }

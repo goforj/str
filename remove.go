@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: remove substrings
 //
-//	val := str.Of("The Laravel Framework")
-//	godump.Dump(val.Remove("Laravel ").String())
-//
+//	v := str.Of("The Laravel Framework")
+//	godump.Dump(v.Remove("Laravel ").String())
 //	// #string The Framework
 func (s String) Remove(subs ...string) String {
 	out := s.s

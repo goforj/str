@@ -5,9 +5,8 @@ package str
 //
 // Example: take head
 //
-//	val := str.Of("gophers")
-//	godump.Dump(val.Take(3).String())
-//
+//	v := str.Of("gophers")
+//	godump.Dump(v.Take(3).String())
 //	// #string gop
 func (s String) Take(length int) String {
 	if length <= 0 {
@@ -25,9 +24,8 @@ func (s String) Take(length int) String {
 //
 // Example: take tail
 //
-//	val := str.Of("gophers")
-//	godump.Dump(val.TakeLast(4).String())
-//
+//	v := str.Of("gophers")
+//	godump.Dump(v.TakeLast(4).String())
 //	// #string hers
 func (s String) TakeLast(length int) String {
 	if length <= 0 {

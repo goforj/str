@@ -5,9 +5,8 @@ package str
 //
 // Example: wrap string
 //
-//	val := str.Of("Laravel")
-//	godump.Dump(val.Wrap("\"", "").String())
-//
+//	v := str.Of("Laravel")
+//	godump.Dump(v.Wrap("\"", "").String())
 //	// #string "Laravel"
 func (s String) Wrap(before, after string) String {
 	if after == "" {
@@ -21,9 +20,8 @@ func (s String) Wrap(before, after string) String {
 //
 // Example: unwrap string
 //
-//	val := str.Of("\"Laravel\"")
-//	godump.Dump(val.Unwrap("\"", "\"").String())
-//
+//	v := str.Of("\"Laravel\"")
+//	godump.Dump(v.Unwrap("\"", "\"").String())
 //	// #string Laravel
 func (s String) Unwrap(before, after string) String {
 	if after == "" {

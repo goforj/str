@@ -12,8 +12,7 @@ func main() {
 	// SplitWords splits the string into words (Unicode letters/digits runs).
 
 	// Example: split words
-	val := str.Of("one, two, three")
-	godump.Dump(val.SplitWords())
-
+	v := str.Of("one, two, three")
+	godump.Dump(v.SplitWords())
 	// #[]string [one two three]
 }

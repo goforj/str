@@ -13,8 +13,7 @@ func main() {
 	// Returns an empty string if either marker is missing or overlapping.
 
 	// Example: between first and last
-	val := str.Of("This is my name")
-	godump.Dump(val.Between("This", "name").String())
-
+	v := str.Of("This is my name").Between("This", "name").String()
+	godump.Dump(v)
 	// #string  is my
 }

@@ -14,8 +14,7 @@ func main() {
 	// Empty substrings are ignored.
 
 	// Example: contains all (case-insensitive)
-	val := str.Of("Go means gophers")
-	godump.Dump(val.ContainsAllFold("go", "GOPHER"))
-
+	v := str.Of("Go means gophers").ContainsAllFold("go", "GOPHER")
+	godump.Dump(v)
 	// #bool true
 }

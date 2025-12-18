@@ -13,8 +13,7 @@ func main() {
 	// Empty substrings are ignored.
 
 	// Example: contains all
-	val := str.Of("Go means gophers")
-	godump.Dump(val.ContainsAll("Go", "gopher"))
-
+	v := str.Of("Go means gophers").ContainsAll("Go", "gopher")
+	godump.Dump(v)
 	// #bool true
 }

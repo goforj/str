@@ -12,8 +12,7 @@ func main() {
 	// IsBlank reports whether the string contains only Unicode whitespace.
 
 	// Example: blank check
-	val := str.Of("  \\t\\n")
-	godump.Dump(val.IsBlank())
-
+	v := str.Of("  \\t\\n")
+	godump.Dump(v.IsBlank())
 	// #bool true
 }

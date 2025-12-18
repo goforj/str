@@ -12,8 +12,7 @@ func main() {
 	// FirstWord returns the first word token or empty string.
 
 	// Example: first word
-	val := str.Of("Hello world")
-	godump.Dump(val.FirstWord().String())
-
+	v := str.Of("Hello world")
+	godump.Dump(v.FirstWord().String())
 	// #string Hello
 }

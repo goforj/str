@@ -8,9 +8,8 @@ import "strings"
 //
 // Example: slice after marker
 //
-//	val := str.Of("gopher::go")
-//	godump.Dump(val.After("::").String())
-//
+//	v := str.Of("gopher::go").After("::").String()
+//	godump.Dump(v)
 //	// #string go
 func (s String) After(sep string) String {
 	if sep == "" {
@@ -31,9 +30,8 @@ func (s String) After(sep string) String {
 //
 // Example: slice after last separator
 //
-//	val := str.Of("pkg/path/file.txt")
-//	godump.Dump(val.AfterLast("/").String())
-//
+//	v := str.Of("pkg/path/file.txt").AfterLast("/").String()
+//	godump.Dump(v)
 //	// #string file.txt
 func (s String) AfterLast(sep string) String {
 	if sep == "" {

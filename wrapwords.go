@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: wrap words
 //
-//	val := str.Of("The quick brown fox jumped over the lazy dog.")
-//	godump.Dump(val.WrapWords(20, "\n").String())
-//
+//	v := str.Of("The quick brown fox jumped over the lazy dog.")
+//	godump.Dump(v.WrapWords(20, "\n").String())
 //	// #string The quick brown fox\njumped over the lazy\ndog.
 func (s String) WrapWords(width int, breakStr string) String {
 	if width <= 0 {

@@ -13,8 +13,7 @@ func main() {
 	// Returns an empty string if markers are missing.
 
 	// Example: minimal span between markers
-	val := str.Of("[a] bc [d]")
-	godump.Dump(val.BetweenFirst("[", "]").String())
-
+	v := str.Of("[a] bc [d]").BetweenFirst("[", "]").String()
+	godump.Dump(v)
 	// #string a
 }

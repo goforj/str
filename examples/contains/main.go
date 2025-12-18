@@ -13,8 +13,7 @@ func main() {
 	// Empty substrings return true to match strings.Contains semantics.
 
 	// Example: contains any
-	val := str.Of("Go means gophers")
-	godump.Dump(val.Contains("rust", "gopher"))
-
+	v := str.Of("Go means gophers").Contains("rust", "gopher")
+	godump.Dump(v)
 	// #bool true
 }

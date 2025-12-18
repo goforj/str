@@ -12,8 +12,7 @@ func main() {
 	// LastWord returns the last word token or empty string.
 
 	// Example: last word
-	val := str.Of("Hello world")
-	godump.Dump(val.LastWord().String())
-
+	v := str.Of("Hello world")
+	godump.Dump(v.LastWord().String())
 	// #string world
 }

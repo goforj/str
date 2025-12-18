@@ -12,8 +12,7 @@ func main() {
 	// Reverse returns a rune-safe reversed string.
 
 	// Example: reverse
-	val := str.Of("naïve")
-	godump.Dump(val.Reverse().String())
-
+	v := str.Of("naïve")
+	godump.Dump(v.Reverse().String())
 	// #string evïan
 }

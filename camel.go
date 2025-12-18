@@ -10,9 +10,8 @@ import (
 //
 // Example: camel case
 //
-//	val := str.Of("foo_bar baz")
-//	godump.Dump(val.Camel().String())
-//
+//	v := str.Of("foo_bar baz").Camel().String()
+//	godump.Dump(v)
 //	// #string fooBarBaz
 func (s String) Camel() String {
 	words := splitWordsRunes(s.s)

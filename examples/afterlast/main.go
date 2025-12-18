@@ -13,8 +13,7 @@ func main() {
 	// If sep is empty or not found, the original string is returned.
 
 	// Example: slice after last separator
-	val := str.Of("pkg/path/file.txt")
-	godump.Dump(val.AfterLast("/").String())
-
+	v := str.Of("pkg/path/file.txt").AfterLast("/").String()
+	godump.Dump(v)
 	// #string file.txt
 }

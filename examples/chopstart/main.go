@@ -12,8 +12,7 @@ func main() {
 	// ChopStart removes the first matching prefix if present.
 
 	// Example: chop start
-	val := str.Of("https://goforj.dev")
-	godump.Dump(val.ChopStart("https://", "http://").String())
-
+	v := str.Of("https://goforj.dev").ChopStart("https://", "http://").String()
+	godump.Dump(v)
 	// #string goforj.dev
 }

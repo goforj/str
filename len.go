@@ -7,9 +7,8 @@ import "unicode/utf8"
 //
 // Example: count runes instead of bytes
 //
-//	val := str.Of("gophers 🦫")
-//	godump.Dump(val.Len())
-//
+//	v := str.Of("gophers 🦫").Len()
+//	godump.Dump(v)
 //	// #int 9
 func (s String) Len() int {
 	return utf8.RuneCountInString(s.s)
@@ -20,9 +19,8 @@ func (s String) Len() int {
 //
 // Example: alias for Len
 //
-//	val := str.Of("naïve")
-//	godump.Dump(val.RuneCount())
-//
+//	v := str.Of("naïve").RuneCount()
+//	godump.Dump(v)
 //	// #int 5
 func (s String) RuneCount() int {
 	return s.Len()

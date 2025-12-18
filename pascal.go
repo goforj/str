@@ -10,9 +10,8 @@ import (
 //
 // Example: pascal case
 //
-//	val := str.Of("foo_bar baz")
-//	godump.Dump(val.Pascal().String())
-//
+//	v := str.Of("foo_bar baz")
+//	godump.Dump(v.Pascal().String())
 //	// #string FooBarBaz
 func (s String) Pascal() String {
 	words := splitWordsRunes(s.s)

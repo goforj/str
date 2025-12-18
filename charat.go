@@ -5,10 +5,8 @@ package str
 //
 // Example: rune lookup
 //
-//	val := str.Of("gopher")
-//	r, ok := val.CharAt(2)
-//	godump.Dump(string(r), ok)
-//
+//	v, ok := str.Of("gopher").CharAt(2)
+//	godump.Dump(string(v), ok)
 //	// #string p
 //	// #bool true
 func (s String) CharAt(idx int) (rune, bool) {

@@ -12,8 +12,7 @@ func main() {
 	// LcFirst returns the string with the first rune lower-cased.
 
 	// Example: lowercase first rune
-	val := str.Of("Gopher")
-	godump.Dump(val.LcFirst().String())
-
+	v := str.Of("Gopher")
+	godump.Dump(v.LcFirst().String())
 	// #string gopher
 }

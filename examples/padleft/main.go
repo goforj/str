@@ -12,8 +12,7 @@ func main() {
 	// PadLeft pads the string on the left to reach length runes using pad (defaults to space).
 
 	// Example: pad left
-	val := str.Of("go")
-	godump.Dump(val.PadLeft(5, " ").String())
-
+	v := str.Of("go")
+	godump.Dump(v.PadLeft(5, " ").String())
 	// #string \u00a0\u00a0\u00a0go
 }

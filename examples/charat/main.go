@@ -12,10 +12,8 @@ func main() {
 	// CharAt returns the rune at the given index and true if within bounds.
 
 	// Example: rune lookup
-	val := str.Of("gopher")
-	r, ok := val.CharAt(2)
-	godump.Dump(string(r), ok)
-
+	v, ok := str.Of("gopher").CharAt(2)
+	godump.Dump(string(v), ok)
 	// #string p
 	// #bool true
 }

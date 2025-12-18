@@ -12,8 +12,7 @@ func main() {
 	// UcFirst returns the string with the first rune upper-cased.
 
 	// Example: uppercase first rune
-	val := str.Of("gopher")
-	godump.Dump(val.UcFirst().String())
-
+	v := str.Of("gopher")
+	godump.Dump(v.UcFirst().String())
 	// #string Gopher
 }

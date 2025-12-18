@@ -5,9 +5,8 @@ package str
 //
 // Example: ensure prefix
 //
-//	val := str.Of("path/to")
-//	godump.Dump(val.EnsurePrefix("/").String())
-//
+//	v := str.Of("path/to").EnsurePrefix("/").String()
+//	godump.Dump(v)
 //	// #string /path/to
 func (s String) EnsurePrefix(prefix string) String {
 	if prefix == "" || s.StartsWith(prefix) {
@@ -21,9 +20,8 @@ func (s String) EnsurePrefix(prefix string) String {
 //
 // Example: ensure suffix
 //
-//	val := str.Of("path/to")
-//	godump.Dump(val.EnsureSuffix("/").String())
-//
+//	v := str.Of("path/to").EnsureSuffix("/").String()
+//	godump.Dump(v)
 //	// #string path/to/
 func (s String) EnsureSuffix(suffix string) String {
 	if suffix == "" || s.EndsWith(suffix) {

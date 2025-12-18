@@ -12,8 +12,7 @@ func main() {
 	// ReplaceFirst replaces the first occurrence of old with repl.
 
 	// Example: replace first
-	val := str.Of("gopher gopher")
-	godump.Dump(val.ReplaceFirst("gopher", "go").String())
-
+	v := str.Of("gopher gopher")
+	godump.Dump(v.ReplaceFirst("gopher", "go").String())
 	// #string go gopher
 }

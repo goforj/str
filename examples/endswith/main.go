@@ -12,8 +12,7 @@ func main() {
 	// EndsWith reports whether the string ends with any of the provided suffixes (case-sensitive).
 
 	// Example: ends with any
-	val := str.Of("gopher")
-	godump.Dump(val.EndsWith("her", "cat"))
-
+	v := str.Of("gopher").EndsWith("her", "cat")
+	godump.Dump(v)
 	// #bool true
 }

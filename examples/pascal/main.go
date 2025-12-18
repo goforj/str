@@ -12,8 +12,7 @@ func main() {
 	// Pascal converts the string to PascalCase.
 
 	// Example: pascal case
-	val := str.Of("foo_bar baz")
-	godump.Dump(val.Pascal().String())
-
+	v := str.Of("foo_bar baz")
+	godump.Dump(v.Pascal().String())
 	// #string FooBarBaz
 }

@@ -12,8 +12,7 @@ func main() {
 	// Wrap surrounds the string with before and after (after defaults to before).
 
 	// Example: wrap string
-	val := str.Of("Laravel")
-	godump.Dump(val.Wrap("\"", "").String())
-
+	v := str.Of("Laravel")
+	godump.Dump(v.Wrap("\"", "").String())
 	// #string "Laravel"
 }

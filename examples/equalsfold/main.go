@@ -12,8 +12,7 @@ func main() {
 	// EqualsFold reports whether the string matches other using Unicode case folding.
 
 	// Example: case-insensitive match
-	val := str.Of("gopher")
-	godump.Dump(val.EqualsFold("GOPHER"))
-
+	v := str.Of("gopher").EqualsFold("GOPHER")
+	godump.Dump(v)
 	// #bool true
 }

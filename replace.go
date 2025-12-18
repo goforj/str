@@ -11,9 +11,8 @@ import (
 //
 // Example: replace first
 //
-//	val := str.Of("gopher gopher")
-//	godump.Dump(val.ReplaceFirst("gopher", "go").String())
-//
+//	v := str.Of("gopher gopher")
+//	godump.Dump(v.ReplaceFirst("gopher", "go").String())
 //	// #string go gopher
 func (s String) ReplaceFirst(old, repl string) String {
 	return String{s: strings.Replace(s.s, old, repl, 1)}
@@ -24,9 +23,8 @@ func (s String) ReplaceFirst(old, repl string) String {
 //
 // Example: replace last
 //
-//	val := str.Of("gopher gopher")
-//	godump.Dump(val.ReplaceLast("gopher", "go").String())
-//
+//	v := str.Of("gopher gopher")
+//	godump.Dump(v.ReplaceLast("gopher", "go").String())
 //	// #string gopher go
 func (s String) ReplaceLast(old, repl string) String {
 	idx := strings.LastIndex(s.s, old)
@@ -46,9 +44,8 @@ func (s String) ReplaceLast(old, repl string) String {
 //
 // Example: replace many
 //
-//	val := str.Of("The---Laravel---Framework")
-//	godump.Dump(val.ReplaceArray([]string{"---"}, "-").String())
-//
+//	v := str.Of("The---Laravel---Framework")
+//	godump.Dump(v.ReplaceArray([]string{"---"}, "-").String())
 //	// #string The-Laravel-Framework
 func (s String) ReplaceArray(olds []string, repl string) String {
 	out := s.s
@@ -66,10 +63,9 @@ func (s String) ReplaceArray(olds []string, repl string) String {
 //
 // Example: regex replace with callback
 //
-//	val := str.Of("Hello 123 World")
+//	v := str.Of("Hello 123 World")
 //	re := regexp.MustCompile(`\d+`)
-//	godump.Dump(val.ReplaceMatches(re, func(m string) string { return "[" + m + "]" }).String())
-//
+//	godump.Dump(v.ReplaceMatches(re, func(m string) string { return "[" + m + "]" }).String())
 //	// #string Hello [123] World
 func (s String) ReplaceMatches(pattern *regexp.Regexp, repl func(string) string) String {
 	return String{s: pattern.ReplaceAllStringFunc(s.s, repl)}
@@ -80,10 +76,9 @@ func (s String) ReplaceMatches(pattern *regexp.Regexp, repl func(string) string)
 //
 // Example: swap map
 //
-//	val := str.Of("Tacos are great!")
+//	v := str.Of("Tacos are great!")
 //	pairs := map[string]string{"Tacos": "Burritos", "great": "fantastic"}
-//	godump.Dump(val.Swap(pairs).String())
-//
+//	godump.Dump(v.Swap(pairs).String())
 //	// #string Burritos are fantastic!
 func (s String) Swap(pairs map[string]string) String {
 	if len(pairs) == 0 {

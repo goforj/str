@@ -12,8 +12,7 @@ func main() {
 	// ChopEnd removes the first matching suffix if present.
 
 	// Example: chop end
-	val := str.Of("file.txt")
-	godump.Dump(val.ChopEnd(".txt", ".md").String())
-
+	v := str.Of("file.txt").ChopEnd(".txt", ".md").String()
+	godump.Dump(v)
 	// #string file
 }

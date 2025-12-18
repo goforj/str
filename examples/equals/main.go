@@ -12,8 +12,7 @@ func main() {
 	// Equals reports whether the string exactly matches other (case-sensitive).
 
 	// Example: exact match
-	val := str.Of("gopher")
-	godump.Dump(val.Equals("gopher"))
-
+	v := str.Of("gopher").Equals("gopher")
+	godump.Dump(v)
 	// #bool true
 }

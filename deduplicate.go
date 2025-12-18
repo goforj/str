@@ -6,9 +6,8 @@ package str
 //
 // Example: collapse spaces
 //
-//	val := str.Of("The   Laravel   Framework")
-//	godump.Dump(val.Deduplicate(' ').String())
-//
+//	v := str.Of("The   Laravel   Framework").Deduplicate(' ').String()
+//	godump.Dump(v)
 //	// #string The Laravel Framework
 func (s String) Deduplicate(char rune) String {
 	if char == 0 {

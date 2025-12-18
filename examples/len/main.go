@@ -12,8 +12,7 @@ func main() {
 	// Len returns the number of runes in the string.
 
 	// Example: count runes instead of bytes
-	val := str.Of("gophers 🦫")
-	godump.Dump(val.Len())
-
+	v := str.Of("gophers 🦫").Len()
+	godump.Dump(v)
 	// #int 9
 }

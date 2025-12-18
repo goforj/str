@@ -13,8 +13,7 @@ func main() {
 	// Indices are clamped; if start >= end the result is empty.
 
 	// Example: rune-safe slice
-	val := str.Of("naïve café")
-	godump.Dump(val.Slice(3, 7).String())
-
+	v := str.Of("naïve café")
+	godump.Dump(v.Slice(3, 7).String())
 	// #string e ca
 }

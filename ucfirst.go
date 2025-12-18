@@ -7,9 +7,8 @@ import "unicode"
 //
 // Example: uppercase first rune
 //
-//	val := str.Of("gopher")
-//	godump.Dump(val.UcFirst().String())
-//
+//	v := str.Of("gopher")
+//	godump.Dump(v.UcFirst().String())
 //	// #string Gopher
 func (s String) UcFirst() String {
 	runes := []rune(s.s)

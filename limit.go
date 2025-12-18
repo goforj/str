@@ -5,9 +5,8 @@ package str
 //
 // Example: limit with suffix
 //
-//	val := str.Of("Perfectly balanced, as all things should be.")
-//	godump.Dump(val.Limit(10, "...").String())
-//
+//	v := str.Of("Perfectly balanced, as all things should be.")
+//	godump.Dump(v.Limit(10, "...").String())
 //	// #string Perfectly...
 func (s String) Limit(length int, suffix string) String {
 	if length <= 0 {

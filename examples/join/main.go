@@ -12,8 +12,7 @@ func main() {
 	// Join joins the provided words with sep.
 
 	// Example: join words
-	val := str.Of("unused")
-	godump.Dump(val.Join([]string{"foo", "bar"}, "-").String())
-
+	v := str.Of("unused")
+	godump.Dump(v.Join([]string{"foo", "bar"}, "-").String())
 	// #string foo-bar
 }

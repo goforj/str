@@ -12,8 +12,7 @@ func main() {
 	// EndsWithFold reports whether the string ends with any of the provided suffixes using Unicode case folding.
 
 	// Example: ends with (case-insensitive)
-	val := str.Of("gopher")
-	godump.Dump(val.EndsWithFold("HER"))
-
+	v := str.Of("gopher").EndsWithFold("HER")
+	godump.Dump(v)
 	// #bool true
 }

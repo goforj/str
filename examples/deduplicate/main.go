@@ -13,8 +13,7 @@ func main() {
 	// If char is zero, space is used.
 
 	// Example: collapse spaces
-	val := str.Of("The   Laravel   Framework")
-	godump.Dump(val.Deduplicate(' ').String())
-
+	v := str.Of("The   Laravel   Framework").Deduplicate(' ').String()
+	godump.Dump(v)
 	// #string The Laravel Framework
 }

@@ -12,8 +12,7 @@ func main() {
 	// IsEmpty reports whether the string has zero length.
 
 	// Example: empty check
-	val := str.Of("")
-	godump.Dump(val.IsEmpty())
-
+	v := str.Of("")
+	godump.Dump(v.IsEmpty())
 	// #bool true
 }

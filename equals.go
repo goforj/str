@@ -7,9 +7,8 @@ import "strings"
 //
 // Example: exact match
 //
-//	val := str.Of("gopher")
-//	godump.Dump(val.Equals("gopher"))
-//
+//	v := str.Of("gopher").Equals("gopher")
+//	godump.Dump(v)
 //	// #bool true
 func (s String) Equals(other string) bool {
 	return s.s == other
@@ -20,9 +19,8 @@ func (s String) Equals(other string) bool {
 //
 // Example: case-insensitive match
 //
-//	val := str.Of("gopher")
-//	godump.Dump(val.EqualsFold("GOPHER"))
-//
+//	v := str.Of("gopher").EqualsFold("GOPHER")
+//	godump.Dump(v)
 //	// #bool true
 func (s String) EqualsFold(other string) bool {
 	return strings.EqualFold(s.s, other)

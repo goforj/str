@@ -12,8 +12,7 @@ func main() {
 	// EnsurePrefix ensures the string starts with prefix, adding it if missing.
 
 	// Example: ensure prefix
-	val := str.Of("path/to")
-	godump.Dump(val.EnsurePrefix("/").String())
-
+	v := str.Of("path/to").EnsurePrefix("/").String()
+	godump.Dump(v)
 	// #string /path/to
 }

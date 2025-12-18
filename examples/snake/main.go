@@ -12,8 +12,7 @@ func main() {
 	// Snake converts the string to snake_case using the provided separator (default "_").
 
 	// Example: snake case
-	val := str.Of("fooBar baz")
-	godump.Dump(val.Snake("_").String())
-
+	v := str.Of("fooBar baz")
+	godump.Dump(v.Snake("_").String())
 	// #string foo_bar_baz
 }

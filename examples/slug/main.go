@@ -13,8 +13,7 @@ func main() {
 	// Not locale-aware; intended for identifiers/URLs.
 
 	// Example: build slug
-	val := str.Of("Laravel Framework")
-	godump.Dump(val.Slug("-").String())
-
+	v := str.Of("Laravel Framework")
+	godump.Dump(v.Slug("-").String())
 	// #string laravel-framework
 }
