@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-168-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-176-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -55,6 +55,7 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Masking** | [Mask](#mask) |
 | **Match** | [Is](#is) [IsMatch](#ismatch) |
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
+| **Pluralize** | [Plural](#plural) [Singular](#singular) |
 | **Replace** | [Remove](#remove) [ReplaceAll](#replaceall) [ReplaceArray](#replacearray) [ReplaceFirst](#replacefirst) [ReplaceFirstFold](#replacefirstfold) [ReplaceFold](#replacefold) [ReplaceLast](#replacelast) [ReplaceLastFold](#replacelastfold) [ReplaceMatches](#replacematches) [Swap](#swap) |
 | **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [DoesntContain](#doesntcontain) [DoesntContainFold](#doesntcontainfold) [DoesntEndWith](#doesntendwith) [DoesntEndWithFold](#doesntendwithfold) [DoesntStartWith](#doesntstartwith) [DoesntStartWithFold](#doesntstartwithfold) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
 | **Slug** | [Slug](#slug) |
@@ -567,6 +568,28 @@ PadRight pads the string on the right to reach length runes using pad (defaults 
 v := str.Of("go").PadRight(5, ".").String()
 str.Dump(v)
 // #string go...
+```
+
+## Pluralize
+
+### <a id="plural"></a>Plural
+
+Plural returns a best-effort English plural form of the last word.
+
+```go
+v := str.Of("city").Plural().String()
+str.Dump(v)
+// #string cities
+```
+
+### <a id="singular"></a>Singular
+
+Singular returns a best-effort English singular form of the last word.
+
+```go
+v := str.Of("people").Singular().String()
+str.Dump(v)
+// #string person
 ```
 
 ## Replace
