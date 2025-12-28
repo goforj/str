@@ -112,7 +112,7 @@ str.Dump(v)
 Unwrap removes matching before and after strings if present.
 
 ```go
-v := str.Of("\"GoForj\"").Unwrap("\"", "\"").String()
+v := str.Of(`"GoForj"`).Unwrap(`"`, `"`).String()
 str.Dump(v)
 // #string GoForj
 ```
@@ -122,7 +122,7 @@ str.Dump(v)
 Wrap surrounds the string with before and after (after defaults to before).
 
 ```go
-v := str.Of("GoForj").Wrap("\"", "").String()
+v := str.Of("GoForj").Wrap(`"`, "").String()
 str.Dump(v)
 // #string "GoForj"
 ```

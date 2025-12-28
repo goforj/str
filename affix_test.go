@@ -43,10 +43,10 @@ func TestChopAndEnsure(t *testing.T) {
 func TestWrapAndUnwrap(t *testing.T) {
 	t.Parallel()
 
-	if got := Of("GoForj").Wrap("\"", "").String(); got != "\"GoForj\"" {
+	if got := Of("GoForj").Wrap(`"`, "").String(); got != `"GoForj"` {
 		t.Fatalf("Wrap = %q", got)
 	}
-	if got := Of("\"GoForj\"").Unwrap("\"", "\"").String(); got != "GoForj" {
+	if got := Of(`"GoForj"`).Unwrap(`"`, `"`).String(); got != "GoForj" {
 		t.Fatalf("Unwrap = %q", got)
 	}
 	if got := Of("gopher").Unwrap("[", "]").String(); got != "gopher" {
