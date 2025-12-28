@@ -48,9 +48,10 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Cleanup** | [Deduplicate](#deduplicate) [NormalizeNewlines](#normalizenewlines) [NormalizeSpace](#normalizespace) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) |
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
 | **Compose** | [Append](#append) [NewLine](#newline) [Prepend](#prepend) |
+| **Constructor** | [Of](#of) |
 | **Debug** | [Dump](#dump) |
 | **Encoding** | [FromBase64](#frombase64) [ToBase64](#tobase64) |
-| **Fluent** | [GoString](#gostring) [Of](#of) [String](#string) |
+| **Fluent** | [GoString](#gostring) [String](#string) |
 | **Length** | [Len](#len) [RuneCount](#runecount) |
 | **Masking** | [Mask](#mask) |
 | **Match** | [Is](#is) [IsMatch](#ismatch) [Match](#match) [MatchAll](#matchall) |
@@ -411,6 +412,18 @@ str.Dump(v)
 // #string Hello Go World
 ```
 
+## Constructor
+
+### <a id="of"></a>Of
+
+Of wraps a raw string with fluent helpers.
+
+```go
+v := str.Of("gopher")
+str.Dump(v.String())
+// #string gopher
+```
+
 ## Debug
 
 ### <a id="dump"></a>Dump
@@ -457,16 +470,6 @@ GoString allows %#v formatting to print the raw string.
 v := str.Of("go")
 str.Dump(fmt.Sprintf("%#v", v))
 // #string go
-```
-
-### <a id="of"></a>Of
-
-Of wraps a raw string with fluent helpers.
-
-```go
-v := str.Of("gopher")
-str.Dump(v.String())
-// #string gopher
 ```
 
 ### <a id="string"></a>String

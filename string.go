@@ -7,7 +7,7 @@ type String struct {
 }
 
 // Of wraps a raw string with fluent helpers.
-// @group Fluent
+// @group Constructor
 //
 // Example: wrap raw string
 //
