@@ -57,7 +57,7 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
 | **Pluralize** | [Plural](#plural) [Singular](#singular) |
 | **Replace** | [Remove](#remove) [ReplaceAll](#replaceall) [ReplaceArray](#replacearray) [ReplaceEnd](#replaceend) [ReplaceFirst](#replacefirst) [ReplaceFirstFold](#replacefirstfold) [ReplaceFold](#replacefold) [ReplaceLast](#replacelast) [ReplaceLastFold](#replacelastfold) [ReplaceMatches](#replacematches) [ReplaceStart](#replacestart) [Swap](#swap) |
-| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [DoesntContain](#doesntcontain) [DoesntContainFold](#doesntcontainfold) [DoesntEndWith](#doesntendwith) [DoesntEndWithFold](#doesntendwithfold) [DoesntStartWith](#doesntstartwith) [DoesntStartWithFold](#doesntstartwithfold) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
+| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
 | **Slug** | [Slug](#slug) |
 | **Snippet** | [Excerpt](#excerpt) |
 | **Split** | [Lines](#lines) [Split](#split) [UcSplit](#ucsplit) |
@@ -784,68 +784,6 @@ Count returns the number of non-overlapping occurrences of sub.
 v := str.Of("gogophergo").Count("go")
 println(v)
 // #int 3
-```
-
-### <a id="doesntcontain"></a>DoesntContain
-
-DoesntContain reports true if none of the substrings are found (case-sensitive).
-Empty substrings are ignored.
-
-```go
-v := str.Of("gophers are great")
-println(v.DoesntContain("rust", "beam"))
-// #bool true
-```
-
-### <a id="doesntcontainfold"></a>DoesntContainFold
-
-DoesntContainFold reports true if none of the substrings are found using Unicode case folding.
-Empty substrings are ignored.
-
-```go
-v := str.Of("gophers are great")
-println(v.DoesntContainFold("GOPHER"))
-// #bool false
-```
-
-### <a id="doesntendwith"></a>DoesntEndWith
-
-DoesntEndWith reports true if the string ends with none of the provided suffixes (case-sensitive).
-
-```go
-v := str.Of("gopher")
-println(v.DoesntEndWith("her", "cat"))
-// #bool false
-```
-
-### <a id="doesntendwithfold"></a>DoesntEndWithFold
-
-DoesntEndWithFold reports true if the string ends with none of the provided suffixes using Unicode case folding.
-
-```go
-v := str.Of("gopher")
-println(v.DoesntEndWithFold("HER"))
-// #bool false
-```
-
-### <a id="doesntstartwith"></a>DoesntStartWith
-
-DoesntStartWith reports true if the string starts with none of the provided prefixes (case-sensitive).
-
-```go
-v := str.Of("gopher")
-println(v.DoesntStartWith("go", "rust"))
-// #bool false
-```
-
-### <a id="doesntstartwithfold"></a>DoesntStartWithFold
-
-DoesntStartWithFold reports true if the string starts with none of the provided prefixes using Unicode case folding.
-
-```go
-v := str.Of("gopher")
-println(v.DoesntStartWithFold("GO"))
-// #bool false
 ```
 
 ### <a id="endswith"></a>EndsWith
