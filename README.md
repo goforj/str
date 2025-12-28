@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-183-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-196-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -45,7 +45,7 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Affixes** | [ChopEnd](#chopend) [ChopStart](#chopstart) [EnsurePrefix](#ensureprefix) [EnsureSuffix](#ensuresuffix) [Unwrap](#unwrap) [Wrap](#wrap) |
 | **Case** | [Camel](#camel) [Headline](#headline) [Kebab](#kebab) [LcFirst](#lcfirst) [Pascal](#pascal) [Snake](#snake) [Title](#title) [ToLower](#tolower) [ToTitle](#totitle) [ToUpper](#toupper) [UcFirst](#ucfirst) [UcWords](#ucwords) |
 | **Checks** | [IsASCII](#isascii) [IsBlank](#isblank) [IsEmpty](#isempty) |
-| **Cleanup** | [Deduplicate](#deduplicate) [NormalizeNewlines](#normalizenewlines) [NormalizeSpace](#normalizespace) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) |
+| **Cleanup** | [Deduplicate](#deduplicate) [NormalizeNewlines](#normalizenewlines) [NormalizeSpace](#normalizespace) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) [TrimSpace](#trimspace) |
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
 | **Compose** | [Append](#append) [NewLine](#newline) [Prepend](#prepend) |
 | **Constructor** | [Of](#of) |
@@ -329,7 +329,7 @@ println(v)
 
 ### <a id="trim"></a>Trim
 
-Trim trims leading and trailing characters. If cutset is empty, trims Unicode whitespace.
+Trim trims leading and trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 
 ```go
 v := str.Of("  GoForj  ").Trim("").String()
@@ -339,7 +339,7 @@ println(v)
 
 ### <a id="trimleft"></a>TrimLeft
 
-TrimLeft trims leading characters. If cutset is empty, trims Unicode whitespace.
+TrimLeft trims leading characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 
 ```go
 v := str.Of("  GoForj  ").TrimLeft("").String()
@@ -349,12 +349,22 @@ println(v)
 
 ### <a id="trimright"></a>TrimRight
 
-TrimRight trims trailing characters. If cutset is empty, trims Unicode whitespace.
+TrimRight trims trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 
 ```go
 v := str.Of("  GoForj  ").TrimRight("").String()
 println(v)
 // #string   GoForj
+```
+
+### <a id="trimspace"></a>TrimSpace
+
+TrimSpace trims leading and trailing Unicode whitespace.
+
+```go
+v := str.Of("  GoForj  ").TrimSpace().String()
+println(v)
+// #string GoForj
 ```
 
 ## Comparison

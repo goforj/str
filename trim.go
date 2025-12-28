@@ -5,7 +5,7 @@ import (
 	"unicode"
 )
 
-// Trim trims leading and trailing characters. If cutset is empty, trims Unicode whitespace.
+// Trim trims leading and trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 // @group Cleanup
 //
 // Example: trim whitespace
@@ -20,7 +20,26 @@ func (s String) Trim(cutset string) String {
 	return String{s: strings.Trim(s.s, cutset)}
 }
 
-// TrimLeft trims leading characters. If cutset is empty, trims Unicode whitespace.
+// TrimSpace trims leading and trailing Unicode whitespace.
+// @group Cleanup
+//
+// Example: trim space
+//
+//	v := str.Of("  GoForj  ").TrimSpace().String()
+//	println(v)
+//	// #string GoForj
+func (s String) TrimSpace() String {
+	if s.s == "" {
+		return s
+	}
+	if trimmed := strings.TrimFunc(s.s, unicode.IsSpace); trimmed == s.s {
+		return s
+	} else {
+		return String{s: trimmed}
+	}
+}
+
+// TrimLeft trims leading characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 // @group Cleanup
 //
 // Example: trim left
@@ -35,7 +54,7 @@ func (s String) TrimLeft(cutset string) String {
 	return String{s: strings.TrimLeft(s.s, cutset)}
 }
 
-// TrimRight trims trailing characters. If cutset is empty, trims Unicode whitespace.
+// TrimRight trims trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
 // @group Cleanup
 //
 // Example: trim right
