@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-196-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-218-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -42,9 +42,9 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 
 | Group | Functions |
 |------:|-----------|
-| **Affixes** | [ChopEnd](#chopend) [ChopStart](#chopstart) [EnsurePrefix](#ensureprefix) [EnsureSuffix](#ensuresuffix) [Unwrap](#unwrap) [Wrap](#wrap) |
+| **Affixes** | [ChopEnd](#chopend) [ChopStart](#chopstart) [EnsurePrefix](#ensureprefix) [EnsureSuffix](#ensuresuffix) [HasSurrounding](#hassurrounding) [Unwrap](#unwrap) [Wrap](#wrap) |
 | **Case** | [Camel](#camel) [Headline](#headline) [Kebab](#kebab) [LcFirst](#lcfirst) [Pascal](#pascal) [Snake](#snake) [Title](#title) [ToLower](#tolower) [ToTitle](#totitle) [ToUpper](#toupper) [UcFirst](#ucfirst) [UcWords](#ucwords) |
-| **Checks** | [IsASCII](#isascii) [IsBlank](#isblank) [IsEmpty](#isempty) |
+| **Checks** | [IsASCII](#isascii) [IsAlnum](#isalnum) [IsAlpha](#isalpha) [IsBlank](#isblank) [IsEmpty](#isempty) [IsNumeric](#isnumeric) |
 | **Cleanup** | [Deduplicate](#deduplicate) [NormalizeNewlines](#normalizenewlines) [NormalizeSpace](#normalizespace) [Squish](#squish) [Trim](#trim) [TrimLeft](#trimleft) [TrimRight](#trimright) [TrimSpace](#trimspace) |
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
 | **Compose** | [Append](#append) [NewLine](#newline) [Prepend](#prepend) |
@@ -57,13 +57,13 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
 | **Pluralize** | [Plural](#plural) [Singular](#singular) |
 | **Replace** | [Remove](#remove) [ReplaceAll](#replaceall) [ReplaceArray](#replacearray) [ReplaceEnd](#replaceend) [ReplaceFirst](#replacefirst) [ReplaceFirstFold](#replacefirstfold) [ReplaceFold](#replacefold) [ReplaceLast](#replacelast) [ReplaceLastFold](#replacelastfold) [ReplaceMatches](#replacematches) [ReplaceStart](#replacestart) [Swap](#swap) |
-| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [LastIndex](#lastindex) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
+| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [IndexFold](#indexfold) [LastIndex](#lastindex) [LastIndexFold](#lastindexfold) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
 | **Slug** | [Slug](#slug) |
 | **Snippet** | [Excerpt](#excerpt) |
 | **Split** | [Lines](#lines) [Split](#split) [UcSplit](#ucsplit) |
-| **Substrings** | [After](#after) [AfterLast](#afterlast) [Before](#before) [BeforeLast](#beforelast) [Between](#between) [BetweenFirst](#betweenfirst) [CharAt](#charat) [Limit](#limit) [Slice](#slice) [SubstrReplace](#substrreplace) [Take](#take) [TakeLast](#takelast) |
+| **Substrings** | [After](#after) [AfterFold](#afterfold) [AfterLast](#afterlast) [Before](#before) [BeforeFold](#beforefold) [BeforeLast](#beforelast) [Between](#between) [BetweenFirst](#betweenfirst) [CharAt](#charat) [CommonPrefix](#commonprefix) [CommonSuffix](#commonsuffix) [Limit](#limit) [Slice](#slice) [SubstrReplace](#substrreplace) [Take](#take) [TakeLast](#takelast) |
 | **Transform** | [Repeat](#repeat) [Reverse](#reverse) [Transliterate](#transliterate) |
-| **Words** | [FirstWord](#firstword) [Join](#join) [LastWord](#lastword) [SplitWords](#splitwords) [WordCount](#wordcount) [Words](#words) [WrapWords](#wrapwords) |
+| **Words** | [FirstWord](#firstword) [Initials](#initials) [Join](#join) [LastWord](#lastword) [SplitWords](#splitwords) [WordCount](#wordcount) [Words](#words) [WrapWords](#wrapwords) |
 
 
 ## Affixes
@@ -106,6 +106,17 @@ EnsureSuffix ensures the string ends with suffix, adding it if missing.
 v := str.Of("path/to").EnsureSuffix("/").String()
 println(v)
 // #string path/to/
+```
+
+### <a id="hassurrounding"></a>HasSurrounding
+
+HasSurrounding reports whether the string starts with before and ends with after.
+If after is empty, before is used for both sides.
+
+```go
+v := str.Of(`"GoForj"`).HasSurrounding(`"`, "")
+println(v)
+// #bool true
 ```
 
 ### <a id="unwrap"></a>Unwrap
@@ -264,6 +275,26 @@ println(v)
 // #bool true
 ```
 
+### <a id="isalnum"></a>IsAlnum
+
+IsAlnum reports whether the string contains at least one rune and every rune is a Unicode letter or number.
+
+```go
+v := str.Of("Gopher2025").IsAlnum()
+println(v)
+// #bool true
+```
+
+### <a id="isalpha"></a>IsAlpha
+
+IsAlpha reports whether the string contains at least one rune and every rune is a Unicode letter.
+
+```go
+v := str.Of("Gopher").IsAlpha()
+println(v)
+// #bool true
+```
+
 ### <a id="isblank"></a>IsBlank
 
 IsBlank reports whether the string contains only Unicode whitespace.
@@ -280,6 +311,16 @@ IsEmpty reports whether the string has zero length.
 
 ```go
 v := str.Of("").IsEmpty()
+println(v)
+// #bool true
+```
+
+### <a id="isnumeric"></a>IsNumeric
+
+IsNumeric reports whether the string contains at least one rune and every rune is a Unicode number.
+
+```go
+v := str.Of("12345").IsNumeric()
 println(v)
 // #bool true
 ```
@@ -826,12 +867,34 @@ println(v)
 // #int 2
 ```
 
+### <a id="indexfold"></a>IndexFold
+
+IndexFold returns the rune index of the first occurrence of sub using Unicode-aware
+case-insensitive comparison, or -1 if not found.
+
+```go
+v := str.Of("Go gopher GO").IndexFold("go")
+println(v)
+// #int 0
+```
+
 ### <a id="lastindex"></a>LastIndex
 
 LastIndex returns the rune index of the last occurrence of sub, or -1 if not found.
 
 ```go
 v := str.Of("go gophers go").LastIndex("go")
+println(v)
+// #int 10
+```
+
+### <a id="lastindexfold"></a>LastIndexFold
+
+LastIndexFold returns the rune index of the last occurrence of sub using Unicode-aware
+case-insensitive comparison, or -1 if not found.
+
+```go
+v := str.Of("Go gopher GO").LastIndexFold("go")
 println(v)
 // #int 10
 ```
@@ -928,6 +991,17 @@ println(v)
 // #string go
 ```
 
+### <a id="afterfold"></a>AfterFold
+
+AfterFold returns the substring after the first occurrence of sep using Unicode-aware
+case-insensitive comparison. If sep is empty or not found, the original string is returned.
+
+```go
+v := str.Of("gopher::GO-team").AfterFold("::go").String()
+println(v)
+// #string -team
+```
+
 ### <a id="afterlast"></a>AfterLast
 
 AfterLast returns the substring after the last occurrence of sep.
@@ -948,6 +1022,17 @@ If sep is empty or not found, the original string is returned.
 v := str.Of("gopher::go").Before("::").String()
 println(v)
 // #string gopher
+```
+
+### <a id="beforefold"></a>BeforeFold
+
+BeforeFold returns the substring before the first occurrence of sep using Unicode-aware
+case-insensitive comparison. If sep is empty or not found, the original string is returned.
+
+```go
+v := str.Of("GoPHER::go").BeforeFold("::GO").String()
+println(v)
+// #string GoPHER
 ```
 
 ### <a id="beforelast"></a>BeforeLast
@@ -992,6 +1077,28 @@ v, ok := str.Of("gopher").CharAt(2)
 println(string(v), ok)
 // #string p
 // #bool true
+```
+
+### <a id="commonprefix"></a>CommonPrefix
+
+CommonPrefix returns the longest shared prefix between the string and all provided others.
+Comparison is rune-safe. If no others are provided, the original string is returned.
+
+```go
+v := str.Of("gopher").CommonPrefix("go", "gold").String()
+println(v)
+// #string go
+```
+
+### <a id="commonsuffix"></a>CommonSuffix
+
+CommonSuffix returns the longest shared suffix between the string and all provided others.
+Comparison is rune-safe. If no others are provided, the original string is returned.
+
+```go
+v := str.Of("main_test.go").CommonSuffix("user_test.go", "api_test.go").String()
+println(v)
+// #string _test.go
 ```
 
 ### <a id="limit"></a>Limit
@@ -1087,6 +1194,17 @@ FirstWord returns the first word token or empty string.
 v := str.Of("Hello world")
 println(v.FirstWord().String())
 // #string Hello
+```
+
+### <a id="initials"></a>Initials
+
+Initials returns the uppercase first rune of each detected word.
+Words are split the same way as SplitWords, including camelCase boundaries.
+
+```go
+v := str.Of("portableNetwork graphics").Initials().String()
+println(v)
+// #string PNG
 ```
 
 ### <a id="join"></a>Join
