@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-224-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-230-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -49,6 +49,7 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Comparison** | [Equals](#equals) [EqualsFold](#equalsfold) |
 | **Compose** | [Append](#append) [NewLine](#newline) [Prepend](#prepend) |
 | **Constructor** | [Of](#of) |
+| **Conversion** | [Bool](#bool) [Float64](#float64) [Int](#int) |
 | **Encoding** | [FromBase64](#frombase64) [ToBase64](#tobase64) |
 | **Fluent** | [GoString](#gostring) [String](#string) |
 | **Length** | [Len](#len) [RuneCount](#runecount) |
@@ -472,6 +473,41 @@ Of wraps a raw string with fluent helpers.
 v := str.Of("gopher")
 println(v.String())
 // #string gopher
+```
+
+## Conversion
+
+### <a id="bool"></a>Bool
+
+Bool parses the string as a bool using strconv.ParseBool semantics.
+
+```go
+v, err := str.Of("true").Bool()
+println(v, err == nil)
+// #bool true
+// #bool true
+```
+
+### <a id="float64"></a>Float64
+
+Float64 parses the string as a float64 using strconv.ParseFloat semantics.
+
+```go
+v, err := str.Of("3.14").Float64()
+println(v, err == nil)
+// #float64 3.14
+// #bool true
+```
+
+### <a id="int"></a>Int
+
+Int parses the string as a base-10 int using strconv.Atoi semantics.
+
+```go
+v, err := str.Of("42").Int()
+println(v, err == nil)
+// #int 42
+// #bool true
 ```
 
 ## Encoding
