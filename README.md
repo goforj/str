@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str" ><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3"/></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-218-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-224-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
     <a href="https://goreportcard.com/report/github.com/goforj/str"><img src="https://goreportcard.com/badge/github.com/goforj/str" alt="Go Report Card"></a>
 </p>
@@ -57,11 +57,11 @@ This guarantees all examples are valid, up-to-date, and remain functional as the
 | **Padding** | [PadBoth](#padboth) [PadLeft](#padleft) [PadRight](#padright) |
 | **Pluralize** | [Plural](#plural) [Singular](#singular) |
 | **Replace** | [Remove](#remove) [ReplaceAll](#replaceall) [ReplaceArray](#replacearray) [ReplaceEnd](#replaceend) [ReplaceFirst](#replacefirst) [ReplaceFirstFold](#replacefirstfold) [ReplaceFold](#replacefold) [ReplaceLast](#replacelast) [ReplaceLastFold](#replacelastfold) [ReplaceMatches](#replacematches) [ReplaceStart](#replacestart) [Swap](#swap) |
-| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [IndexFold](#indexfold) [LastIndex](#lastindex) [LastIndexFold](#lastindexfold) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
+| **Search** | [Contains](#contains) [ContainsAll](#containsall) [ContainsAllFold](#containsallfold) [ContainsFold](#containsfold) [Count](#count) [CountFold](#countfold) [EndsWith](#endswith) [EndsWithFold](#endswithfold) [Index](#index) [IndexFold](#indexfold) [LastIndex](#lastindex) [LastIndexFold](#lastindexfold) [StartsWith](#startswith) [StartsWithFold](#startswithfold) |
 | **Slug** | [Slug](#slug) |
 | **Snippet** | [Excerpt](#excerpt) |
 | **Split** | [Lines](#lines) [Split](#split) [UcSplit](#ucsplit) |
-| **Substrings** | [After](#after) [AfterFold](#afterfold) [AfterLast](#afterlast) [Before](#before) [BeforeFold](#beforefold) [BeforeLast](#beforelast) [Between](#between) [BetweenFirst](#betweenfirst) [CharAt](#charat) [CommonPrefix](#commonprefix) [CommonSuffix](#commonsuffix) [Limit](#limit) [Slice](#slice) [SubstrReplace](#substrreplace) [Take](#take) [TakeLast](#takelast) |
+| **Substrings** | [After](#after) [AfterFold](#afterfold) [AfterLast](#afterlast) [AfterLastFold](#afterlastfold) [Before](#before) [BeforeFold](#beforefold) [BeforeLast](#beforelast) [BeforeLastFold](#beforelastfold) [Between](#between) [BetweenFirst](#betweenfirst) [CharAt](#charat) [CommonPrefix](#commonprefix) [CommonSuffix](#commonsuffix) [Limit](#limit) [Slice](#slice) [SubstrReplace](#substrreplace) [Take](#take) [TakeLast](#takelast) |
 | **Transform** | [Repeat](#repeat) [Reverse](#reverse) [Transliterate](#transliterate) |
 | **Words** | [FirstWord](#firstword) [Initials](#initials) [Join](#join) [LastWord](#lastword) [SplitWords](#splitwords) [WordCount](#wordcount) [Words](#words) [WrapWords](#wrapwords) |
 
@@ -837,6 +837,17 @@ println(v)
 // #int 3
 ```
 
+### <a id="countfold"></a>CountFold
+
+CountFold returns the number of non-overlapping occurrences of sub using Unicode-aware
+case-insensitive comparison.
+
+```go
+v := str.Of("GoGOgophergo").CountFold("go")
+println(v)
+// #int 4
+```
+
 ### <a id="endswith"></a>EndsWith
 
 EndsWith reports whether the string ends with any of the provided suffixes (case-sensitive).
@@ -1013,6 +1024,17 @@ println(v)
 // #string file.txt
 ```
 
+### <a id="afterlastfold"></a>AfterLastFold
+
+AfterLastFold returns the substring after the last occurrence of sep using Unicode-aware
+case-insensitive comparison. If sep is empty or not found, the original string is returned.
+
+```go
+v := str.Of("pkg/Path/FILE.txt").AfterLastFold("/path/").String()
+println(v)
+// #string FILE.txt
+```
+
 ### <a id="before"></a>Before
 
 Before returns the substring before the first occurrence of sep.
@@ -1044,6 +1066,17 @@ If sep is empty or not found, the original string is returned.
 v := str.Of("pkg/path/file.txt").BeforeLast("/").String()
 println(v)
 // #string pkg/path
+```
+
+### <a id="beforelastfold"></a>BeforeLastFold
+
+BeforeLastFold returns the substring before the last occurrence of sep using Unicode-aware
+case-insensitive comparison. If sep is empty or not found, the original string is returned.
+
+```go
+v := str.Of("pkg/Path/FILE.txt").BeforeLastFold("/path/").String()
+println(v)
+// #string pkg
 ```
 
 ### <a id="between"></a>Between
