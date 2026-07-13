@@ -1,11 +1,10 @@
 package str
 
 import (
-	"regexp"
-	"strings"
 	"testing"
 )
 
+// TestReplaceVariants guards its covered contract against regressions.
 func TestReplaceVariants(t *testing.T) {
 	t.Parallel()
 
@@ -25,13 +24,12 @@ func TestReplaceVariants(t *testing.T) {
 	if got := val.ReplaceArray([]string{""}, "x").String(); got != "gopher gopher" {
 		t.Fatalf("ReplaceArray empty skip = %q", got)
 	}
-
-	re := regexp.MustCompile(`go\w+`)
-	if got := val.ReplaceMatches(re, strings.ToUpper).String(); got != "GOPHER GOPHER" {
-		t.Fatalf("ReplaceMatches = %q", got)
+	if got := val.ReplaceFirst("", "x").String(); got != "gopher gopher" {
+		t.Fatalf("ReplaceFirst empty search = %q", got)
 	}
 }
 
+// TestSwapRemoveCountRepeat guards its covered contract against regressions.
 func TestSwapRemoveCountRepeat(t *testing.T) {
 	t.Parallel()
 

@@ -6,6 +6,7 @@ import (
 )
 
 // Title converts the string to title case (first letter of each word upper, rest lower) using Unicode rules.
+// Similar: Headline.
 // @group Case
 //
 // Example: title case words

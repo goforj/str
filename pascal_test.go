@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestPascal guards its covered contract against regressions.
 func TestPascal(t *testing.T) {
 	t.Parallel()
 
@@ -13,5 +14,8 @@ func TestPascal(t *testing.T) {
 	}
 	if got := Of("fooBAR").Pascal().String(); got != "FooBar" {
 		t.Fatalf("Pascal mixed = %q", got)
+	}
+	if got := Of("HTTPRequestID").Pascal().String(); got != "HttpRequestId" {
+		t.Fatalf("Pascal acronym = %q", got)
 	}
 }

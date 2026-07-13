@@ -2,26 +2,33 @@ package str
 
 import "testing"
 
+// TestToBase64 guards its covered contract against regressions.
 func TestToBase64(t *testing.T) {
-	got := Of("gopher").ToBase64().String()
-	if got != "Z29waGVy" {
-		t.Fatalf("expected Z29waGVy, got %s", got)
+	t.Parallel()
+
+	if got := Of("gopher").ToBase64().String(); got != "Z29waGVy" {
+		t.Fatalf("ToBase64 = %q", got)
 	}
 }
 
+// TestFromBase64 guards its covered contract against regressions.
 func TestFromBase64(t *testing.T) {
-	val, err := Of("Z29waGVy").FromBase64()
+	t.Parallel()
+
+	value, err := Of("Z29waGVy").FromBase64()
 	if err != nil {
-		t.Fatalf("expected nil error, got %v", err)
+		t.Fatalf("FromBase64 returned an error: %v", err)
 	}
-	if val.String() != "gopher" {
-		t.Fatalf("expected gopher, got %s", val.String())
+	if got := value.String(); got != "gopher" {
+		t.Fatalf("FromBase64 = %q", got)
 	}
 }
 
+// TestFromBase64Error guards its covered contract against regressions.
 func TestFromBase64Error(t *testing.T) {
-	_, err := Of("not-base64").FromBase64()
-	if err == nil {
-		t.Fatalf("expected error for invalid base64 input")
+	t.Parallel()
+
+	if _, err := Of("not-base64").FromBase64(); err == nil {
+		t.Fatal("FromBase64 accepted invalid Base64")
 	}
 }

@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestCamel guards its covered contract against regressions.
 func TestCamel(t *testing.T) {
 	t.Parallel()
 
@@ -13,5 +14,8 @@ func TestCamel(t *testing.T) {
 	}
 	if got := Of("foo bar").Camel().String(); got != "fooBar" {
 		t.Fatalf("Camel multi = %q", got)
+	}
+	if got := Of("HTTPRequestID").Camel().String(); got != "httpRequestId" {
+		t.Fatalf("Camel acronym = %q", got)
 	}
 }

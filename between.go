@@ -2,41 +2,16 @@ package str
 
 import "strings"
 
-// Between returns the substring between the first occurrence of start and the last occurrence of end.
-// Returns an empty string if either marker is missing or overlapping.
+// Between returns the substring between the first start marker and the first end marker after it.
+// It returns an empty string when either marker is empty or missing.
 // @group Substrings
 //
-// Example: between first and last
+// Example: between markers
 //
-//	v := str.Of("This is my name").Between("This", "name").String()
+//	v := str.Of("[first] and [second]").Between("[", "]").String()
 //	println(v)
-//	// #string  is my
+//	// #string first
 func (s String) Between(start, end string) String {
-	if start == "" || end == "" {
-		return String{s: ""}
-	}
-	startIdx := strings.Index(s.s, start)
-	endIdx := strings.LastIndex(s.s, end)
-	if startIdx == -1 || endIdx == -1 {
-		return String{s: ""}
-	}
-	startEnd := startIdx + len(start)
-	if startEnd > endIdx {
-		return String{s: ""}
-	}
-	return String{s: s.s[startEnd:endIdx]}
-}
-
-// BetweenFirst returns the substring between the first occurrence of start and the first occurrence of end after it.
-// Returns an empty string if markers are missing.
-// @group Substrings
-//
-// Example: minimal span between markers
-//
-//	v := str.Of("[a] bc [d]").BetweenFirst("[", "]").String()
-//	println(v)
-//	// #string a
-func (s String) BetweenFirst(start, end string) String {
 	if start == "" || end == "" {
 		return String{s: ""}
 	}
@@ -45,10 +20,9 @@ func (s String) BetweenFirst(start, end string) String {
 		return String{s: ""}
 	}
 	startEnd := startIdx + len(start)
-	rest := s.s[startEnd:]
-	endIdx := strings.Index(rest, end)
+	endIdx := strings.Index(s.s[startEnd:], end)
 	if endIdx == -1 {
 		return String{s: ""}
 	}
-	return String{s: rest[:endIdx]}
+	return String{s: s.s[startEnd : startEnd+endIdx]}
 }

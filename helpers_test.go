@@ -1,7 +1,11 @@
 package str
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
+// TestClampAndRuneHelpers guards its covered contract against regressions.
 func TestClampAndRuneHelpers(t *testing.T) {
 	t.Parallel()
 
@@ -31,10 +35,43 @@ func TestClampAndRuneHelpers(t *testing.T) {
 	if got := runeIndex("gopher gopher", "go", true); got != 7 {
 		t.Fatalf("runeIndex last %d", got)
 	}
-	if got := runeIndex("go", "", false); got != 0 {
+	if got := runeIndex("go", "", false); got != -1 {
 		t.Fatalf("runeIndex empty sub")
 	}
 	if got := runeIndex("go", "z", true); got != -1 {
 		t.Fatalf("runeIndex missing")
+	}
+}
+
+// TestTokenizeWords guards its covered contract against regressions.
+func TestTokenizeWords(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		input string
+		want  []string
+	}{
+		{name: "acronyms", input: "HTTPRequestID", want: []string{"HTTP", "Request", "ID"}},
+		{name: "mixed delimiters", input: "Go-Forj_Rules", want: []string{"Go", "Forj", "Rules"}},
+		{name: "Unicode", input: "ÉclairHTTPÜberID", want: []string{"Éclair", "HTTP", "Über", "ID"}},
+		{name: "combining mark", input: "Cafe\u0301HTTP", want: []string{"Cafe\u0301", "HTTP"}},
+		{name: "empty", input: "", want: nil},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := wordTokenValues(tokenizeWords(test.input))
+			if !reflect.DeepEqual(got, test.want) {
+				t.Fatalf("tokenizeWords(%q) = %v, want %v", test.input, got, test.want)
+			}
+		})
+	}
+
+	tokens := tokenizeWords("  HTTPRequestID!")
+	if tokens[0].start != 2 || tokens[1].end != 13 {
+		t.Fatalf("token spans = %+v", tokens)
 	}
 }

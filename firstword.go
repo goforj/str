@@ -1,6 +1,7 @@
 package str
 
-// FirstWord returns the first word token or empty string.
+// FirstWord returns the first detected word or an empty string.
+// Similar: LastWord and SplitWords.
 // @group Words
 //
 // Example: first word
@@ -9,9 +10,9 @@ package str
 //	println(v.FirstWord().String())
 //	// #string Hello
 func (s String) FirstWord() String {
-	words := splitWordsRunes(s.s)
-	if len(words) == 0 {
+	tokens := tokenizeWords(s.s)
+	if len(tokens) == 0 {
 		return String{s: ""}
 	}
-	return String{s: words[0]}
+	return String{s: tokens[0].value}
 }

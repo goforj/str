@@ -7,7 +7,7 @@ package str
 //
 //	v := str.Of("Perfectly balanced, as all things should be.").Limit(10, "...").String()
 //	println(v)
-//	// #string Perfectly...
+//	// #string Perfectly\u0020...
 func (s String) Limit(length int, suffix string) String {
 	if length <= 0 {
 		if suffix != "" {

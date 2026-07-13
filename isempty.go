@@ -3,6 +3,7 @@ package str
 import "unicode"
 
 // IsEmpty reports whether the string has zero length.
+// Similar: IsBlank.
 // @group Checks
 //
 // Example: empty check
@@ -15,11 +16,12 @@ func (s String) IsEmpty() bool {
 }
 
 // IsBlank reports whether the string contains only Unicode whitespace.
+// Similar: IsEmpty.
 // @group Checks
 //
 // Example: blank check
 //
-//	v := str.Of("  \\t\\n")
+//	v := str.Of("  \t\n")
 //	println(v.IsBlank())
 //	// #bool true
 func (s String) IsBlank() bool {

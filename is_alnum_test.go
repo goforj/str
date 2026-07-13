@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestIsAlnum guards its covered contract against regressions.
 func TestIsAlnum(t *testing.T) {
 	t.Parallel()
 

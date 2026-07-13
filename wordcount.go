@@ -1,6 +1,7 @@
 package str
 
-// WordCount returns the number of word tokens (letters/digits runs).
+// WordCount returns the number of detected words.
+// Similar: SplitWords.
 // @group Words
 //
 // Example: count words
@@ -9,5 +10,5 @@ package str
 //	println(v)
 //	// #int 2
 func (s String) WordCount() int {
-	return len(splitWordsRunes(s.s))
+	return len(tokenizeWords(s.s))
 }

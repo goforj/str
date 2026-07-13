@@ -3,18 +3,22 @@ package str
 import "strings"
 
 // PadLeft pads the string on the left to reach length runes using pad (defaults to space).
+// Widths at or below the current rune width leave the string unchanged.
+// Similar: PadRight and PadBoth.
 // @group Padding
 //
 // Example: pad left
 //
 //	v := str.Of("go").PadLeft(5, " ").String()
 //	println(v)
-//	// #string \u00a0\u00a0\u00a0go
+//	// #string \u0020\u0020\u0020go
 func (s String) PadLeft(length int, pad string) String {
 	return padInternal(s.s, length, pad, true, false)
 }
 
 // PadRight pads the string on the right to reach length runes using pad (defaults to space).
+// Widths at or below the current rune width leave the string unchanged.
+// Similar: PadLeft and PadBoth.
 // @group Padding
 //
 // Example: pad right
@@ -27,6 +31,8 @@ func (s String) PadRight(length int, pad string) String {
 }
 
 // PadBoth pads the string on both sides to reach length runes using pad (defaults to space).
+// Widths at or below the current rune width leave the string unchanged.
+// Similar: PadLeft and PadRight.
 // @group Padding
 //
 // Example: pad both
@@ -38,12 +44,11 @@ func (s String) PadBoth(length int, pad string) String {
 	return padInternal(s.s, length, pad, true, true)
 }
 
+// padInternal centralizes width handling so every padding direction preserves
+// the original value when the requested rune width has already been met.
 func padInternal(s string, length int, pad string, left, right bool) String {
-	if length <= 0 {
-		return String{s: ""}
-	}
 	runes := []rune(s)
-	if len(runes) >= length {
+	if length <= len(runes) {
 		return String{s: s}
 	}
 	if pad == "" {

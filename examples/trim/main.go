@@ -1,15 +1,18 @@
 //go:build ignore
 // +build ignore
 
+// Command trim is generated as a standalone program so the documented Trim example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import "github.com/goforj/str/v2"
 
+// main keeps this generated example directly runnable with go run.
 func main() {
-	// Trim trims leading and trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
+	// Trim removes leading and trailing Unicode whitespace.
+	// Similar: TrimLeft, TrimRight, and TrimChars.
 
 	// Example: trim whitespace
-	v := str.Of("  GoForj  ").Trim("").String()
+	v := str.Of("  GoForj  ").Trim().String()
 	println(v)
 	// #string GoForj
 }

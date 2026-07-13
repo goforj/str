@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestIndexing guards its covered contract against regressions.
 func TestIndexing(t *testing.T) {
 	t.Parallel()
 
@@ -20,5 +21,11 @@ func TestIndexing(t *testing.T) {
 	}
 	if got := val.Slice(5, 3).String(); got != "" {
 		t.Fatalf("Slice start>=end %q", got)
+	}
+	if got := val.Index(""); got != -1 {
+		t.Fatalf("Index empty = %d", got)
+	}
+	if got := val.LastIndex(""); got != -1 {
+		t.Fatalf("LastIndex empty = %d", got)
 	}
 }

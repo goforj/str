@@ -3,6 +3,7 @@ package str
 import "strings"
 
 // ToLower returns a lowercase copy of the string using Unicode rules.
+// Similar: ToUpper and LcFirst.
 // @group Case
 //
 // Example: lowercase text

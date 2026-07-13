@@ -12,6 +12,7 @@ var smallWords = map[string]struct{}{
 
 // Headline converts the string into a human-friendly headline:
 // splits on case/underscores/dashes/whitespace, title-cases words, and lowercases small words (except the first).
+// Similar: Title.
 // @group Case
 //
 // Example: headline
@@ -20,7 +21,7 @@ var smallWords = map[string]struct{}{
 //	println(v)
 //	// #string Email Notification Sent
 func (s String) Headline() String {
-	words := splitWordsRunes(s.s)
+	words := wordTokenValues(tokenizeWords(s.s))
 	for i, w := range words {
 		lower := strings.ToLower(w)
 		if i != 0 {

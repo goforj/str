@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestCount guards its covered contract against regressions.
 func TestCount(t *testing.T) {
 	t.Parallel()
 

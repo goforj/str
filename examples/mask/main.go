@@ -1,10 +1,12 @@
 //go:build ignore
 // +build ignore
 
+// Command mask is generated as a standalone program so the documented Mask example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import "github.com/goforj/str/v2"
 
+// main keeps this generated example directly runnable with go run.
 func main() {
 	// Mask replaces the middle of the string with the given rune, revealing revealLeft runes
 	// at the start and revealRight runes at the end. Negative reveal values count from the end.

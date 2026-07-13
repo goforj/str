@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestLimit guards its covered contract against regressions.
 func TestLimit(t *testing.T) {
 	t.Parallel()
 

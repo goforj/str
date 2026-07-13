@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestDeduplicate guards its covered contract against regressions.
 func TestDeduplicate(t *testing.T) {
 	t.Parallel()
 

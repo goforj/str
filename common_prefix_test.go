@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestCommonPrefix guards its covered contract against regressions.
 func TestCommonPrefix(t *testing.T) {
 	t.Parallel()
 

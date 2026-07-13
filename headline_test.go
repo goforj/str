@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestHeadline guards its covered contract against regressions.
 func TestHeadline(t *testing.T) {
 	got := Of("emailNotification_sent").Headline().String()
 	if got != "Email Notification Sent" {
@@ -16,5 +17,9 @@ func TestHeadline(t *testing.T) {
 	leadingSmall := Of("and_with_go").Headline().String()
 	if leadingSmall != "And with Go" {
 		t.Fatalf("expected And with Go, got %s", leadingSmall)
+	}
+
+	if acronym := Of("HTTPRequestID").Headline().String(); acronym != "Http Request Id" {
+		t.Fatalf("expected Http Request Id, got %s", acronym)
 	}
 }

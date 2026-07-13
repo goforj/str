@@ -1,6 +1,7 @@
 package str
 
 // Index returns the rune index of the first occurrence of sub, or -1 if not found.
+// Similar: LastIndex.
 // @group Search
 //
 // Example: first rune index
@@ -13,13 +14,14 @@ func (s String) Index(sub string) int {
 }
 
 // LastIndex returns the rune index of the last occurrence of sub, or -1 if not found.
+// Similar: Index.
 // @group Search
 //
 // Example: last rune index
 //
 //	v := str.Of("go gophers go").LastIndex("go")
 //	println(v)
-//	// #int 10
+//	// #int 11
 func (s String) LastIndex(sub string) int {
 	return runeIndex(s.s, sub, true)
 }
@@ -32,7 +34,7 @@ func (s String) LastIndex(sub string) int {
 //
 //	v := str.Of("naïve café").Slice(3, 7).String()
 //	println(v)
-//	// #string e ca
+//	// #string ve c
 func (s String) Slice(start, end int) String {
 	runes := []rune(s.s)
 	start, end = clampRange(start, end, len(runes))

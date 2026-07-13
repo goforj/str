@@ -4,6 +4,7 @@ import "strings"
 
 // After returns the substring after the first occurrence of sep.
 // If sep is empty or not found, the original string is returned.
+// Similar: AfterLast and Before.
 // @group Substrings
 //
 // Example: slice after marker
@@ -26,6 +27,7 @@ func (s String) After(sep string) String {
 
 // AfterLast returns the substring after the last occurrence of sep.
 // If sep is empty or not found, the original string is returned.
+// Similar: After and BeforeLast.
 // @group Substrings
 //
 // Example: slice after last separator

@@ -1,12 +1,12 @@
 package str
 
 import (
-	"regexp"
 	"sort"
 	"strings"
 )
 
 // ReplaceFirst replaces the first occurrence of old with repl.
+// Similar: ReplaceLast and ReplaceAll.
 // @group Replace
 //
 // Example: replace first
@@ -15,10 +15,14 @@ import (
 //	println(v)
 //	// #string go gopher
 func (s String) ReplaceFirst(old, repl string) String {
+	if old == "" {
+		return s
+	}
 	return String{s: strings.Replace(s.s, old, repl, 1)}
 }
 
 // ReplaceLast replaces the last occurrence of old with repl.
+// Similar: ReplaceFirst and ReplaceAll.
 // @group Replace
 //
 // Example: replace last
@@ -40,6 +44,7 @@ func (s String) ReplaceLast(old, repl string) String {
 }
 
 // ReplaceArray replaces all occurrences of each old in olds with repl.
+// Similar: ReplaceAll and Swap.
 // @group Replace
 //
 // Example: replace many
@@ -58,20 +63,8 @@ func (s String) ReplaceArray(olds []string, repl string) String {
 	return String{s: out}
 }
 
-// ReplaceMatches applies repl to each regex match and returns the result.
-// @group Replace
-//
-// Example: regex replace with callback
-//
-//	re := regexp.MustCompile(`\d+`)
-//	v := str.Of("Hello 123 World").ReplaceMatches(re, func(m string) string { return "[" + m + "]" }).String()
-//	println(v)
-//	// #string Hello [123] World
-func (s String) ReplaceMatches(pattern *regexp.Regexp, repl func(string) string) String {
-	return String{s: pattern.ReplaceAllStringFunc(s.s, repl)}
-}
-
 // Swap replaces multiple values using strings.Replacer built from a map.
+// Similar: ReplaceArray.
 // @group Replace
 //
 // Example: swap map

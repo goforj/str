@@ -1,6 +1,7 @@
 package str
 
 // Take returns the first length runes of the string (clamped).
+// Similar: TakeLast and Limit.
 // @group Substrings
 //
 // Example: take head
@@ -20,6 +21,7 @@ func (s String) Take(length int) String {
 }
 
 // TakeLast returns the last length runes of the string (clamped).
+// Similar: Take.
 // @group Substrings
 //
 // Example: take tail

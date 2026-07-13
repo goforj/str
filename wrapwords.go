@@ -1,8 +1,13 @@
 package str
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
-// WrapWords wraps the string to the given width on word boundaries, using breakStr between lines.
+// WrapWords wraps the string to the given rune width on whitespace boundaries,
+// using breakStr between lines without discarding punctuation.
+// Similar: Words.
 // @group Words
 //
 // Example: wrap words
@@ -18,37 +23,61 @@ func (s String) WrapWords(width int, breakStr string) String {
 		breakStr = "\n"
 	}
 
-	words := splitWordsRunes(s.s)
-	if len(words) == 0 {
+	runes := []rune(s.s)
+	if len(runes) == 0 {
 		return s
 	}
 
-	var lines []string
-	var current []string
-	currentLen := 0
+	var out strings.Builder
+	out.Grow(len(s.s))
+	lineWidth := 0
+	hasWord := false
 
-	flush := func() {
-		lines = append(lines, strings.Join(current, " "))
-		current = current[:0]
-		currentLen = 0
-	}
-
-	for _, w := range words {
-		if currentLen == 0 {
-			current = append(current, w)
-			currentLen = len([]rune(w))
-			continue
+	for pos := 0; pos < len(runes); {
+		separatorStart := pos
+		for pos < len(runes) && unicode.IsSpace(runes[pos]) {
+			pos++
 		}
-		if currentLen+1+len([]rune(w)) > width {
-			flush()
-			current = append(current, w)
-			currentLen = len([]rune(w))
+		separator := runes[separatorStart:pos]
+		if pos == len(runes) {
+			out.WriteString(string(separator))
+			break
+		}
+
+		wordStart := pos
+		for pos < len(runes) && !unicode.IsSpace(runes[pos]) {
+			pos++
+		}
+		word := runes[wordStart:pos]
+		nextWidth, separatorBreaksLine := widthAfterWhitespace(lineWidth, separator)
+
+		if hasWord && !separatorBreaksLine && nextWidth+len(word) > width {
+			out.WriteString(breakStr)
+			lineWidth = 0
 		} else {
-			current = append(current, w)
-			currentLen += 1 + len([]rune(w))
+			out.WriteString(string(separator))
+			lineWidth = nextWidth
+		}
+		out.WriteString(string(word))
+		lineWidth += len(word)
+		hasWord = true
+	}
+
+	return String{s: out.String()}
+}
+
+// widthAfterWhitespace preserves existing line boundaries while measuring all
+// other whitespace as one rune each, matching the package's rune-safe width contract.
+func widthAfterWhitespace(lineWidth int, whitespace []rune) (int, bool) {
+	breaksLine := false
+	for _, r := range whitespace {
+		switch r {
+		case '\n', '\r', '\u2028', '\u2029':
+			lineWidth = 0
+			breaksLine = true
+		default:
+			lineWidth++
 		}
 	}
-	flush()
-
-	return String{s: strings.Join(lines, breakStr)}
+	return lineWidth, breaksLine
 }

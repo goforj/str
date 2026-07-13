@@ -2,32 +2,31 @@ package str
 
 import "unicode"
 
-// NormalizeSpace collapses whitespace runs to single spaces without trimming ends.
+// NormalizeSpace removes surrounding whitespace and collapses internal whitespace to single spaces.
+// Similar: Trim.
 // @group Cleanup
 //
-// Example: normalize interior space
+// Example: normalize whitespace
 //
 //	v := str.Of("  go   forj  ").NormalizeSpace().String()
 //	println(v)
-//	// #string  go forj 
+//	// #string go forj
 func (s String) NormalizeSpace() String {
-	if s.s == "" {
-		return s
-	}
-
 	var out []rune
-	inSpace := false
+	seenWord := false
+	pendingSpace := false
 
 	for _, r := range s.s {
 		if unicode.IsSpace(r) {
-			if !inSpace {
-				out = append(out, ' ')
-				inSpace = true
-			}
+			pendingSpace = seenWord
 			continue
 		}
+		if pendingSpace {
+			out = append(out, ' ')
+			pendingSpace = false
+		}
 		out = append(out, r)
-		inSpace = false
+		seenWord = true
 	}
 
 	return String{s: string(out)}

@@ -1,6 +1,7 @@
 package str
 
 // EnsurePrefix ensures the string starts with prefix, adding it if missing.
+// Similar: EnsureSuffix and TrimPrefix.
 // @group Affixes
 //
 // Example: ensure prefix
@@ -9,13 +10,14 @@ package str
 //	println(v)
 //	// #string /path/to
 func (s String) EnsurePrefix(prefix string) String {
-	if prefix == "" || s.StartsWith(prefix) {
+	if prefix == "" || s.HasPrefix(prefix) {
 		return s
 	}
 	return String{s: prefix + s.s}
 }
 
 // EnsureSuffix ensures the string ends with suffix, adding it if missing.
+// Similar: EnsurePrefix and TrimSuffix.
 // @group Affixes
 //
 // Example: ensure suffix
@@ -24,7 +26,7 @@ func (s String) EnsurePrefix(prefix string) String {
 //	println(v)
 //	// #string path/to/
 func (s String) EnsureSuffix(suffix string) String {
-	if suffix == "" || s.EndsWith(suffix) {
+	if suffix == "" || s.HasSuffix(suffix) {
 		return s
 	}
 	return String{s: s.s + suffix}

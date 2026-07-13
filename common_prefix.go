@@ -2,6 +2,7 @@ package str
 
 // CommonPrefix returns the longest shared prefix between the string and all provided others.
 // Comparison is rune-safe. If no others are provided, the original string is returned.
+// Similar: CommonSuffix.
 // @group Substrings
 //
 // Example: longest common prefix

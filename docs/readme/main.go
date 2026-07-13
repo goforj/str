@@ -1,15 +1,15 @@
-//go:build ignore
-// +build ignore
-
+// Command readme rebuilds generated README sections from the library's GoDoc and tests.
 package main
 
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -23,91 +23,107 @@ const (
 	apiEnd         = "<!-- api:embed:end -->"
 	testCountStart = "<!-- test-count:embed:start -->"
 	testCountEnd   = "<!-- test-count:embed:end -->"
+	documentation  = "https://pkg.go.dev/github.com/goforj/str/v2"
 )
 
-func main() {
-	if err := run(); err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
-	}
-	fmt.Println("✔ API section updated in README.md")
+var (
+	groupHeader   = regexp.MustCompile(`(?im)^\s*@group\s+(.+?)\s*$`)
+	exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
+)
+
+// apiSymbol contains one public declaration and the GoDoc content rendered in the README.
+type apiSymbol struct {
+	name        string
+	group       string
+	receiver    string
+	description string
+	examples    []apiExample
 }
 
+// apiExample contains one runnable GoDoc example and its source position.
+type apiExample struct {
+	label string
+	code  string
+	line  int
+}
+
+// main reports generation errors without a stack trace because this command is intended for routine documentation updates.
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, "readme generator:", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("README.md API index and test count updated")
+}
+
+// run computes every generated value before writing so a failed parse or test run cannot partially update README.md.
 func run() error {
 	root, err := findRoot()
 	if err != nil {
 		return err
 	}
 
-	testsCount, err := countTests(root)
+	symbols, err := parseAPISymbols(root)
+	if err != nil {
+		return fmt.Errorf("parse API declarations: %w", err)
+	}
+
+	readmePath := filepath.Join(root, "README.md")
+	readme, err := os.ReadFile(readmePath)
+	if err != nil {
+		return fmt.Errorf("read README.md: %w", err)
+	}
+	if _, _, err := markerBounds(string(readme), apiStart, apiEnd, "API index"); err != nil {
+		return err
+	}
+	if _, _, err := markerBounds(string(readme), testCountStart, testCountEnd, "test count"); err != nil {
+		return err
+	}
+
+	tests, err := countTests(root)
 	if err != nil {
 		return fmt.Errorf("count tests: %w", err)
 	}
 
-	funcs, err := parseFuncs(root)
+	updated, err := replaceMarkedSection(
+		string(readme),
+		apiStart,
+		apiEnd,
+		"\n\n"+renderAPI(symbols)+"\n",
+		"API index",
+	)
 	if err != nil {
 		return err
 	}
 
-	api := renderAPI(funcs)
-
-	readmePath := filepath.Join(root, "README.md")
-	data, err := os.ReadFile(readmePath)
+	testBadge := fmt.Sprintf("\n    <img src=\"https://img.shields.io/badge/tests-%d-brightgreen\" alt=\"Tests\">\n", tests)
+	updated, err = replaceMarkedSection(
+		updated,
+		testCountStart,
+		testCountEnd,
+		testBadge,
+		"test count",
+	)
 	if err != nil {
 		return err
 	}
 
-	out, err := replaceAPISection(string(data), api)
-	if err != nil {
-		return err
+	if bytes.Equal(readme, []byte(updated)) {
+		return nil
 	}
 
-	out, err = updateTestsSection(out, testsCount)
-	if err != nil {
-		return err
+	if err := os.WriteFile(readmePath, []byte(updated), 0o644); err != nil {
+		return fmt.Errorf("write README.md: %w", err)
 	}
 
-	return os.WriteFile(readmePath, []byte(out), 0o644)
+	return nil
 }
 
-//
-// ------------------------------------------------------------
-// Data model
-// ------------------------------------------------------------
-//
-
-type FuncDoc struct {
-	Name        string
-	Group       string
-	Behavior    string
-	Fluent      string
-	Description string
-	Examples    []Example
-}
-
-type Example struct {
-	Label string
-	Code  string
-	Line  int
-}
-
-//
-// ------------------------------------------------------------
-// Parsing
-// ------------------------------------------------------------
-//
-
-var (
-	groupHeader    = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
-	behaviorHeader = regexp.MustCompile(`(?i)^\s*@behavior\s+(.+)$`)
-	fluentHeader   = regexp.MustCompile(`(?i)^\s*@fluent\s+(.+)$`)
-	exampleHeader  = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
-)
-
-func parseFuncs(root string) ([]*FuncDoc, error) {
+// parseAPISymbols reads public declarations and their examples from the package root.
+func parseAPISymbols(root string) ([]apiSymbol, error) {
 	fset := token.NewFileSet()
-
-	pkgs, err := parser.ParseDir(
+	packages, err := parser.ParseDir(
 		fset,
 		root,
 		func(info os.FileInfo) bool {
@@ -119,327 +135,361 @@ func parseFuncs(root string) ([]*FuncDoc, error) {
 		return nil, err
 	}
 
-	pkgName, err := selectPackage(pkgs)
+	packageName, err := selectPackage(packages)
 	if err != nil {
 		return nil, err
 	}
 
-	pkg, ok := pkgs[pkgName]
+	pkg, ok := packages[packageName]
 	if !ok {
-		return nil, fmt.Errorf(`package %q not found`, pkgName)
+		return nil, fmt.Errorf("selected package %q is missing", packageName)
 	}
 
-	funcs := map[string]*FuncDoc{}
-
+	symbolsByAnchor := make(map[string]apiSymbol)
 	for _, file := range pkg.Files {
-		for _, decl := range file.Decls {
-			fn, ok := decl.(*ast.FuncDecl)
-			if !ok || fn.Doc == nil {
+		for _, declaration := range file.Decls {
+			function, ok := declaration.(*ast.FuncDecl)
+			if !ok || function.Doc == nil || !ast.IsExported(function.Name.Name) {
 				continue
 			}
 
-			if !ast.IsExported(fn.Name.Name) {
+			receiver, err := receiverName(function)
+			if err != nil {
+				return nil, fmt.Errorf("%s: %w", function.Name.Name, err)
+			}
+
+			symbol := apiSymbol{
+				name:        function.Name.Name,
+				group:       extractGroup(function.Doc),
+				receiver:    receiver,
+				description: extractDescription(function.Doc),
+				examples:    extractExamples(fset, function),
+			}
+			anchor := symbolAnchor(symbol)
+			if existing, ok := symbolsByAnchor[anchor]; ok {
+				existing.examples = append(existing.examples, symbol.examples...)
+				symbolsByAnchor[anchor] = existing
 				continue
 			}
-
-			fd := &FuncDoc{
-				Name:        fn.Name.Name,
-				Group:       extractGroup(fn.Doc),
-				Behavior:    extractBehavior(fn.Doc),
-				Fluent:      extractFluent(fn.Doc),
-				Description: extractDescription(fn.Doc),
-				Examples:    extractExamples(fset, fn),
-			}
-
-			if existing, ok := funcs[fd.Name]; ok {
-				existing.Examples = append(existing.Examples, fd.Examples...)
-			} else {
-				funcs[fd.Name] = fd
-			}
+			symbolsByAnchor[anchor] = symbol
 		}
 	}
 
-	out := make([]*FuncDoc, 0, len(funcs))
-	for _, fd := range funcs {
-		sort.Slice(fd.Examples, func(i, j int) bool {
-			return fd.Examples[i].Line < fd.Examples[j].Line
+	symbols := make([]apiSymbol, 0, len(symbolsByAnchor))
+	for _, symbol := range symbolsByAnchor {
+		sort.Slice(symbol.examples, func(i, j int) bool {
+			return symbol.examples[i].line < symbol.examples[j].line
 		})
-		out = append(out, fd)
+		symbols = append(symbols, symbol)
 	}
 
-	return out, nil
+	sort.Slice(symbols, func(i, j int) bool {
+		if symbols[i].group != symbols[j].group {
+			return symbols[i].group < symbols[j].group
+		}
+		if symbols[i].name != symbols[j].name {
+			return symbols[i].name < symbols[j].name
+		}
+		return symbols[i].receiver < symbols[j].receiver
+	})
+
+	return symbols, nil
 }
 
-func extractGroup(group *ast.CommentGroup) string {
-	for _, c := range group.List {
-		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-		if m := groupHeader.FindStringSubmatch(line); m != nil {
-			return strings.TrimSpace(m[1])
-		}
-	}
-	return "Other"
-}
-
-func extractBehavior(group *ast.CommentGroup) string {
-	for _, c := range group.List {
-		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-		if m := behaviorHeader.FindStringSubmatch(line); m != nil {
-			return strings.ToLower(strings.TrimSpace(m[1]))
-		}
-	}
-	return ""
-}
-
-func extractFluent(group *ast.CommentGroup) string {
-	for _, c := range group.List {
-		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-		if m := fluentHeader.FindStringSubmatch(line); m != nil {
-			return strings.ToLower(strings.TrimSpace(m[1]))
-		}
-	}
-	return ""
-}
-
-func extractDescription(group *ast.CommentGroup) string {
-	var lines []string
-
-	for _, c := range group.List {
-		line := strings.TrimSpace(strings.TrimPrefix(c.Text, "//"))
-
-		if exampleHeader.MatchString(line) ||
-			groupHeader.MatchString(line) ||
-			behaviorHeader.MatchString(line) ||
-			fluentHeader.MatchString(line) {
-			break
-		}
-
-		if len(lines) == 0 && line == "" {
-			continue
-		}
-
-		lines = append(lines, line)
-	}
-
-	return strings.TrimSpace(strings.Join(lines, "\n"))
-}
-
-func extractExamples(fset *token.FileSet, fn *ast.FuncDecl) []Example {
-	var out []Example
-	var current []string
-	var label string
-	var start int
-	inExample := false
-
-	flush := func() {
-		if len(current) == 0 {
-			return
-		}
-
-		out = append(out, Example{
-			Label: label,
-			Code:  strings.Join(normalizeIndent(current), "\n"),
-			Line:  start,
-		})
-
-		current = nil
-		label = ""
-		inExample = false
-	}
-
-	for _, c := range fn.Doc.List {
-		raw := strings.TrimPrefix(c.Text, "//")
-		line := strings.TrimSpace(raw)
-
-		if m := exampleHeader.FindStringSubmatch(line); m != nil {
-			flush()
-			inExample = true
-			label = strings.TrimSpace(m[1])
-			start = fset.Position(c.Slash).Line
-			continue
-		}
-
-		if !inExample {
-			continue
-		}
-
-		current = append(current, raw)
-	}
-
-	flush()
-	return out
-}
-
-// selectPackage picks the primary package to document.
-// Strategy:
-//  1. If only one package exists, use it.
-//  2. Prefer the non-"main" package with the most files.
-//  3. Fall back to the first package alphabetically.
-func selectPackage(pkgs map[string]*ast.Package) (string, error) {
-	if len(pkgs) == 0 {
-		return "", fmt.Errorf("no packages found")
-	}
-
-	if len(pkgs) == 1 {
-		for name := range pkgs {
-			return name, nil
-		}
+// selectPackage prefers the largest non-main package so incidental tool packages cannot displace the library package.
+func selectPackage(packages map[string]*ast.Package) (string, error) {
+	if len(packages) == 0 {
+		return "", errors.New("no packages found in repository root")
 	}
 
 	type candidate struct {
-		name  string
-		count int
+		name      string
+		fileCount int
 	}
 
-	candidates := make([]candidate, 0, len(pkgs))
-	for name, pkg := range pkgs {
-		candidates = append(candidates, candidate{
-			name:  name,
-			count: len(pkg.Files),
-		})
+	candidates := make([]candidate, 0, len(packages))
+	for name, pkg := range packages {
+		candidates = append(candidates, candidate{name: name, fileCount: len(pkg.Files)})
 	}
 
 	sort.Slice(candidates, func(i, j int) bool {
-		if candidates[i].count == candidates[j].count {
-			return candidates[i].name < candidates[j].name
+		if candidates[i].fileCount != candidates[j].fileCount {
+			return candidates[i].fileCount > candidates[j].fileCount
 		}
-		return candidates[i].count > candidates[j].count
+		return candidates[i].name < candidates[j].name
 	})
 
-	for _, cand := range candidates {
-		if cand.name != "main" {
-			return cand.name, nil
+	for _, candidate := range candidates {
+		if candidate.name != "main" {
+			return candidate.name, nil
 		}
 	}
 
 	return candidates[0].name, nil
 }
 
-//
-// ------------------------------------------------------------
-// Rendering
-// ------------------------------------------------------------
-//
-
-func renderAPI(funcs []*FuncDoc) string {
-	byGroup := map[string][]*FuncDoc{}
-
-	for _, fd := range funcs {
-		byGroup[fd.Group] = append(byGroup[fd.Group], fd)
+// extractGroup defaults unclassified declarations to Other so newly added APIs remain visible until their documentation is categorized.
+func extractGroup(group *ast.CommentGroup) string {
+	match := groupHeader.FindStringSubmatch(group.Text())
+	if match == nil {
+		return "Other"
 	}
 
-	groupNames := make([]string, 0, len(byGroup))
-	for g := range byGroup {
-		groupNames = append(groupNames, g)
+	return strings.TrimSpace(match[1])
+}
+
+// extractDescription returns the reader-facing prose before generator metadata and examples.
+func extractDescription(group *ast.CommentGroup) string {
+	var lines []string
+	for _, comment := range group.List {
+		line := strings.TrimSpace(commentLine(comment.Text))
+		if groupHeader.MatchString(line) || exampleHeader.MatchString(line) {
+			break
+		}
+		if len(lines) == 0 && line == "" {
+			continue
+		}
+		lines = append(lines, line)
 	}
-	sort.Strings(groupNames)
 
-	var buf bytes.Buffer
+	return strings.TrimSpace(strings.Join(lines, "\n"))
+}
 
-	// ---------------- Index ----------------
-	buf.WriteString("## API Index\n\n")
-	buf.WriteString("| Group | Functions |\n")
-	buf.WriteString("|------:|-----------|\n")
+// extractExamples returns every runnable example block attached to function.
+func extractExamples(fset *token.FileSet, function *ast.FuncDecl) []apiExample {
+	var examples []apiExample
+	var collected []string
+	var label string
+	var line int
+	inExample := false
 
-	for _, group := range groupNames {
-		sort.Slice(byGroup[group], func(i, j int) bool {
-			return byGroup[group][i].Name < byGroup[group][j].Name
+	flush := func() {
+		if len(collected) == 0 {
+			return
+		}
+		examples = append(examples, apiExample{
+			label: label,
+			code:  strings.Join(normalizeIndent(collected), "\n"),
+			line:  line,
 		})
-
-		var links []string
-		for _, fn := range byGroup[group] {
-			links = append(links, fmt.Sprintf("[%s](#%s)", fn.Name, strings.ToLower(fn.Name)))
-		}
-
-		buf.WriteString(fmt.Sprintf("| **%s** | %s |\n",
-			group,
-			strings.Join(links, " "),
-		))
+		collected = nil
+		label = ""
+		inExample = false
 	}
 
-	buf.WriteString("\n\n")
+	for _, comment := range function.Doc.List {
+		raw := commentLine(comment.Text)
+		if match := exampleHeader.FindStringSubmatch(strings.TrimSpace(raw)); match != nil {
+			flush()
+			inExample = true
+			label = strings.TrimSpace(match[1])
+			line = fset.Position(comment.Slash).Line
+			continue
+		}
+		if inExample {
+			collected = append(collected, raw)
+		}
+	}
+	flush()
 
-	// ---------------- Details ----------------
-	for _, group := range groupNames {
-		buf.WriteString("## " + group + "\n\n")
+	return examples
+}
 
-		for _, fn := range byGroup[group] {
-			anchor := strings.ToLower(fn.Name)
+// commentLine removes comment syntax while retaining code indentation.
+func commentLine(text string) string {
+	line := strings.TrimPrefix(text, "//")
+	if strings.HasPrefix(line, " ") {
+		line = line[1:]
+	}
+	return line
+}
 
-			header := fn.Name
-			if fn.Behavior != "" {
-				header += " · " + fn.Behavior
+// normalizeIndent removes shared indentation without altering nested example code.
+func normalizeIndent(lines []string) []string {
+	minimum := -1
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		indent := len(line) - len(strings.TrimLeft(line, " \t"))
+		if minimum == -1 || indent < minimum {
+			minimum = indent
+		}
+	}
+	if minimum <= 0 {
+		return lines
+	}
+
+	normalized := make([]string, len(lines))
+	for i, line := range lines {
+		if len(line) >= minimum {
+			normalized[i] = line[minimum:]
+			continue
+		}
+		normalized[i] = strings.TrimLeft(line, " \t")
+	}
+	return normalized
+}
+
+// receiverName returns an empty name for package functions and the documented type name for methods.
+func receiverName(function *ast.FuncDecl) (string, error) {
+	if function.Recv == nil || len(function.Recv.List) == 0 {
+		return "", nil
+	}
+
+	name := receiverTypeName(function.Recv.List[0].Type)
+	if name == "" {
+		return "", errors.New("unsupported receiver type in exported method")
+	}
+
+	return name, nil
+}
+
+// receiverTypeName unwraps pointer and generic syntax because pkg.go.dev anchors use the declared receiver type name.
+func receiverTypeName(expression ast.Expr) string {
+	switch expression := expression.(type) {
+	case *ast.Ident:
+		return expression.Name
+	case *ast.StarExpr:
+		return receiverTypeName(expression.X)
+	case *ast.IndexExpr:
+		return receiverTypeName(expression.X)
+	case *ast.IndexListExpr:
+		return receiverTypeName(expression.X)
+	default:
+		return ""
+	}
+}
+
+// renderAPI groups symbols into a compact index followed by their generated GoDoc examples.
+func renderAPI(symbols []apiSymbol) string {
+	var output strings.Builder
+	output.WriteString("## API index\n\n")
+	output.WriteString("The full API and these examples are also available on [pkg.go.dev](")
+	output.WriteString(documentation)
+	output.WriteString(").\n\n")
+	output.WriteString("| Group | API |\n")
+	output.WriteString("| --- | --- |\n")
+
+	for start := 0; start < len(symbols); {
+		end := start + 1
+		for end < len(symbols) && symbols[end].group == symbols[start].group {
+			end++
+		}
+
+		links := make([]string, 0, end-start)
+		for _, symbol := range symbols[start:end] {
+			links = append(links, fmt.Sprintf("[%s](#%s)", symbol.name, readmeAnchor(symbol)))
+		}
+
+		fmt.Fprintf(&output, "| %s | %s |\n", symbols[start].group, strings.Join(links, " · "))
+		start = end
+	}
+
+	output.WriteString("\n## API examples\n\n")
+	output.WriteString("These examples come from GoDoc and run as part of the test suite.\n\n")
+	for start := 0; start < len(symbols); {
+		end := start + 1
+		for end < len(symbols) && symbols[end].group == symbols[start].group {
+			end++
+		}
+
+		output.WriteString("### " + symbols[start].group + "\n\n")
+		for _, symbol := range symbols[start:end] {
+			fmt.Fprintf(&output, "#### <a id=\"%s\"></a>%s\n\n", readmeAnchor(symbol), symbol.name)
+			if symbol.description != "" {
+				output.WriteString(symbol.description + "\n\n")
 			}
-			if fn.Fluent == "true" {
-				header += " · fluent"
-			}
-
-			buf.WriteString(fmt.Sprintf("### <a id=\"%s\"></a>%s\n\n", anchor, header))
-
-			if fn.Description != "" {
-				buf.WriteString(fn.Description + "\n\n")
-			}
-
-			for _, ex := range fn.Examples {
-				if ex.Label != "" && len(fn.Examples) > 1 {
-					buf.WriteString(fmt.Sprintf("_Example: %s_\n\n", ex.Label))
+			for _, example := range symbol.examples {
+				if example.label != "" && len(symbol.examples) > 1 {
+					output.WriteString("_Example: " + example.label + "_\n\n")
 				}
-
-				buf.WriteString("```go\n")
-				buf.WriteString(strings.TrimSpace(ex.Code))
-				buf.WriteString("\n```\n\n")
+				output.WriteString("```go\n")
+				output.WriteString(strings.TrimSpace(example.code))
+				output.WriteString("\n```\n\n")
 			}
 		}
+		start = end
 	}
 
-	return strings.TrimRight(buf.String(), "\n")
+	return strings.TrimRight(output.String(), "\n")
 }
 
-//
-// ------------------------------------------------------------
-// README replacement
-// ------------------------------------------------------------
-//
+// readmeAnchor returns a stable local anchor for a public API name.
+func readmeAnchor(symbol apiSymbol) string {
+	return strings.ToLower(symbol.name)
+}
 
-func replaceAPISection(readme, api string) (string, error) {
-	start := strings.Index(readme, apiStart)
-	end := strings.Index(readme, apiEnd)
-
-	if start == -1 || end == -1 || end < start {
-		return "", fmt.Errorf("API anchors not found or malformed")
+// symbolAnchor mirrors pkg.go.dev's receiver-qualified anchors for methods while leaving package functions unqualified.
+func symbolAnchor(symbol apiSymbol) string {
+	if symbol.receiver == "" {
+		return symbol.name
 	}
 
-	var out bytes.Buffer
-	out.WriteString(readme[:start+len(apiStart)])
-	out.WriteString("\n\n")
-	out.WriteString(api)
-	out.WriteString("\n")
-	out.WriteString(readme[end:])
-
-	return out.String(), nil
+	return symbol.receiver + "." + symbol.name
 }
 
+// replaceMarkedSection rejects absent, repeated, or reversed markers so malformed README structure is never guessed at.
+func replaceMarkedSection(document, startMarker, endMarker, replacement, section string) (string, error) {
+	start, end, err := markerBounds(document, startMarker, endMarker, section)
+	if err != nil {
+		return "", err
+	}
+
+	return document[:start] + replacement + document[end:], nil
+}
+
+// markerBounds returns content boundaries only when a section has one correctly ordered pair of markers.
+func markerBounds(document, startMarker, endMarker, section string) (int, int, error) {
+	startCount := strings.Count(document, startMarker)
+	if startCount == 0 {
+		return 0, 0, fmt.Errorf("README %s start marker %q is missing", section, startMarker)
+	}
+	if startCount > 1 {
+		return 0, 0, fmt.Errorf("README %s start marker %q appears %d times; expected once", section, startMarker, startCount)
+	}
+
+	endCount := strings.Count(document, endMarker)
+	if endCount == 0 {
+		return 0, 0, fmt.Errorf("README %s end marker %q is missing", section, endMarker)
+	}
+	if endCount > 1 {
+		return 0, 0, fmt.Errorf("README %s end marker %q appears %d times; expected once", section, endMarker, endCount)
+	}
+
+	start := strings.Index(document, startMarker) + len(startMarker)
+	end := strings.Index(document, endMarker)
+	if end < start {
+		return 0, 0, fmt.Errorf("README %s markers are malformed: end marker precedes start marker", section)
+	}
+
+	return start, end, nil
+}
+
+// countTests uses Go's JSON event stream so subtests represented by the badge are counted consistently with top-level tests.
 func countTests(root string) (int, error) {
-	cmd := exec.Command("go", "test", "./...", "-run", "Test", "-count=1", "-json")
-	cmd.Dir = root
+	command := exec.Command("go", "test", "./...", "-run", "Test", "-count=1", "-json")
+	command.Dir = root
 
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &out
-
-	if err := cmd.Run(); err != nil {
-		return 0, fmt.Errorf("go test -json: %w\n%s", err, out.String())
+	var output bytes.Buffer
+	command.Stdout = &output
+	command.Stderr = &output
+	if err := command.Run(); err != nil {
+		return 0, fmt.Errorf("go test -json failed: %w\n%s", err, output.String())
 	}
 
-	var total int
-	dec := json.NewDecoder(bytes.NewReader(out.Bytes()))
-
-	for dec.More() {
+	decoder := json.NewDecoder(bytes.NewReader(output.Bytes()))
+	total := 0
+	for {
 		var event struct {
 			Action string `json:"Action"`
 			Test   string `json:"Test"`
 		}
-		if err := dec.Decode(&event); err != nil {
-			return 0, err
+		if err := decoder.Decode(&event); err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			return 0, fmt.Errorf("decode go test event: %w", err)
 		}
 		if event.Action == "run" && event.Test != "" {
 			total++
@@ -449,78 +499,29 @@ func countTests(root string) (int, error) {
 	return total, nil
 }
 
-var testsBadgePattern = regexp.MustCompile(`tests-\d+-brightgreen`)
-
-func updateTestsSection(readme string, tests int) (string, error) {
-	start := strings.Index(readme, testCountStart)
-	end := strings.Index(readme, testCountEnd)
-
-	if start == -1 || end == -1 || end < start {
-		return "", fmt.Errorf("test count anchors not found or malformed")
-	}
-
-	before := readme[:start+len(testCountStart)]
-	body := readme[start+len(testCountStart) : end]
-	after := readme[end:]
-
-	leading := ""
-	if strings.HasPrefix(body, "\n") {
-		leading = "\n"
-	}
-
-	badge := fmt.Sprintf("%s    <img src=\"https://img.shields.io/badge/tests-%d-brightgreen\" alt=\"Tests\">\n", leading, tests)
-
-	return before + badge + after, nil
-}
-
-//
-// ------------------------------------------------------------
-// Helpers
-// ------------------------------------------------------------
-//
-
+// findRoot supports running from either the repository root or the docs/readme directory used during generator development.
 func findRoot() (string, error) {
-	wd, _ := os.Getwd()
-	if fileExists(filepath.Join(wd, "go.mod")) {
-		return wd, nil
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("get working directory: %w", err)
 	}
-	parent := filepath.Join(wd, "..")
-	if fileExists(filepath.Join(parent, "go.mod")) {
-		return filepath.Clean(parent), nil
+
+	candidates := []string{
+		workingDirectory,
+		filepath.Join(workingDirectory, ".."),
+		filepath.Join(workingDirectory, "..", ".."),
 	}
-	return "", fmt.Errorf("could not find project root")
+	for _, candidate := range candidates {
+		if fileExists(filepath.Join(candidate, "go.mod")) {
+			return filepath.Clean(candidate), nil
+		}
+	}
+
+	return "", errors.New("could not find repository root containing go.mod")
 }
 
-func fileExists(p string) bool {
-	_, err := os.Stat(p)
+// fileExists treats inaccessible paths as absent because callers only use it to probe root candidates.
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
 	return err == nil
-}
-
-func normalizeIndent(lines []string) []string {
-	min := -1
-
-	for _, l := range lines {
-		if strings.TrimSpace(l) == "" {
-			continue
-		}
-		n := len(l) - len(strings.TrimLeft(l, " \t"))
-		if min == -1 || n < min {
-			min = n
-		}
-	}
-
-	if min <= 0 {
-		return lines
-	}
-
-	out := make([]string, len(lines))
-	for i, l := range lines {
-		if len(l) >= min {
-			out[i] = l[min:]
-		} else {
-			out[i] = strings.TrimLeft(l, " \t")
-		}
-	}
-
-	return out
 }

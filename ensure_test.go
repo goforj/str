@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestEnsurePrefixSuffix guards its covered contract against regressions.
 func TestEnsurePrefixSuffix(t *testing.T) {
 	t.Parallel()
 

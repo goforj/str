@@ -1,16 +1,18 @@
 //go:build ignore
 // +build ignore
 
+// Command between is generated as a standalone program so the documented Between example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import "github.com/goforj/str/v2"
 
+// main keeps this generated example directly runnable with go run.
 func main() {
-	// Between returns the substring between the first occurrence of start and the last occurrence of end.
-	// Returns an empty string if either marker is missing or overlapping.
+	// Between returns the substring between the first start marker and the first end marker after it.
+	// It returns an empty string when either marker is empty or missing.
 
-	// Example: between first and last
-	v := str.Of("This is my name").Between("This", "name").String()
+	// Example: between markers
+	v := str.Of("[first] and [second]").Between("[", "]").String()
 	println(v)
-	// #string  is my
+	// #string first
 }

@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// TestSplit guards its covered contract against regressions.
 func TestSplit(t *testing.T) {
 	got := Of("a,b,c").Split(",")
 	expected := []string{"a", "b", "c"}

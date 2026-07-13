@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestCharAt guards its covered contract against regressions.
 func TestCharAt(t *testing.T) {
 	t.Parallel()
 

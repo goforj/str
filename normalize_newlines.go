@@ -6,11 +6,12 @@ import (
 )
 
 // NormalizeNewlines replaces CRLF, CR, and Unicode separators with \n.
+// Similar: Lines.
 // @group Cleanup
 //
 // Example: normalize newline variants
 //
-//	v := str.Of("a\\r\\nb\\u2028c").NormalizeNewlines().String()
+//	v := str.Of("a\r\nb\u2028c").NormalizeNewlines().String()
 //	println(v)
 //	// #string a\nb\nc
 func (s String) NormalizeNewlines() String {

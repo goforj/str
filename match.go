@@ -1,19 +1,17 @@
 package str
 
-import "regexp"
+import "path"
 
-// Match returns the first match and submatches for the pattern.
+// Match reports whether the entire string matches pattern using [path.Match] syntax.
+// A malformed pattern returns an error, and wildcards do not match a slash.
 // @group Match
 //
-// Example: regex match
+// Example: match a shell pattern
 //
-//	re := regexp.MustCompile(`g(o+)`)
-//	v := str.Of("gooo").Match(re)
-//	println(v)
-//	// #[]string [gooo ooo]
-func (s String) Match(pattern *regexp.Regexp) []string {
-	if pattern == nil {
-		return nil
-	}
-	return pattern.FindStringSubmatch(s.s)
+//	matched, err := str.Of("billing:reports").Match("billing:*")
+//	println(matched, err == nil)
+//	// #bool true
+//	// #bool true
+func (s String) Match(pattern string) (bool, error) {
+	return path.Match(pattern, s.s)
 }

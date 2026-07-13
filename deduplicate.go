@@ -2,6 +2,7 @@ package str
 
 // Deduplicate collapses consecutive instances of char into a single instance.
 // If char is zero, space is used.
+// Similar: NormalizeSpace.
 // @group Cleanup
 //
 // Example: collapse spaces

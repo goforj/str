@@ -1,6 +1,7 @@
 package str
 
 // CharAt returns the rune at the given index and true if within bounds.
+// Similar: Slice and RuneCount.
 // @group Substrings
 //
 // Example: rune lookup

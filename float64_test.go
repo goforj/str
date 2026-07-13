@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestFloat64 guards its covered contract against regressions.
 func TestFloat64(t *testing.T) {
 	t.Parallel()
 

@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestIsEmptyBlank guards its covered contract against regressions.
 func TestIsEmptyBlank(t *testing.T) {
 	t.Parallel()
 

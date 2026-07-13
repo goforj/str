@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestAppend guards its covered contract against regressions.
 func TestAppend(t *testing.T) {
 	got := Of("Go").Append("Forj", "!").String()
 	if got != "GoForj!" {

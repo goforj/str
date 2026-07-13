@@ -1,15 +1,22 @@
 //go:build ignore
 // +build ignore
 
+// Command splitwords is generated as a standalone program so the documented SplitWords example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import (
+	"fmt"
 
+	"github.com/goforj/str/v2"
+)
+
+// main keeps this generated example directly runnable with go run.
 func main() {
-	// SplitWords splits the string into words (Unicode letters/digits runs).
+	// SplitWords splits the string into Unicode words, including camel case and acronym boundaries.
+	// Similar: FirstWord, LastWord, WordCount, and Words.
 
 	// Example: split words
 	v := str.Of("one, two, three").SplitWords()
-	println(v)
+	fmt.Println(v)
 	// #[]string [one two three]
 }

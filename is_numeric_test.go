@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestIsNumeric guards its covered contract against regressions.
 func TestIsNumeric(t *testing.T) {
 	t.Parallel()
 

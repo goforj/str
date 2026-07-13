@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestMask guards its covered contract against regressions.
 func TestMask(t *testing.T) {
 	t.Parallel()
 

@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestInt guards its covered contract against regressions.
 func TestInt(t *testing.T) {
 	t.Parallel()
 

@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestNormalizeNewlines guards its covered contract against regressions.
 func TestNormalizeNewlines(t *testing.T) {
 	t.Parallel()
 

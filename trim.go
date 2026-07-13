@@ -5,66 +5,54 @@ import (
 	"unicode"
 )
 
-// Trim trims leading and trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
+// Trim removes leading and trailing Unicode whitespace.
+// Similar: TrimLeft, TrimRight, and TrimChars.
 // @group Cleanup
 //
 // Example: trim whitespace
 //
-//	v := str.Of("  GoForj  ").Trim("").String()
+//	v := str.Of("  GoForj  ").Trim().String()
 //	println(v)
 //	// #string GoForj
-func (s String) Trim(cutset string) String {
-	if cutset == "" {
-		return String{s: strings.TrimFunc(s.s, unicode.IsSpace)}
-	}
+func (s String) Trim() String {
+	return String{s: strings.TrimFunc(s.s, unicode.IsSpace)}
+}
+
+// TrimChars removes leading and trailing runes contained in cutset.
+// Similar: Trim.
+// @group Cleanup
+//
+// Example: trim selected characters
+//
+//	v := str.Of("..GoForj!!").TrimChars(".!").String()
+//	println(v)
+//	// #string GoForj
+func (s String) TrimChars(cutset string) String {
 	return String{s: strings.Trim(s.s, cutset)}
 }
 
-// TrimSpace trims leading and trailing Unicode whitespace.
-// @group Cleanup
-//
-// Example: trim space
-//
-//	v := str.Of("  GoForj  ").TrimSpace().String()
-//	println(v)
-//	// #string GoForj
-func (s String) TrimSpace() String {
-	if s.s == "" {
-		return s
-	}
-	if trimmed := strings.TrimFunc(s.s, unicode.IsSpace); trimmed == s.s {
-		return s
-	} else {
-		return String{s: trimmed}
-	}
-}
-
-// TrimLeft trims leading characters. If cutset is the zero value (empty string), trims Unicode whitespace.
+// TrimLeft removes leading Unicode whitespace.
+// Similar: Trim and TrimRight.
 // @group Cleanup
 //
 // Example: trim left
 //
-//	v := str.Of("  GoForj  ").TrimLeft("").String()
+//	v := str.Of("  GoForj  ").TrimLeft().String()
 //	println(v)
-//	// #string GoForj
-func (s String) TrimLeft(cutset string) String {
-	if cutset == "" {
-		return String{s: strings.TrimLeftFunc(s.s, unicode.IsSpace)}
-	}
-	return String{s: strings.TrimLeft(s.s, cutset)}
+//	// #string GoForj\u0020\u0020
+func (s String) TrimLeft() String {
+	return String{s: strings.TrimLeftFunc(s.s, unicode.IsSpace)}
 }
 
-// TrimRight trims trailing characters. If cutset is the zero value (empty string), trims Unicode whitespace.
+// TrimRight removes trailing Unicode whitespace.
+// Similar: Trim and TrimLeft.
 // @group Cleanup
 //
 // Example: trim right
 //
-//	v := str.Of("  GoForj  ").TrimRight("").String()
+//	v := str.Of("  GoForj  ").TrimRight().String()
 //	println(v)
-//	// #string   GoForj
-func (s String) TrimRight(cutset string) String {
-	if cutset == "" {
-		return String{s: strings.TrimRightFunc(s.s, unicode.IsSpace)}
-	}
-	return String{s: strings.TrimRight(s.s, cutset)}
+//	// #string \u0020\u0020GoForj
+func (s String) TrimRight() String {
+	return String{s: strings.TrimRightFunc(s.s, unicode.IsSpace)}
 }

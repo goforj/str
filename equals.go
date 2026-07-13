@@ -2,26 +2,14 @@ package str
 
 import "strings"
 
-// Equals reports whether the string exactly matches other (case-sensitive).
-// @group Comparison
-//
-// Example: exact match
-//
-//	v := str.Of("gopher").Equals("gopher")
-//	println(v)
-//	// #bool true
-func (s String) Equals(other string) bool {
-	return s.s == other
-}
-
-// EqualsFold reports whether the string matches other using Unicode case folding.
+// EqualFold reports whether the string matches other using Unicode simple case folding.
 // @group Comparison
 //
 // Example: case-insensitive match
 //
-//	v := str.Of("gopher").EqualsFold("GOPHER")
+//	v := str.Of("gopher").EqualFold("GOPHER")
 //	println(v)
 //	// #bool true
-func (s String) EqualsFold(other string) bool {
+func (s String) EqualFold(other string) bool {
 	return strings.EqualFold(s.s, other)
 }

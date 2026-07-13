@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestRepeat guards its covered contract against regressions.
 func TestRepeat(t *testing.T) {
 	t.Parallel()
 

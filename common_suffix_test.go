@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestCommonSuffix guards its covered contract against regressions.
 func TestCommonSuffix(t *testing.T) {
 	t.Parallel()
 

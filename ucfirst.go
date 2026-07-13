@@ -3,6 +3,7 @@ package str
 import "unicode"
 
 // UcFirst returns the string with the first rune upper-cased.
+// Similar: LcFirst and ToUpper.
 // @group Case
 //
 // Example: uppercase first rune

@@ -1,41 +1,35 @@
 package str
 
-// ChopStart removes the first matching prefix if present.
+import "strings"
+
+// TrimPrefix removes prefix when it appears at the start of the string.
+// Similar: TrimSuffix and EnsurePrefix.
 // @group Affixes
 //
-// Example: chop start
+// Example: trim prefix
 //
-//	v := str.Of("https://goforj.dev").ChopStart("https://", "http://").String()
+//	v := str.Of("https://goforj.dev").TrimPrefix("https://").String()
 //	println(v)
 //	// #string goforj.dev
-func (s String) ChopStart(prefixes ...string) String {
-	for _, p := range prefixes {
-		if p == "" {
-			continue
-		}
-		if len(s.s) >= len(p) && s.s[:len(p)] == p {
-			return String{s: s.s[len(p):]}
-		}
+func (s String) TrimPrefix(prefix string) String {
+	if prefix == "" {
+		return s
 	}
-	return s
+	return String{s: strings.TrimPrefix(s.s, prefix)}
 }
 
-// ChopEnd removes the first matching suffix if present.
+// TrimSuffix removes suffix when it appears at the end of the string.
+// Similar: TrimPrefix and EnsureSuffix.
 // @group Affixes
 //
-// Example: chop end
+// Example: trim suffix
 //
-//	v := str.Of("file.txt").ChopEnd(".txt", ".md").String()
+//	v := str.Of("file.txt").TrimSuffix(".txt").String()
 //	println(v)
 //	// #string file
-func (s String) ChopEnd(suffixes ...string) String {
-	for _, suf := range suffixes {
-		if suf == "" {
-			continue
-		}
-		if len(s.s) >= len(suf) && s.s[len(s.s)-len(suf):] == suf {
-			return String{s: s.s[:len(s.s)-len(suf)]}
-		}
+func (s String) TrimSuffix(suffix string) String {
+	if suffix == "" {
+		return s
 	}
-	return s
+	return String{s: strings.TrimSuffix(s.s, suffix)}
 }

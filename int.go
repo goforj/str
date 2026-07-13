@@ -3,6 +3,7 @@ package str
 import "strconv"
 
 // Int parses the string as a base-10 int using strconv.Atoi semantics.
+// Similar: Bool and Float64.
 // @group Conversion
 //
 // Example: parse int

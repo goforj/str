@@ -2,49 +2,51 @@ package str
 
 import "testing"
 
-func TestReplaceFoldVariants(t *testing.T) {
+// TestReplaceFold verifies all non-overlapping Unicode simple-fold matches are replaced safely.
+func TestReplaceFold(t *testing.T) {
 	t.Parallel()
 
-	val := Of("go gopher GO")
-	if got := val.ReplaceFold("GO", "Go").String(); got != "Go Gopher Go" {
-		t.Fatalf("ReplaceFold = %q", got)
+	tests := []struct {
+		name  string
+		value String
+		old   string
+		repl  string
+		want  string
+	}{
+		{name: "ASCII all", value: Of("go gopher GO"), old: "GO", repl: "Go", want: "Go Gopher Go"},
+		{name: "Greek sigma variants", value: Of("Σ σ ς"), old: "σ", repl: "s", want: "s s s"},
+		{name: "different UTF-8 widths", value: Of("aKb kb"), old: "KB", repl: "X", want: "aX X"},
+		{name: "non-overlapping", value: Of("ΣΣΣ"), old: "σς", repl: "x", want: "xΣ"},
+		{name: "empty replacement", value: Of("Σxς"), old: "σ", repl: "", want: "x"},
+		{name: "empty old", value: Of("go"), old: "", repl: "x", want: "go"},
+		{name: "empty receiver", value: Of(""), old: "go", repl: "x", want: ""},
+		{name: "missing", value: Of("go"), old: "rust", repl: "x", want: "go"},
+		{name: "longer old", value: Of("go"), old: "gopher", repl: "x", want: "go"},
 	}
-	if got := val.ReplaceFirstFold("GO", "Go").String(); got != "Go gopher GO" {
-		t.Fatalf("ReplaceFirstFold = %q", got)
-	}
-	if got := val.ReplaceLastFold("GO", "Go").String(); got != "go gopher Go" {
-		t.Fatalf("ReplaceLastFold = %q", got)
-	}
-	if got := val.ReplaceFold("", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceFold empty old = %q", got)
-	}
-	if got := val.ReplaceFirstFold("", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceFirstFold empty old = %q", got)
-	}
-	if got := val.ReplaceLastFold("", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceLastFold empty old = %q", got)
-	}
-	if got := val.ReplaceFold("missing", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceFold missing = %q", got)
-	}
-	if got := val.ReplaceFold("longer value", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceFold longer = %q", got)
-	}
-	if got := val.ReplaceFirstFold("longer", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceFirstFold longer = %q", got)
-	}
-	if got := val.ReplaceLastFold("nope", "Go").String(); got != val.String() {
-		t.Fatalf("ReplaceLastFold missing = %q", got)
+
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			if got := test.value.ReplaceFold(test.old, test.repl).String(); got != test.want {
+				t.Fatalf("ReplaceFold(%q, %q) = %q, want %q", test.old, test.repl, got, test.want)
+			}
+		})
 	}
 }
 
-func TestReplaceFoldInternals(t *testing.T) {
+// TestFoldMatchRange verifies shared matching reports byte offsets for unequal-width fold pairs.
+func TestFoldMatchRange(t *testing.T) {
 	t.Parallel()
 
 	if got, ok := replaceFoldAll("go", "", "x"); ok || got != "go" {
 		t.Fatalf("replaceFoldAll empty old = %q, %v", got, ok)
 	}
-	if _, _, ok := findFoldMatch("go", "", false); ok {
-		t.Fatalf("findFoldMatch empty old expected false")
+	start, end, ok := foldMatchRange("xKΣy", "kς", 0)
+	if !ok || start != 1 || end != 6 {
+		t.Fatalf("foldMatchRange = (%d, %d, %v), want (1, 6, true)", start, end, ok)
+	}
+	if _, _, ok := foldMatchRange("go", "", 0); ok {
+		t.Fatal("foldMatchRange matched an empty substring")
 	}
 }

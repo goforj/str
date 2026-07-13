@@ -3,6 +3,7 @@ package str
 import "strconv"
 
 // Bool parses the string as a bool using strconv.ParseBool semantics.
+// Similar: Int and Float64.
 // @group Conversion
 //
 // Example: parse bool

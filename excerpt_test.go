@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestExcerpt guards its covered contract against regressions.
 func TestExcerpt(t *testing.T) {
 	got := Of("abcde").Excerpt("c", 1, "...").String()
 	if got != "...bcd..." {

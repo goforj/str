@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestToUpper guards its covered contract against regressions.
 func TestToUpper(t *testing.T) {
 	t.Parallel()
 

@@ -1,6 +1,7 @@
 //go:build ignore
 // +build ignore
 
+// Command examplegen keeps the runnable examples in sync with the library's GoDoc.
 package main
 
 import (
@@ -16,6 +17,7 @@ import (
 	"strings"
 )
 
+// main regenerates runnable examples from the library's public GoDoc.
 func main() {
 	if err := run(); err != nil {
 		fmt.Println("Error:", err)
@@ -24,6 +26,7 @@ func main() {
 	fmt.Println("✔ Examples generated in ./examples/")
 }
 
+// run generates examples for every documented exported function.
 func run() error {
 	root, err := findRoot()
 	if err != nil {
@@ -72,6 +75,10 @@ func run() error {
 		}
 	}
 
+	if err := removeStaleExampleDirs(examplesDir, funcs); err != nil {
+		return err
+	}
+
 	for _, fd := range funcs {
 		sort.Slice(fd.Examples, func(i, j int) bool {
 			return fd.Examples[i].Line < fd.Examples[j].Line
@@ -88,6 +95,39 @@ func run() error {
 	return nil
 }
 
+// removeStaleExampleDirs removes directories that no longer correspond to documented examples.
+func removeStaleExampleDirs(examplesDir string, funcs map[string]*FuncDoc) error {
+	activeDirs := make(map[string]struct{}, len(funcs))
+	for _, fd := range funcs {
+		if len(fd.Examples) == 0 {
+			continue
+		}
+		activeDirs[strings.ToLower(fd.Name)] = struct{}{}
+	}
+
+	entries, err := os.ReadDir(examplesDir)
+	if err != nil {
+		return fmt.Errorf("read examples directory: %w", err)
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		if _, ok := activeDirs[entry.Name()]; ok {
+			continue
+		}
+
+		path := filepath.Join(examplesDir, entry.Name())
+		if err := os.RemoveAll(path); err != nil {
+			return fmt.Errorf("remove stale example directory %s: %w", path, err)
+		}
+	}
+
+	return nil
+}
+
+// findRoot supports invoking the generator from the repository root or its docs directory.
 func findRoot() (string, error) {
 	wd, _ := os.Getwd()
 	if fileExists(filepath.Join(wd, "go.mod")) {
@@ -100,8 +140,13 @@ func findRoot() (string, error) {
 	return "", fmt.Errorf("could not find project root")
 }
 
-func fileExists(p string) bool { _, err := os.Stat(p); return err == nil }
+// fileExists reports whether p is accessible while probing repository roots.
+func fileExists(p string) bool {
+	_, err := os.Stat(p)
+	return err == nil
+}
 
+// modulePath reads the canonical import path so examples always target the current major version.
 func modulePath(root string) (string, error) {
 	data, err := os.ReadFile(filepath.Join(root, "go.mod"))
 	if err != nil {
@@ -118,12 +163,7 @@ func modulePath(root string) (string, error) {
 	return "", fmt.Errorf("module path not found in go.mod")
 }
 
-//
-// ------------------------------------------------------------
-// Data models
-// ------------------------------------------------------------
-//
-
+// FuncDoc contains the documentation needed to generate one function's examples.
 type FuncDoc struct {
 	Name        string
 	Group       string
@@ -131,6 +171,7 @@ type FuncDoc struct {
 	Examples    []Example
 }
 
+// Example contains one runnable documentation block and its source location.
 type Example struct {
 	FuncName string
 	File     string
@@ -139,20 +180,16 @@ type Example struct {
 	Code     string
 }
 
-//
-// ------------------------------------------------------------
-// Example extraction
-// ------------------------------------------------------------
-//
-
 var exampleHeader = regexp.MustCompile(`(?i)^\s*Example:\s*(.*)$`)
 var groupHeader = regexp.MustCompile(`(?i)^\s*@group\s+(.+)$`)
 
+// docLine retains token positions so generated examples can remain deterministically ordered.
 type docLine struct {
 	text string
 	pos  token.Pos
 }
 
+// extractFuncDocs collects exported function documentation from a parsed source file.
 func extractFuncDocs(
 	fset *token.FileSet,
 	filename string,
@@ -183,6 +220,7 @@ func extractFuncDocs(
 	return out
 }
 
+// extractGroup returns the explicit documentation group or Other when none is declared.
 func extractGroup(group *ast.CommentGroup) string {
 	lines := docLines(group)
 
@@ -196,6 +234,7 @@ func extractGroup(group *ast.CommentGroup) string {
 	return "Other"
 }
 
+// extractFuncDescription keeps prose before generator metadata and example blocks.
 func extractFuncDescription(group *ast.CommentGroup) string {
 	lines := docLines(group)
 	var desc []string
@@ -222,6 +261,7 @@ func extractFuncDescription(group *ast.CommentGroup) string {
 	return strings.Join(desc, "\n")
 }
 
+// docLines normalizes line comments without discarding their source positions.
 func docLines(group *ast.CommentGroup) []docLine {
 	var lines []docLine
 
@@ -246,6 +286,7 @@ func docLines(group *ast.CommentGroup) []docLine {
 	return lines
 }
 
+// extractBlocks extracts every labeled runnable block from a function's GoDoc.
 func extractBlocks(
 	fset *token.FileSet,
 	filename, funcName string,
@@ -346,12 +387,7 @@ func selectPackage(pkgs map[string]*ast.Package) (string, error) {
 	return candidates[0].name, nil
 }
 
-//
-// ------------------------------------------------------------
-// Write ./examples/<func>/main.go
-// ------------------------------------------------------------
-//
-
+// writeMain renders all examples for one function into its generated executable.
 func writeMain(base string, fd *FuncDoc, importPath string) error {
 	if len(fd.Examples) == 0 {
 		return nil
@@ -372,6 +408,7 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 	buf.WriteString("//go:build ignore\n")
 	buf.WriteString("// +build ignore\n\n")
 
+	fmt.Fprintf(&buf, "// Command %s is generated as a standalone program so the documented %s example can be run directly.\n", strings.ToLower(fd.Name), fd.Name)
 	buf.WriteString("package main\n\n")
 
 	imports := map[string]bool{
@@ -420,25 +457,9 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 		}
 	}
 
-	if len(imports) == 1 {
-		buf.WriteString("import ")
-		for imp := range imports {
-			buf.WriteString(fmt.Sprintf("%q", imp))
-		}
-		buf.WriteString("\n\n")
-	} else {
-		buf.WriteString("import (\n")
-		keys := make([]string, 0, len(imports))
-		for k := range imports {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, imp := range keys {
-			buf.WriteString("\t\"" + imp + "\"\n")
-		}
-		buf.WriteString(")\n\n")
-	}
+	writeImports(&buf, imports)
 
+	buf.WriteString("// main keeps this generated example directly runnable with go run.\n")
 	buf.WriteString("func main() {\n")
 
 	// Description
@@ -469,4 +490,46 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 	buf.WriteString("}\n")
 
 	return os.WriteFile(filepath.Join(dir, "main.go"), buf.Bytes(), 0o644)
+}
+
+// writeImports renders deterministic standard-library and third-party import groups.
+func writeImports(buf *bytes.Buffer, imports map[string]bool) {
+	if len(imports) == 1 {
+		buf.WriteString("import ")
+		for importPath := range imports {
+			buf.WriteString(fmt.Sprintf("%q", importPath))
+		}
+		buf.WriteString("\n\n")
+		return
+	}
+
+	var standard []string
+	var thirdParty []string
+	for importPath := range imports {
+		if isStandardImport(importPath) {
+			standard = append(standard, importPath)
+		} else {
+			thirdParty = append(thirdParty, importPath)
+		}
+	}
+	sort.Strings(standard)
+	sort.Strings(thirdParty)
+
+	buf.WriteString("import (\n")
+	for _, importPath := range standard {
+		buf.WriteString("\t\"" + importPath + "\"\n")
+	}
+	if len(standard) > 0 && len(thirdParty) > 0 {
+		buf.WriteByte('\n')
+	}
+	for _, importPath := range thirdParty {
+		buf.WriteString("\t\"" + importPath + "\"\n")
+	}
+	buf.WriteString(")\n\n")
+}
+
+// isStandardImport recognizes standard-library paths by their dot-free first component.
+func isStandardImport(importPath string) bool {
+	first, _, _ := strings.Cut(importPath, "/")
+	return !strings.Contains(first, ".")
 }

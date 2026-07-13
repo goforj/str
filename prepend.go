@@ -1,6 +1,9 @@
 package str
 
+import "strings"
+
 // Prepend concatenates the provided parts to the beginning of the string.
+// Similar: Append.
 // @group Compose
 //
 // Example: prepend text
@@ -9,9 +12,19 @@ package str
 //	println(v)
 //	// #string Hello Go World
 func (s String) Prepend(parts ...string) String {
-	out := s.s
-	for i := len(parts) - 1; i >= 0; i-- {
-		out = parts[i] + out
+	if len(parts) == 0 {
+		return s
 	}
-	return String{s: out}
+
+	var b strings.Builder
+	total := len(s.s)
+	for _, part := range parts {
+		total += len(part)
+	}
+	b.Grow(total)
+	for _, part := range parts {
+		b.WriteString(part)
+	}
+	b.WriteString(s.s)
+	return String{s: b.String()}
 }

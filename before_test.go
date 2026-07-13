@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestBeforeVariants guards its covered contract against regressions.
 func TestBeforeVariants(t *testing.T) {
 	t.Parallel()
 
@@ -16,6 +17,7 @@ func TestBeforeVariants(t *testing.T) {
 	}
 }
 
+// TestBeforeLastVariants guards its covered contract against regressions.
 func TestBeforeLastVariants(t *testing.T) {
 	t.Parallel()
 

@@ -2,15 +2,16 @@ package str
 
 import "strings"
 
-// ReplaceEnd replaces old with repl at the end of the string, if present.
+// ReplaceSuffix replaces old with repl when old is a suffix of the string.
+// Similar: ReplacePrefix and TrimSuffix.
 // @group Replace
 //
 // Example: replace suffix
 //
-//	v := str.Of("file.old").ReplaceEnd(".old", ".new").String()
+//	v := str.Of("file.old").ReplaceSuffix(".old", ".new").String()
 //	println(v)
 //	// #string file.new
-func (s String) ReplaceEnd(old, repl string) String {
+func (s String) ReplaceSuffix(old, repl string) String {
 	if old == "" || !strings.HasSuffix(s.s, old) {
 		return s
 	}

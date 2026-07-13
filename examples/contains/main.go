@@ -1,16 +1,19 @@
 //go:build ignore
 // +build ignore
 
+// Command contains is generated as a standalone program so the documented Contains example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import "github.com/goforj/str/v2"
 
+// main keeps this generated example directly runnable with go run.
 func main() {
-	// Contains reports whether the string contains any of the provided substrings (case-sensitive).
-	// Empty substrings return true to match strings.Contains semantics.
+	// Contains reports whether the string contains sub using a case-sensitive comparison.
+	// An empty substring is not a match.
+	// Similar: ContainsFold.
 
-	// Example: contains any
-	v := str.Of("Go means gophers").Contains("rust", "gopher")
+	// Example: contains substring
+	v := str.Of("Go means gophers").Contains("gopher")
 	println(v)
 	// #bool true
 }

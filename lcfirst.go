@@ -3,6 +3,7 @@ package str
 import "unicode"
 
 // LcFirst returns the string with the first rune lower-cased.
+// Similar: UcFirst and ToLower.
 // @group Case
 //
 // Example: lowercase first rune

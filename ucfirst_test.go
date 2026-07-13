@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestUcFirst guards its covered contract against regressions.
 func TestUcFirst(t *testing.T) {
 	t.Parallel()
 

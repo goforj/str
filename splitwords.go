@@ -1,13 +1,14 @@
 package str
 
-// SplitWords splits the string into words (Unicode letters/digits runs).
+// SplitWords splits the string into Unicode words, including camel case and acronym boundaries.
+// Similar: FirstWord, LastWord, WordCount, and Words.
 // @group Words
 //
 // Example: split words
 //
 //	v := str.Of("one, two, three").SplitWords()
-//	println(v)
+//	fmt.Println(v)
 //	// #[]string [one two three]
 func (s String) SplitWords() []string {
-	return splitWordsRunes(s.s)
+	return wordTokenValues(tokenizeWords(s.s))
 }

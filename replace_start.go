@@ -2,15 +2,16 @@ package str
 
 import "strings"
 
-// ReplaceStart replaces old with repl at the start of the string, if present.
+// ReplacePrefix replaces old with repl when old is a prefix of the string.
+// Similar: ReplaceSuffix and TrimPrefix.
 // @group Replace
 //
 // Example: replace prefix
 //
-//	v := str.Of("prefix-value").ReplaceStart("prefix-", "new-").String()
+//	v := str.Of("prefix-value").ReplacePrefix("prefix-", "new-").String()
 //	println(v)
 //	// #string new-value
-func (s String) ReplaceStart(old, repl string) String {
+func (s String) ReplacePrefix(old, repl string) String {
 	if old == "" || !strings.HasPrefix(s.s, old) {
 		return s
 	}

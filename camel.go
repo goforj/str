@@ -6,6 +6,7 @@ import (
 )
 
 // Camel converts the string to camelCase.
+// Similar: Pascal.
 // @group Case
 //
 // Example: camel case
@@ -14,7 +15,7 @@ import (
 //	println(v)
 //	// #string fooBarBaz
 func (s String) Camel() String {
-	words := splitWordsRunes(s.s)
+	words := wordTokenValues(tokenizeWords(s.s))
 	for i, w := range words {
 		if i == 0 {
 			words[i] = strings.ToLower(w)

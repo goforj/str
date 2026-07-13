@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestStringWrapper guards its covered contract against regressions.
 func TestStringWrapper(t *testing.T) {
 	t.Parallel()
 

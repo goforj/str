@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestTake guards its covered contract against regressions.
 func TestTake(t *testing.T) {
 	t.Parallel()
 
@@ -17,6 +18,7 @@ func TestTake(t *testing.T) {
 	}
 }
 
+// TestTakeLast guards its covered contract against regressions.
 func TestTakeLast(t *testing.T) {
 	t.Parallel()
 

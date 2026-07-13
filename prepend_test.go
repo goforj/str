@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestPrepend guards its covered contract against regressions.
 func TestPrepend(t *testing.T) {
 	got := Of("World").Prepend("Hello ", "Go ").String()
 	if got != "Hello Go World" {

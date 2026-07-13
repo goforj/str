@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestLines guards its covered contract against regressions.
 func TestLines(t *testing.T) {
 	t.Parallel()
 

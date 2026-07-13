@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestInitials guards its covered contract against regressions.
 func TestInitials(t *testing.T) {
 	t.Parallel()
 
@@ -10,5 +11,8 @@ func TestInitials(t *testing.T) {
 	}
 	if got := Of("").Initials().String(); got != "" {
 		t.Fatalf("Initials empty = %q", got)
+	}
+	if got := Of("HTTPRequestID").Initials().String(); got != "HRI" {
+		t.Fatalf("Initials acronym = %q", got)
 	}
 }

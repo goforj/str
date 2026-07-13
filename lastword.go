@@ -1,6 +1,7 @@
 package str
 
-// LastWord returns the last word token or empty string.
+// LastWord returns the last detected word or an empty string.
+// Similar: FirstWord and SplitWords.
 // @group Words
 //
 // Example: last word
@@ -9,9 +10,9 @@ package str
 //	println(v)
 //	// #string world
 func (s String) LastWord() String {
-	words := splitWordsRunes(s.s)
-	if len(words) == 0 {
+	tokens := tokenizeWords(s.s)
+	if len(tokens) == 0 {
 		return String{s: ""}
 	}
-	return String{s: words[len(words)-1]}
+	return String{s: tokens[len(tokens)-1].value}
 }

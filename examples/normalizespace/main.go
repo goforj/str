@@ -1,15 +1,18 @@
 //go:build ignore
 // +build ignore
 
+// Command normalizespace is generated as a standalone program so the documented NormalizeSpace example can be run directly.
 package main
 
-import "github.com/goforj/str"
+import "github.com/goforj/str/v2"
 
+// main keeps this generated example directly runnable with go run.
 func main() {
-	// NormalizeSpace collapses whitespace runs to single spaces without trimming ends.
+	// NormalizeSpace removes surrounding whitespace and collapses internal whitespace to single spaces.
+	// Similar: Trim.
 
-	// Example: normalize interior space
+	// Example: normalize whitespace
 	v := str.Of("  go   forj  ").NormalizeSpace().String()
 	println(v)
-	// #string  go forj 
+	// #string go forj
 }

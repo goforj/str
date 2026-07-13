@@ -3,6 +3,7 @@ package str
 import "strings"
 
 // ToUpper returns an uppercase copy of the string using Unicode rules.
+// Similar: ToLower and UcFirst.
 // @group Case
 //
 // Example: uppercase text

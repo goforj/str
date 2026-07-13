@@ -2,7 +2,8 @@ package str
 
 import "testing"
 
-func TestLen(t *testing.T) {
+// TestRuneCount guards its covered contract against regressions.
+func TestRuneCount(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -19,19 +20,10 @@ func TestLen(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			got := Of(tt.in).Len()
+			got := Of(tt.in).RuneCount()
 			if got != tt.want {
-				t.Fatalf("Len(%q) = %d, want %d", tt.in, got, tt.want)
+				t.Fatalf("RuneCount(%q) = %d, want %d", tt.in, got, tt.want)
 			}
 		})
-	}
-}
-
-func TestRuneCountAlias(t *testing.T) {
-	t.Parallel()
-
-	val := Of("naïve café")
-	if got, want := val.RuneCount(), val.Len(); got != want {
-		t.Fatalf("RuneCount mismatch: got %d, want %d", got, want)
 	}
 }

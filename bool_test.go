@@ -2,6 +2,7 @@ package str
 
 import "testing"
 
+// TestBool guards its covered contract against regressions.
 func TestBool(t *testing.T) {
 	t.Parallel()
 

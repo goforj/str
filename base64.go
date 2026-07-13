@@ -3,6 +3,7 @@ package str
 import "encoding/base64"
 
 // ToBase64 encodes the string using standard Base64.
+// Similar: FromBase64.
 // @group Encoding
 //
 // Example: base64 encode
@@ -15,14 +16,15 @@ func (s String) ToBase64() String {
 }
 
 // FromBase64 decodes a standard Base64 string.
+// Similar: ToBase64.
 // @group Encoding
 //
 // Example: base64 decode
 //
 //	v, err := str.Of("Z29waGVy").FromBase64()
-//	println(v.String(), err)
+//	println(v.String(), err == nil)
 //	// #string gopher
-//	// #error <nil>
+//	// #bool true
 func (s String) FromBase64() (String, error) {
 	decoded, err := base64.StdEncoding.DecodeString(s.s)
 	return String{s: string(decoded)}, err

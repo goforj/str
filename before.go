@@ -4,6 +4,7 @@ import "strings"
 
 // Before returns the substring before the first occurrence of sep.
 // If sep is empty or not found, the original string is returned.
+// Similar: BeforeLast and After.
 // @group Substrings
 //
 // Example: slice before marker
@@ -24,6 +25,7 @@ func (s String) Before(sep string) String {
 
 // BeforeLast returns the substring before the last occurrence of sep.
 // If sep is empty or not found, the original string is returned.
+// Similar: Before and AfterLast.
 // @group Substrings
 //
 // Example: slice before last separator

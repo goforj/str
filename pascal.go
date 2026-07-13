@@ -6,6 +6,7 @@ import (
 )
 
 // Pascal converts the string to PascalCase.
+// Similar: Camel.
 // @group Case
 //
 // Example: pascal case
@@ -14,7 +15,7 @@ import (
 //	fmt.Println(v)
 //	// #string FooBarBaz
 func (s String) Pascal() String {
-	words := splitWordsRunes(s.s)
+	words := wordTokenValues(tokenizeWords(s.s))
 	for i, w := range words {
 		runes := []rune(strings.ToLower(w))
 		runes[0] = unicode.ToTitle(runes[0])

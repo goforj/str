@@ -6,7 +6,8 @@ import (
 )
 
 // Initials returns the uppercase first rune of each detected word.
-// Words are split the same way as SplitWords, including camelCase boundaries.
+// Words are split the same way as SplitWords, including camel case and acronym boundaries.
+// Similar: SplitWords.
 // @group Words
 //
 // Example: collect word initials
@@ -15,7 +16,7 @@ import (
 //	println(v)
 //	// #string PNG
 func (s String) Initials() String {
-	words := splitWordsRunes(s.s)
+	words := wordTokenValues(tokenizeWords(s.s))
 	if len(words) == 0 {
 		return String{s: ""}
 	}
