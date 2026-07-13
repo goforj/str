@@ -94,9 +94,6 @@ func tokenizeWords(s string) []wordToken {
 			continue
 		}
 		if start < 0 {
-			if unicode.IsMark(r) {
-				continue
-			}
 			start = i
 			continue
 		}

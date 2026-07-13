@@ -15,10 +15,16 @@ func TestBetween(t *testing.T) {
 	if got := Of("abc").Between("a", "z").String(); got != "" {
 		t.Fatalf("Between missing end")
 	}
+	if got := Of("abc").Between("z", "a").String(); got != "" {
+		t.Fatalf("Between missing start")
+	}
 	if got := Of("abc").Between("bc", "a").String(); got != "" {
 		t.Fatalf("Between overlapping order")
 	}
 	if got := Of("abc").Between("", "c").String(); got != "" {
 		t.Fatalf("Between empty start should be empty")
+	}
+	if got := Of("abc").Between("a", "").String(); got != "" {
+		t.Fatalf("Between empty end should be empty")
 	}
 }

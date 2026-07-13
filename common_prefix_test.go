@@ -15,4 +15,7 @@ func TestCommonPrefix(t *testing.T) {
 	if got := Of("gopher").CommonPrefix().String(); got != "gopher" {
 		t.Fatalf("CommonPrefix no args = %q", got)
 	}
+	if got := Of("gopher").CommonPrefix("cat").String(); got != "" {
+		t.Fatalf("CommonPrefix no match = %q", got)
+	}
 }

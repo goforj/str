@@ -56,6 +56,7 @@ func TestTokenizeWords(t *testing.T) {
 		{name: "mixed delimiters", input: "Go-Forj_Rules", want: []string{"Go", "Forj", "Rules"}},
 		{name: "Unicode", input: "ÉclairHTTPÜberID", want: []string{"Éclair", "HTTP", "Über", "ID"}},
 		{name: "combining mark", input: "Cafe\u0301HTTP", want: []string{"Cafe\u0301", "HTTP"}},
+		{name: "leading combining mark", input: "\u0301Cafe", want: []string{"Cafe"}},
 		{name: "empty", input: "", want: nil},
 	}
 
@@ -73,5 +74,15 @@ func TestTokenizeWords(t *testing.T) {
 	tokens := tokenizeWords("  HTTPRequestID!")
 	if tokens[0].start != 2 || tokens[1].end != 13 {
 		t.Fatalf("token spans = %+v", tokens)
+	}
+
+	if startsNewWord([]rune{'\u0301', 'A'}, 0, 1) {
+		t.Fatal("startsNewWord should reject a boundary with no preceding base rune")
+	}
+	if startsNewWord([]rune{'_', 'A'}, 0, 1) {
+		t.Fatal("startsNewWord should reject a non-word predecessor")
+	}
+	if !startsNewWord([]rune{'H', 'T', '\u0301', 'e'}, 0, 1) {
+		t.Fatal("startsNewWord should skip combining marks when finding the next letter")
 	}
 }

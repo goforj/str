@@ -93,4 +93,10 @@ func TestWordsSuite(t *testing.T) {
 	if got := Of("foo  bar ").WrapWords(8, "|").String(); got != "foo  bar " {
 		t.Fatalf("WrapWords whitespace = %q", got)
 	}
+	if got := Of("").WrapWords(8, "|").String(); got != "" {
+		t.Fatalf("WrapWords empty = %q", got)
+	}
+	if got := Of("foo\nbar").WrapWords(8, "|").String(); got != "foo\nbar" {
+		t.Fatalf("WrapWords existing line break = %q", got)
+	}
 }

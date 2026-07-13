@@ -15,4 +15,7 @@ func TestCommonSuffix(t *testing.T) {
 	if got := Of("gopher").CommonSuffix().String(); got != "gopher" {
 		t.Fatalf("CommonSuffix no args = %q", got)
 	}
+	if got := Of("gopher").CommonSuffix("cat").String(); got != "" {
+		t.Fatalf("CommonSuffix no match = %q", got)
+	}
 }
