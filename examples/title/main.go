@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command title is generated as a standalone program so the documented Title example can be run directly.
 package main
 

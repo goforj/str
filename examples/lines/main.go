@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command lines is generated as a standalone program so the documented Lines example can be run directly.
 package main
 

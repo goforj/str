@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command repeat is generated as a standalone program so the documented Repeat example can be run directly.
 package main
 

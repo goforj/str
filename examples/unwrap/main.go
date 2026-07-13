@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command unwrap is generated as a standalone program so the documented Unwrap example can be run directly.
 package main
 

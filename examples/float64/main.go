@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command float64 is generated as a standalone program so the documented Float64 example can be run directly.
 package main
 

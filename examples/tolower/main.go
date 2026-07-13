@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command tolower is generated as a standalone program so the documented ToLower example can be run directly.
 package main
 

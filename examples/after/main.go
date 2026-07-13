@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command after is generated as a standalone program so the documented After example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command padleft is generated as a standalone program so the documented PadLeft example can be run directly.
 package main
 

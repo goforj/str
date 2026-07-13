@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command normalizespace is generated as a standalone program so the documented NormalizeSpace example can be run directly.
 package main
 

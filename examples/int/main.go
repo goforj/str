@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command int is generated as a standalone program so the documented Int example can be run directly.
 package main
 

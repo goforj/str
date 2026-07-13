@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command ensuresuffix is generated as a standalone program so the documented EnsureSuffix example can be run directly.
 package main
 

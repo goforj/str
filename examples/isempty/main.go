@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command isempty is generated as a standalone program so the documented IsEmpty example can be run directly.
 package main
 

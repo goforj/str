@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command hasprefixfold is generated as a standalone program so the documented HasPrefixFold example can be run directly.
 package main
 

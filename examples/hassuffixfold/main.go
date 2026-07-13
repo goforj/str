@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command hassuffixfold is generated as a standalone program so the documented HasSuffixFold example can be run directly.
 package main
 

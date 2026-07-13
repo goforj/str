@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command trimright is generated as a standalone program so the documented TrimRight example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command slice is generated as a standalone program so the documented Slice example can be run directly.
 package main
 

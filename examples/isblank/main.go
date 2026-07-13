@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command isblank is generated as a standalone program so the documented IsBlank example can be run directly.
 package main
 

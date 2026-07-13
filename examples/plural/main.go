@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command plural is generated as a standalone program so the documented Plural example can be run directly.
 package main
 

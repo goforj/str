@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command normalizenewlines is generated as a standalone program so the documented NormalizeNewlines example can be run directly.
 package main
 

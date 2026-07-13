@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/images/logo.png?v=2" width="300" alt="str logo">
+  <img src="https://raw.githubusercontent.com/goforj/str/main/docs/images/logo.png" width="300" alt="str logo">
 </p>
 
 <p align="center">
@@ -1264,12 +1264,16 @@ println(v)
 
 ## Development
 
+`docs` and `examples` are separate Go modules, keeping their tooling and generated programs out of the library module download.
+
 Run the tests and rebuild the generated examples and README with:
 
 ```sh
 go test ./...
-go run ./docs/examplegen/main.go
-go run ./docs/readme
+go -C docs test ./...
+go -C examples test ./...
+go -C docs run ./examplegen
+go -C docs run ./readme
 ```
 
 Licensed under the [MIT License](./LICENSE).

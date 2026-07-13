@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command toupper is generated as a standalone program so the documented ToUpper example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command isascii is generated as a standalone program so the documented IsASCII example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command pascal is generated as a standalone program so the documented Pascal example can be run directly.
 package main
 

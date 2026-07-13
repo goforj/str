@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command hasprefix is generated as a standalone program so the documented HasPrefix example can be run directly.
 package main
 

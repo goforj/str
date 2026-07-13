@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command match is generated as a standalone program so the documented Match example can be run directly.
 package main
 

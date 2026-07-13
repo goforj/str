@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command gostring is generated as a standalone program so the documented GoString example can be run directly.
 package main
 

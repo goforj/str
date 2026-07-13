@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command words is generated as a standalone program so the documented Words example can be run directly.
 package main
 

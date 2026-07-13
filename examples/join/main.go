@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command join is generated as a standalone program so the documented Join example can be run directly.
 package main
 

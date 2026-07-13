@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command wrapwords is generated as a standalone program so the documented WrapWords example can be run directly.
 package main
 

@@ -2,7 +2,6 @@ package str
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"go/parser"
 	"go/token"
@@ -62,7 +61,7 @@ func TestGeneratedExamplesMatchDocumentedOutput(t *testing.T) {
 				t.Fatalf("parse documented output: %v", err)
 			}
 
-			actual, err := runExampleWithoutBuildTags(root, path, source)
+			actual, err := runExample(root, name)
 			if err != nil {
 				t.Fatalf("example %q failed to execute:\n%v", name, err)
 			}
@@ -108,32 +107,6 @@ func main() {
 	want := []byte("42 true\nfirst\nsecond\n  padded \n")
 	if !bytes.Equal(got, want) {
 		t.Errorf("documented output mismatch:\nexpected: %q\nactual:   %q", want, got)
-	}
-}
-
-// TestStripBuildTagsPreservesFileHeader guards its covered contract against regressions.
-func TestStripBuildTagsPreservesFileHeader(t *testing.T) {
-	t.Parallel()
-
-	source := []byte(`// Copyright Example
-//go:build ignore
-// +build ignore
-
-// Package documentation remains intact.
-package main
-
-func main() {}
-`)
-
-	got := stripBuildTags(source)
-	if bytes.Contains(got, []byte("//go:build")) || bytes.Contains(got, []byte("// +build")) {
-		t.Errorf("build constraints remain in stripped source:\n%s", got)
-	}
-	if !bytes.Contains(got, []byte("// Copyright Example")) {
-		t.Errorf("leading file header was removed:\n%s", got)
-	}
-	if !bytes.Contains(got, []byte("// Package documentation remains intact.")) {
-		t.Errorf("package documentation was removed:\n%s", got)
 	}
 }
 
@@ -252,44 +225,10 @@ func unescapeExpectedValue(value string) (string, error) {
 	return decoded.String(), nil
 }
 
-// runExampleWithoutBuildTags executes an ignored example through a temporary overlay.
-func runExampleWithoutBuildTags(root, exampleDir string, src []byte) ([]byte, error) {
-	orig := filepath.Join(root, exampleDir, "main.go")
-	clean := stripBuildTags(src)
-
-	tmpDir, err := os.MkdirTemp("", "example-overlay-*")
-	if err != nil {
-		return nil, fmt.Errorf("create example overlay directory: %w", err)
-	}
-	defer os.RemoveAll(tmpDir)
-
-	tmpFile := filepath.Join(tmpDir, "main.go")
-	if err := os.WriteFile(tmpFile, clean, 0o644); err != nil {
-		return nil, fmt.Errorf("write example overlay source: %w", err)
-	}
-
-	overlay := map[string]any{
-		"Replace": map[string]string{
-			orig: tmpFile,
-		},
-	}
-
-	overlayJSON, err := json.Marshal(overlay)
-	if err != nil {
-		return nil, fmt.Errorf("encode example overlay: %w", err)
-	}
-
-	overlayPath := filepath.Join(tmpDir, "overlay.json")
-	if err := os.WriteFile(overlayPath, overlayJSON, 0o644); err != nil {
-		return nil, fmt.Errorf("write example overlay: %w", err)
-	}
-
-	cmd := exec.Command(
-		"go", "run",
-		"-overlay", overlayPath,
-		"./"+filepath.ToSlash(exampleDir),
-	)
-	cmd.Dir = root
+// runExample executes a generated command from the nested examples module.
+func runExample(root, exampleName string) ([]byte, error) {
+	cmd := exec.Command("go", "run", "./"+exampleName)
+	cmd.Dir = filepath.Join(root, "examples")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -297,38 +236,4 @@ func runExampleWithoutBuildTags(root, exampleDir string, src []byte) ([]byte, er
 	}
 
 	return output, nil
-}
-
-// stripBuildTags removes modern and legacy build constraints from the file header.
-func stripBuildTags(src []byte) []byte {
-	lines := strings.Split(string(src), "\n")
-
-	for i, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmed, "package ") {
-			break
-		}
-		if isBuildConstraintLine(trimmed) {
-			lines[i] = ""
-		}
-	}
-
-	return []byte(strings.Join(lines, "\n"))
-}
-
-// isBuildConstraintLine reports whether a header line contains a modern or legacy build constraint.
-func isBuildConstraintLine(line string) bool {
-	for _, prefix := range []string{"//go:build", "// +build"} {
-		if line == prefix {
-			return true
-		}
-		if len(line) > len(prefix) && strings.HasPrefix(line, prefix) {
-			next := line[len(prefix)]
-			if next == ' ' || next == '\t' {
-				return true
-			}
-		}
-	}
-
-	return false
 }

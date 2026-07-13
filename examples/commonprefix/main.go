@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command commonprefix is generated as a standalone program so the documented CommonPrefix example can be run directly.
 package main
 

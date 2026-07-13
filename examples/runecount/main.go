@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command runecount is generated as a standalone program so the documented RuneCount example can be run directly.
 package main
 

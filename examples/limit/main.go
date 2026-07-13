@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command limit is generated as a standalone program so the documented Limit example can be run directly.
 package main
 

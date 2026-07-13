@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command kebab is generated as a standalone program so the documented Kebab example can be run directly.
 package main
 

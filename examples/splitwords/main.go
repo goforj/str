@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command splitwords is generated as a standalone program so the documented SplitWords example can be run directly.
 package main
 

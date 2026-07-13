@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command examplegen keeps the runnable examples in sync with the library's GoDoc.
 package main
 
@@ -127,17 +124,24 @@ func removeStaleExampleDirs(examplesDir string, funcs map[string]*FuncDoc) error
 	return nil
 }
 
-// findRoot supports invoking the generator from the repository root or its docs directory.
+// findRoot skips nested module boundaries because generators always operate on the parent library module.
 func findRoot() (string, error) {
-	wd, _ := os.Getwd()
-	if fileExists(filepath.Join(wd, "go.mod")) {
-		return wd, nil
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("get working directory: %w", err)
 	}
-	parent := filepath.Join(wd, "..")
-	if fileExists(filepath.Join(parent, "go.mod")) {
-		return filepath.Clean(parent), nil
+
+	for candidate := workingDirectory; ; candidate = filepath.Dir(candidate) {
+		if fileExists(filepath.Join(candidate, "go.mod")) && fileExists(filepath.Join(candidate, "string.go")) {
+			return filepath.Clean(candidate), nil
+		}
+		parent := filepath.Dir(candidate)
+		if parent == candidate {
+			break
+		}
 	}
-	return "", fmt.Errorf("could not find project root")
+
+	return "", fmt.Errorf("could not find library module root")
 }
 
 // fileExists reports whether p is accessible while probing repository roots.
@@ -403,10 +407,6 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 	}
 
 	var buf bytes.Buffer
-
-	// Build tag
-	buf.WriteString("//go:build ignore\n")
-	buf.WriteString("// +build ignore\n\n")
 
 	fmt.Fprintf(&buf, "// Command %s is generated as a standalone program so the documented %s example can be run directly.\n", strings.ToLower(fd.Name), fd.Name)
 	buf.WriteString("package main\n\n")

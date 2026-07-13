@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command tobase64 is generated as a standalone program so the documented ToBase64 example can be run directly.
 package main
 

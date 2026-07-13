@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command slug is generated as a standalone program so the documented Slug example can be run directly.
 package main
 

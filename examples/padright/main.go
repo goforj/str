@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command padright is generated as a standalone program so the documented PadRight example can be run directly.
 package main
 

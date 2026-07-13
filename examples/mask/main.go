@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command mask is generated as a standalone program so the documented Mask example can be run directly.
 package main
 

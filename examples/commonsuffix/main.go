@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command commonsuffix is generated as a standalone program so the documented CommonSuffix example can be run directly.
 package main
 

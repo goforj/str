@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command replaceall is generated as a standalone program so the documented ReplaceAll example can be run directly.
 package main
 

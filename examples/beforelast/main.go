@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command beforelast is generated as a standalone program so the documented BeforeLast example can be run directly.
 package main
 

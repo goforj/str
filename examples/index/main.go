@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command index is generated as a standalone program so the documented Index example can be run directly.
 package main
 

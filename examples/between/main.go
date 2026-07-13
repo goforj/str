@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command between is generated as a standalone program so the documented Between example can be run directly.
 package main
 

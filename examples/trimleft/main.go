@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command trimleft is generated as a standalone program so the documented TrimLeft example can be run directly.
 package main
 

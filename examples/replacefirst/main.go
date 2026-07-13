@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command replacefirst is generated as a standalone program so the documented ReplaceFirst example can be run directly.
 package main
 

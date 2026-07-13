@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command hassuffix is generated as a standalone program so the documented HasSuffix example can be run directly.
 package main
 

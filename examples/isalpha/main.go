@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command isalpha is generated as a standalone program so the documented IsAlpha example can be run directly.
 package main
 

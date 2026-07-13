@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command replacelast is generated as a standalone program so the documented ReplaceLast example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command replaceprefix is generated as a standalone program so the documented ReplacePrefix example can be run directly.
 package main
 

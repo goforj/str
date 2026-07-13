@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command initials is generated as a standalone program so the documented Initials example can be run directly.
 package main
 

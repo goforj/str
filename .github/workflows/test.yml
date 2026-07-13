@@ -27,15 +27,21 @@ jobs:
       - name: Verify module files
         run: |
           go mod tidy
-          git diff --exit-code -- go.mod go.sum
+          go -C docs mod tidy
+          go -C examples mod tidy
+          git diff --exit-code -- go.mod go.sum docs/go.mod docs/go.sum examples/go.mod examples/go.sum
 
       - name: Run vet
-        run: go vet ./...
+        run: |
+          go vet ./...
+          go -C docs vet ./...
+          go -C examples vet ./...
 
       - name: Run tests with race detection and coverage
         run: |
           go test -race -coverprofile=coverage.txt .
-          go test -race ./docs/readme
+          go -C docs test -race ./...
+          go -C examples test ./...
 
       - name: Require full library coverage
         run: test "$(go tool cover -func=coverage.txt | awk '/^total:/ {print $3}')" = "100.0%"

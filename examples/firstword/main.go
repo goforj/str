@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command firstword is generated as a standalone program so the documented FirstWord example can be run directly.
 package main
 

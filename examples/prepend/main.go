@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command prepend is generated as a standalone program so the documented Prepend example can be run directly.
 package main
 

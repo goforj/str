@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command reverse is generated as a standalone program so the documented Reverse example can be run directly.
 package main
 

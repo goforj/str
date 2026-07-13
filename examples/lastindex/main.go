@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command lastindex is generated as a standalone program so the documented LastIndex example can be run directly.
 package main
 

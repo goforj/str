@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command replacefold is generated as a standalone program so the documented ReplaceFold example can be run directly.
 package main
 

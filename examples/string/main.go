@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command string is generated as a standalone program so the documented String example can be run directly.
 package main
 

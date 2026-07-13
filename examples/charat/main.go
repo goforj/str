@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command charat is generated as a standalone program so the documented CharAt example can be run directly.
 package main
 

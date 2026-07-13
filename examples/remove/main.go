@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command remove is generated as a standalone program so the documented Remove example can be run directly.
 package main
 

@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command swap is generated as a standalone program so the documented Swap example can be run directly.
 package main
 

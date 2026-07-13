@@ -466,16 +466,30 @@ func markerBounds(document, startMarker, endMarker, section string) (int, int, e
 	return start, end, nil
 }
 
-// countTests uses Go's JSON event stream so subtests represented by the badge are counted consistently with top-level tests.
+// countTests includes library and documentation tests while respecting their module boundaries.
 func countTests(root string) (int, error) {
+	libraryTests, err := countTestsIn(root)
+	if err != nil {
+		return 0, err
+	}
+	documentationTests, err := countTestsIn(filepath.Join(root, "docs"))
+	if err != nil {
+		return 0, err
+	}
+
+	return libraryTests + documentationTests, nil
+}
+
+// countTestsIn uses one module's JSON event stream so subtests and top-level tests are counted consistently.
+func countTestsIn(directory string) (int, error) {
 	command := exec.Command("go", "test", "./...", "-run", "Test", "-count=1", "-json")
-	command.Dir = root
+	command.Dir = directory
 
 	var output bytes.Buffer
 	command.Stdout = &output
 	command.Stderr = &output
 	if err := command.Run(); err != nil {
-		return 0, fmt.Errorf("go test -json failed: %w\n%s", err, output.String())
+		return 0, fmt.Errorf("go test -json in %s failed: %w\n%s", directory, err, output.String())
 	}
 
 	decoder := json.NewDecoder(bytes.NewReader(output.Bytes()))
@@ -499,25 +513,24 @@ func countTests(root string) (int, error) {
 	return total, nil
 }
 
-// findRoot supports running from either the repository root or the docs/readme directory used during generator development.
+// findRoot skips nested module boundaries because README generation always targets the parent library module.
 func findRoot() (string, error) {
 	workingDirectory, err := os.Getwd()
 	if err != nil {
 		return "", fmt.Errorf("get working directory: %w", err)
 	}
 
-	candidates := []string{
-		workingDirectory,
-		filepath.Join(workingDirectory, ".."),
-		filepath.Join(workingDirectory, "..", ".."),
-	}
-	for _, candidate := range candidates {
-		if fileExists(filepath.Join(candidate, "go.mod")) {
+	for candidate := workingDirectory; ; candidate = filepath.Dir(candidate) {
+		if fileExists(filepath.Join(candidate, "go.mod")) && fileExists(filepath.Join(candidate, "string.go")) {
 			return filepath.Clean(candidate), nil
+		}
+		parent := filepath.Dir(candidate)
+		if parent == candidate {
+			break
 		}
 	}
 
-	return "", errors.New("could not find repository root containing go.mod")
+	return "", errors.New("could not find library module root")
 }
 
 // fileExists treats inaccessible paths as absent because callers only use it to probe root candidates.

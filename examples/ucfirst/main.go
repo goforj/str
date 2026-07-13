@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command ucfirst is generated as a standalone program so the documented UcFirst example can be run directly.
 package main
 

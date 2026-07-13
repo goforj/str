@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command deduplicate is generated as a standalone program so the documented Deduplicate example can be run directly.
 package main
 

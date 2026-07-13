@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 // Command substrreplace is generated as a standalone program so the documented SubstrReplace example can be run directly.
 package main
 
