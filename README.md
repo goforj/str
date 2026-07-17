@@ -139,11 +139,11 @@ Recorded with `go1.26.1` on `linux/arm64` using `-cpu=1` (`GOMAXPROCS=1`).
 
 | Workload | Standard library | `str` chain |
 | --- | ---: | ---: |
-| Trim | 3.2 ns/op · 0 B/op · 0 allocs/op | 3.3 ns/op · 0 B/op · 0 allocs/op |
-| ToLower | 76.9 ns/op · 48 B/op · 1 allocs/op | 77.3 ns/op · 48 B/op · 1 allocs/op |
-| NormalizeSpace (Fields + Join) | 190.6 ns/op · 208 B/op · 2 allocs/op | 176.1 ns/op · 80 B/op · 1 allocs/op |
-| Trim → ToLower | 67.4 ns/op · 32 B/op · 1 allocs/op | 69.8 ns/op · 32 B/op · 1 allocs/op |
-| ReplaceAll × 3 | 130.4 ns/op · 96 B/op · 3 allocs/op | 128.8 ns/op · 96 B/op · 3 allocs/op |
+| Trim | 3.2 ns/op · 0 B/op · 0 allocs/op | 3.2 ns/op · 0 B/op · 0 allocs/op |
+| ToLower | 61.2 ns/op · 32 B/op · 1 allocs/op | 63.0 ns/op · 32 B/op · 1 allocs/op |
+| NormalizeSpace (Fields + Join) | 191.6 ns/op · 208 B/op · 2 allocs/op | 185.2 ns/op · 80 B/op · 1 allocs/op |
+| Trim → ToLower | 71.8 ns/op · 32 B/op · 1 allocs/op | 69.3 ns/op · 32 B/op · 1 allocs/op |
+| ReplaceAll × 3 | 136.6 ns/op · 96 B/op · 3 allocs/op | 133.1 ns/op · 96 B/op · 3 allocs/op |
 
 Timing is machine-specific; use it to understand the scale of these operations, not as a universal speed claim. Treat small timing differences within the raw sample spread as noise. Allocation counts are less sensitive to machine speed and show how much heap work each composition performs. In these workloads, wrapping and unwrapping added no heap allocations; allocations came from transformations that produced new text. `NormalizeSpace` is algorithmically different: the standard-library composition builds a field slice before joining it, while `str` uses one builder pass.
 

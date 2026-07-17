@@ -9,10 +9,10 @@ var benchmarkStringResult String
 var benchmarkRawStringResult string
 
 const (
-	benchmarkTrimInput           = "  GoForj builds practical Go applications  "
-	benchmarkToLowerInput        = "GoForj Builds Practical Go Applications"
+	benchmarkTrimInput           = "  /var/log/app/events.log  "
+	benchmarkToLowerInput        = "Content-Type: Application/JSON"
 	benchmarkNormalizeSpaceInput = " SELECT  users.id,   users.email\nFROM users\tWHERE users.status = ? "
-	benchmarkTrimToLowerInput    = "  AUTH_OAuth_Provider-Name.Test  "
+	benchmarkTrimToLowerInput    = "  API_GATEWAY-Primary.Region  "
 	benchmarkReplaceAllInput     = "archive-logs cold.storage"
 )
 
@@ -29,9 +29,9 @@ func BenchmarkTrim(b *testing.B) {
 		name  string
 		value string
 	}{
-		{name: "ASCII", value: "  GoForj builds practical Go applications  "},
-		{name: "Unicode", value: "\u2003GoForj builds practical Go applications\u00a0"},
-		{name: "Clean", value: "GoForj builds practical Go applications"},
+		{name: "ASCII", value: "  /var/log/app/events.log  "},
+		{name: "Unicode", value: "\u2003/var/log/app/events.log\u00a0"},
+		{name: "Clean", value: "/var/log/app/events.log"},
 	}
 
 	for _, benchmark := range benchmarks {
@@ -78,10 +78,10 @@ func BenchmarkNormalizeSpace(b *testing.B) {
 		name  string
 		value string
 	}{
-		{name: "ASCII", value: "  GoForj\tbuilds\n practical Go applications  "},
-		{name: "Unicode", value: "\u2003GoForj\tbuilds\n practical\u2003Go applications\u00a0"},
-		{name: "Clean", value: "GoForj builds practical Go applications"},
-		{name: "Trimmed", value: "  GoForj builds practical Go applications  "},
+		{name: "ASCII", value: "  SELECT\tusers.id\n FROM users  "},
+		{name: "Unicode", value: "\u2003SELECT\tusers.id\n FROM\u2003users\u00a0"},
+		{name: "Clean", value: "SELECT users.id FROM users"},
+		{name: "Trimmed", value: "  SELECT users.id FROM users  "},
 		{name: "Whitespace", value: " \t\n\u2003\u00a0 "},
 	}
 
