@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -19,11 +20,13 @@ import (
 )
 
 const (
-	apiStart       = "<!-- api:embed:start -->"
-	apiEnd         = "<!-- api:embed:end -->"
-	testCountStart = "<!-- test-count:embed:start -->"
-	testCountEnd   = "<!-- test-count:embed:end -->"
-	documentation  = "https://pkg.go.dev/github.com/goforj/str/v2"
+	apiStart         = "<!-- api:embed:start -->"
+	apiEnd           = "<!-- api:embed:end -->"
+	performanceStart = "<!-- performance:embed:start -->"
+	performanceEnd   = "<!-- performance:embed:end -->"
+	testCountStart   = "<!-- test-count:embed:start -->"
+	testCountEnd     = "<!-- test-count:embed:end -->"
+	documentation    = "https://pkg.go.dev/github.com/goforj/str/v2"
 )
 
 var (
@@ -49,19 +52,45 @@ type apiExample struct {
 
 // main reports generation errors without a stack trace because this command is intended for routine documentation updates.
 func main() {
-	if err := run(); err != nil {
+	if err := run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, "readme generator:", err)
 		os.Exit(1)
 	}
 
-	fmt.Println("README.md API index and test count updated")
+	fmt.Println("README.md performance table, API index, and test count updated")
 }
 
 // run computes every generated value before writing so a failed parse or test run cannot partially update README.md.
-func run() error {
+func run(arguments []string) error {
+	flags := flag.NewFlagSet("readme", flag.ContinueOnError)
+	flags.SetOutput(io.Discard)
+	recordBenchmarks := flags.Bool("record-benchmarks", false, "record a fresh benchmark snapshot before rebuilding README.md")
+	if err := flags.Parse(arguments); err != nil {
+		return err
+	}
+	if flags.NArg() != 0 {
+		return fmt.Errorf("unexpected arguments: %s", strings.Join(flags.Args(), " "))
+	}
+
 	root, err := findRoot()
 	if err != nil {
 		return err
+	}
+
+	benchmarkPath := filepath.Join(root, benchmarkSnapshotPath)
+	benchmarkSnapshot, err := os.ReadFile(benchmarkPath)
+	if err != nil && !*recordBenchmarks {
+		return fmt.Errorf("read benchmark snapshot: %w", err)
+	}
+	if *recordBenchmarks {
+		benchmarkSnapshot, err = recordBenchmarkSnapshot(root)
+		if err != nil {
+			return fmt.Errorf("record benchmark snapshot: %w", err)
+		}
+	}
+	benchmarks, err := parseBenchmarkSnapshot(benchmarkSnapshot)
+	if err != nil {
+		return fmt.Errorf("parse benchmark snapshot: %w", err)
 	}
 
 	symbols, err := parseAPISymbols(root)
@@ -77,6 +106,9 @@ func run() error {
 	if _, _, err := markerBounds(string(readme), apiStart, apiEnd, "API index"); err != nil {
 		return err
 	}
+	if _, _, err := markerBounds(string(readme), performanceStart, performanceEnd, "performance"); err != nil {
+		return err
+	}
 	if _, _, err := markerBounds(string(readme), testCountStart, testCountEnd, "test count"); err != nil {
 		return err
 	}
@@ -88,6 +120,17 @@ func run() error {
 
 	updated, err := replaceMarkedSection(
 		string(readme),
+		performanceStart,
+		performanceEnd,
+		"\n\n"+renderPerformance(benchmarks)+"\n",
+		"performance",
+	)
+	if err != nil {
+		return err
+	}
+
+	updated, err = replaceMarkedSection(
+		updated,
 		apiStart,
 		apiEnd,
 		"\n\n"+renderAPI(symbols)+"\n",
@@ -109,12 +152,20 @@ func run() error {
 		return err
 	}
 
-	if bytes.Equal(readme, []byte(updated)) {
+	readmeChanged := !bytes.Equal(readme, []byte(updated))
+	if !*recordBenchmarks && !readmeChanged {
 		return nil
 	}
 
-	if err := os.WriteFile(readmePath, []byte(updated), 0o644); err != nil {
-		return fmt.Errorf("write README.md: %w", err)
+	if *recordBenchmarks {
+		if err := atomicWriteFile(benchmarkPath, benchmarkSnapshot, 0o644); err != nil {
+			return fmt.Errorf("write benchmark snapshot: %w", err)
+		}
+	}
+	if readmeChanged {
+		if err := atomicWriteFile(readmePath, []byte(updated), 0o644); err != nil {
+			return fmt.Errorf("write README.md: %w", err)
+		}
 	}
 
 	return nil
