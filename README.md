@@ -16,7 +16,6 @@
 <!-- test-count:embed:start -->
     <img src="https://img.shields.io/badge/tests-281-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
-    <a href="https://goreportcard.com/report/github.com/goforj/str/v2"><img src="https://goreportcard.com/badge/github.com/goforj/str/v2" alt="Go Report Card"></a>
 </p>
 
 `str` wraps a Go string so cleanup and transformation steps can be chained from left to right. Method names follow the standard library where possible, and operations that count, slice, or pad text work in runes rather than bytes.
