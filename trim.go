@@ -15,7 +15,7 @@ import (
 //	println(v)
 //	// #string GoForj
 func (s String) Trim() String {
-	return String{s: strings.TrimFunc(s.s, unicode.IsSpace)}
+	return String{s: strings.TrimSpace(s.s)}
 }
 
 // TrimChars removes leading and trailing runes contained in cutset.

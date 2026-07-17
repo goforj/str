@@ -1,6 +1,7 @@
 package str
 
 import (
+	"strings"
 	"testing"
 	"unicode/utf8"
 )
@@ -34,6 +35,9 @@ func FuzzStringInvariants(f *testing.F) {
 		}
 
 		normalized := wrapped.NormalizeSpace()
+		if want := strings.Join(strings.Fields(value), " "); normalized.String() != want {
+			t.Fatalf("NormalizeSpace = %q, want %q", normalized.String(), want)
+		}
 		if got := normalized.NormalizeSpace().String(); got != normalized.String() {
 			t.Fatalf("NormalizeSpace is not idempotent: %q then %q", normalized.String(), got)
 		}
