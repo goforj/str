@@ -19,7 +19,7 @@ const (
 // BenchmarkAppend measures a common multi-part fluent composition.
 func BenchmarkAppend(b *testing.B) {
 	for b.Loop() {
-		benchmarkStringResult = Of("github.com").Append("/goforj", "/str", "/v2")
+		benchmarkStringResult = Of("github.com").Append("/goforj", "/str", "/v3")
 	}
 }
 
@@ -38,7 +38,7 @@ func BenchmarkTrim(b *testing.B) {
 		value := Of(benchmark.value)
 		b.Run(benchmark.name, func(b *testing.B) {
 			for b.Loop() {
-				benchmarkStringResult = value.Trim()
+				benchmarkStringResult = value.TrimSpace()
 			}
 		})
 	}
@@ -174,7 +174,7 @@ func benchmarkTrimStandard(value string) string {
 //
 //go:noinline
 func benchmarkTrimFluent(value string) string {
-	return Of(value).Trim().String()
+	return Of(value).TrimSpace().String()
 }
 
 // benchmarkToLowerStandard gives the baseline the same B.Loop call boundary as the fluent variant.
@@ -216,7 +216,7 @@ func benchmarkTrimToLowerStandard(value string) string {
 //
 //go:noinline
 func benchmarkTrimToLowerFluent(value string) string {
-	return Of(value).Trim().ToLower().String()
+	return Of(value).TrimSpace().ToLower().String()
 }
 
 // benchmarkReplaceAllStandard gives the baseline the same B.Loop call boundary as the fluent variant.

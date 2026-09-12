@@ -1,12 +1,12 @@
 // Command hasprefix is generated as a standalone program so the documented HasPrefix example can be run directly.
 package main
 
-import "github.com/goforj/str/v2"
+import "github.com/goforj/str/v3"
 
 // main keeps this generated example directly runnable with go run.
 func main() {
 	// HasPrefix reports whether the string starts with prefix using a case-sensitive comparison.
-	// An empty prefix is not a match.
+	// An empty prefix always matches.
 	// Similar: HasPrefixFold and HasSuffix.
 
 	// Example: has prefix

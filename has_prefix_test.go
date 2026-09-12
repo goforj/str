@@ -13,11 +13,11 @@ func TestHasPrefix(t *testing.T) {
 	if val.HasPrefix("Go") {
 		t.Fatal("HasPrefix ignored case")
 	}
-	if val.HasPrefix("") {
-		t.Fatal("HasPrefix matched an empty prefix")
+	if !val.HasPrefix("") {
+		t.Fatal("HasPrefix did not match an empty prefix")
 	}
-	if Of("").HasPrefix("") {
-		t.Fatal("HasPrefix matched an empty prefix in an empty receiver")
+	if !Of("").HasPrefix("") {
+		t.Fatal("HasPrefix did not match an empty prefix in an empty receiver")
 	}
 }
 
@@ -34,8 +34,8 @@ func TestHasPrefixFold(t *testing.T) {
 		{name: "ASCII", value: Of("gopher"), prefix: "GO", want: true},
 		{name: "Greek sigma variants", value: Of("Σίσυφος"), prefix: "ς", want: true},
 		{name: "different UTF-8 widths", value: Of("Kelvin"), prefix: "k", want: true},
-		{name: "empty prefix", value: Of("gopher"), prefix: "", want: false},
-		{name: "empty receiver", value: Of(""), prefix: "", want: false},
+		{name: "empty prefix", value: Of("gopher"), prefix: "", want: true},
+		{name: "empty receiver", value: Of(""), prefix: "", want: true},
 		{name: "missing", value: Of("gopher"), prefix: "CAT", want: false},
 	}
 

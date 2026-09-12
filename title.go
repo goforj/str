@@ -1,35 +1,18 @@
 package str
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
-// Title converts the string to title case (first letter of each word upper, rest lower) using Unicode rules.
-// Similar: Headline.
+// Title title-cases word-initial letters using strings.Title, preserving other letters.
+//
+// Deprecated: Like strings.Title, its word boundaries do not handle Unicode
+// punctuation properly. Use golang.org/x/text/cases for linguistic title casing.
 // @group Case
 //
-// Example: title case words
+// Example: Title
 //
-//	v := str.Of("a nice title uses the correct case").Title().String()
+//	v := str.Of("hello WORLD").Title().String()
 //	println(v)
-//	// #string A Nice Title Uses The Correct Case
+//	// #string Hello WORLD
 func (s String) Title() String {
-	var b strings.Builder
-	b.Grow(len(s.s))
-
-	prevIsWord := false
-	for _, r := range s.s {
-		isWord := unicode.IsLetter(r) || unicode.IsDigit(r)
-		if isWord && !prevIsWord {
-			b.WriteRune(unicode.ToTitle(r))
-		} else if isWord {
-			b.WriteRune(unicode.ToLower(r))
-		} else {
-			b.WriteRune(r)
-		}
-		prevIsWord = isWord
-	}
-
-	return String{s: b.String()}
+	return String{s: strings.Title(s.s)}
 }

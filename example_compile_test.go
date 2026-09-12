@@ -2,6 +2,7 @@ package str
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"go/parser"
 	"go/token"
@@ -12,6 +13,36 @@ import (
 	"strings"
 	"testing"
 )
+
+// TestExampleModuleUsesLocalLibrary prevents examples from silently testing a published major instead of this checkout.
+func TestExampleModuleUsesLocalLibrary(t *testing.T) {
+	t.Parallel()
+	root, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	modulePath, err := readModulePath(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	command := exec.Command("go", "list", "-m", "-json", modulePath)
+	command.Dir = filepath.Join(root, "examples")
+	command.Env = append(os.Environ(), "GOWORK=off")
+	output, err := command.Output()
+	if err != nil {
+		t.Fatalf("resolve example dependency: %v", err)
+	}
+	var module struct {
+		Path string
+		Dir  string
+	}
+	if err := json.Unmarshal(output, &module); err != nil {
+		t.Fatal(err)
+	}
+	if module.Path != modulePath || filepath.Clean(module.Dir) != filepath.Clean(root) {
+		t.Fatalf("examples resolved %q at %q, want %q at %q", module.Path, module.Dir, modulePath, root)
+	}
+}
 
 // TestGeneratedExamplesMatchDocumentedOutput guards its covered contract against regressions.
 func TestGeneratedExamplesMatchDocumentedOutput(t *testing.T) {

@@ -2,17 +2,15 @@ package str
 
 import "strings"
 
-// Repeat repeats the string count times (non-negative).
+// Repeat repeats the string count times.
+// It panics if count is negative or the result length overflows int.
 // @group Transform
 //
-// Example: repeat string
+// Example: Repeat
 //
 //	v := str.Of("go").Repeat(3).String()
 //	println(v)
 //	// #string gogogo
 func (s String) Repeat(count int) String {
-	if count <= 0 {
-		return String{s: ""}
-	}
 	return String{s: strings.Repeat(s.s, count)}
 }

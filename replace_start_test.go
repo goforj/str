@@ -13,7 +13,7 @@ func TestReplacePrefixSuffix(t *testing.T) {
 	if got := val.ReplacePrefix("missing", "new-").String(); got != "prefix-value" {
 		t.Fatalf("ReplacePrefix missing = %q", got)
 	}
-	if got := val.ReplacePrefix("", "new-").String(); got != "prefix-value" {
+	if got := val.ReplacePrefix("", "new-").String(); got != "new-prefix-value" {
 		t.Fatalf("ReplacePrefix empty old = %q", got)
 	}
 
@@ -24,7 +24,7 @@ func TestReplacePrefixSuffix(t *testing.T) {
 	if got := val.ReplaceSuffix(".missing", ".new").String(); got != "file.old" {
 		t.Fatalf("ReplaceSuffix missing = %q", got)
 	}
-	if got := val.ReplaceSuffix("", ".new").String(); got != "file.old" {
+	if got := val.ReplaceSuffix("", ".new").String(); got != "file.old.new" {
 		t.Fatalf("ReplaceSuffix empty old = %q", got)
 	}
 }

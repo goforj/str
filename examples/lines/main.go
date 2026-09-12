@@ -3,17 +3,20 @@ package main
 
 import (
 	"fmt"
+	"slices"
 
-	"github.com/goforj/str/v2"
+	"github.com/goforj/str/v3"
 )
 
 // main keeps this generated example directly runnable with go run.
 func main() {
-	// Lines splits the string into lines after normalizing newline variants.
-	// Similar: NormalizeNewlines.
+	// Lines returns a single-use iterator over newline-terminated lines.
+	// Newline bytes are retained; empty input yields no lines and a trailing newline
+	// does not produce an extra empty line. Use NormalizeNewlines().Split("\n")
+	// when normalized, delimiter-free fields are wanted.
 
-	// Example: split lines
-	v := str.Of("a\r\nb\nc").Lines()
-	fmt.Println(v)
-	// #[]string [a b c]
+	// Example: Lines
+	v := slices.Collect(str.Of("a\nb").Lines())
+	fmt.Printf("%q\n", v)
+	// #[]string ["a\\n" "b"]
 }

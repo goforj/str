@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/goforj/str/v2"
+	"github.com/goforj/str/v3"
 )
 
 // main keeps this generated example directly runnable with go run.

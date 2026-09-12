@@ -18,7 +18,7 @@ func TestReplaceFold(t *testing.T) {
 		{name: "different UTF-8 widths", value: Of("aKb kb"), old: "KB", repl: "X", want: "aX X"},
 		{name: "non-overlapping", value: Of("ΣΣΣ"), old: "σς", repl: "x", want: "xΣ"},
 		{name: "empty replacement", value: Of("Σxς"), old: "σ", repl: "", want: "x"},
-		{name: "empty old", value: Of("go"), old: "", repl: "x", want: "go"},
+		{name: "empty old", value: Of("go"), old: "", repl: "x", want: "xgxox"},
 		{name: "empty receiver", value: Of(""), old: "go", repl: "x", want: ""},
 		{name: "missing", value: Of("go"), old: "rust", repl: "x", want: "go"},
 		{name: "longer old", value: Of("go"), old: "gopher", repl: "x", want: "go"},

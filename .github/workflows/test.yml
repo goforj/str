@@ -46,10 +46,12 @@ jobs:
           go -C docs test -race ./...
           go -C examples test ./...
 
-      - name: Verify generated README sections
+      - name: Verify generated examples and README
         run: |
+          go -C docs run ./examplegen
           go -C docs run ./readme
-          git diff --exit-code -- README.md docs/readme/benchmarks.txt
+          git diff --exit-code -- README.md docs/readme/benchmarks.txt examples
+          test -z "$(git ls-files --others --exclude-standard -- examples)"
 
       - name: Require full library coverage
         run: test "$(go tool cover -func=coverage.txt | awk '/^total:/ {print $3}')" = "100.0%"

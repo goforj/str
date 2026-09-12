@@ -84,7 +84,7 @@ func TestRenderAPI(t *testing.T) {
 	want := strings.Join([]string{
 		"## API index",
 		"",
-		"The full API and these examples are also available on [pkg.go.dev](https://pkg.go.dev/github.com/goforj/str/v2).",
+		"The full API and these examples are also available on [pkg.go.dev](https://pkg.go.dev/github.com/goforj/str/v3).",
 		"",
 		"| Group | API |",
 		"| --- | --- |",

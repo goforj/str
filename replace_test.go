@@ -1,6 +1,7 @@
 package str
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -21,10 +22,10 @@ func TestReplaceVariants(t *testing.T) {
 	if got := val.ReplaceArray([]string{"gopher", "go"}, "x").String(); got != "x x" {
 		t.Fatalf("ReplaceArray = %q", got)
 	}
-	if got := val.ReplaceArray([]string{""}, "x").String(); got != "gopher gopher" {
-		t.Fatalf("ReplaceArray empty skip = %q", got)
+	if got := val.ReplaceArray([]string{""}, "x").String(); got != strings.ReplaceAll(val.String(), "", "x") {
+		t.Fatalf("ReplaceArray empty insertion = %q", got)
 	}
-	if got := val.ReplaceFirst("", "x").String(); got != "gopher gopher" {
+	if got := val.ReplaceFirst("", "x").String(); got != "xgopher gopher" {
 		t.Fatalf("ReplaceFirst empty search = %q", got)
 	}
 }

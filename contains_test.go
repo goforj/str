@@ -10,14 +10,14 @@ func TestContains(t *testing.T) {
 	if !val.Contains("gopher") {
 		t.Fatal("Contains did not find substring")
 	}
-	if val.Contains("") {
-		t.Fatal("Contains matched an empty substring")
+	if !val.Contains("") {
+		t.Fatal("Contains did not match an empty substring")
 	}
 	if val.Contains("rust") {
 		t.Fatal("Contains found a missing substring")
 	}
-	if Of("").Contains("") {
-		t.Fatal("Contains matched an empty substring in an empty receiver")
+	if !Of("").Contains("") {
+		t.Fatal("Contains did not match an empty substring in an empty receiver")
 	}
 }
 
@@ -34,7 +34,7 @@ func TestContainsFold(t *testing.T) {
 		{name: "ASCII", value: Of("Go means gophers"), sub: "GOPHER", want: true},
 		{name: "Greek sigma variants", value: Of("AΣB"), sub: "ςb", want: true},
 		{name: "different UTF-8 widths", value: Of("xKy"), sub: "kY", want: true},
-		{name: "empty substring", value: Of("gopher"), sub: "", want: false},
+		{name: "empty substring", value: Of("gopher"), sub: "", want: true},
 		{name: "empty receiver", value: Of(""), sub: "go", want: false},
 		{name: "missing", value: Of("gopher"), sub: "RUST", want: false},
 	}

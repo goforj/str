@@ -13,11 +13,11 @@ func TestHasSuffix(t *testing.T) {
 	if val.HasSuffix("HER") {
 		t.Fatal("HasSuffix ignored case")
 	}
-	if val.HasSuffix("") {
-		t.Fatal("HasSuffix matched an empty suffix")
+	if !val.HasSuffix("") {
+		t.Fatal("HasSuffix did not match an empty suffix")
 	}
-	if Of("").HasSuffix("") {
-		t.Fatal("HasSuffix matched an empty suffix in an empty receiver")
+	if !Of("").HasSuffix("") {
+		t.Fatal("HasSuffix did not match an empty suffix in an empty receiver")
 	}
 }
 
@@ -34,8 +34,8 @@ func TestHasSuffixFold(t *testing.T) {
 		{name: "ASCII", value: Of("gopher"), suffix: "HER", want: true},
 		{name: "Greek sigma variants", value: Of("final Σ"), suffix: "ς", want: true},
 		{name: "different UTF-8 widths", value: Of("unit K"), suffix: "k", want: true},
-		{name: "empty suffix", value: Of("gopher"), suffix: "", want: false},
-		{name: "empty receiver", value: Of(""), suffix: "", want: false},
+		{name: "empty suffix", value: Of("gopher"), suffix: "", want: true},
+		{name: "empty receiver", value: Of(""), suffix: "", want: true},
 		{name: "too long", value: Of("K"), suffix: "xxk", want: false},
 		{name: "missing", value: Of("gopher"), suffix: "CAT", want: false},
 	}

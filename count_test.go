@@ -9,7 +9,7 @@ func TestCount(t *testing.T) {
 	if got := Of("gogophergo").Count("go"); got != 3 {
 		t.Fatalf("Count = %d", got)
 	}
-	if got := Of("abc").Count(""); got != 0 {
-		t.Fatalf("Count empty expected 0, got %d", got)
+	if got := Of("abc").Count(""); got != 4 {
+		t.Fatalf("Count empty expected 4, got %d", got)
 	}
 }
