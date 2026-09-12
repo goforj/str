@@ -3,7 +3,7 @@ package str
 import "strings"
 
 // Count counts non-overlapping occurrences of sub.
-// An empty sub matches before and after each UTF-8 sequence.
+// An empty sub matches at the beginning and after each UTF-8 sequence.
 // @group Search
 //
 // Example: Count

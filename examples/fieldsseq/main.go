@@ -10,7 +10,8 @@ import (
 
 // main keeps this generated example directly runnable with go run.
 func main() {
-	// FieldsSeq returns a single-use iterator over fields separated by Unicode whitespace.
+	// FieldsSeq returns an iterator over fields separated by Unicode whitespace.
+	// Each iteration starts again from the beginning of the string.
 	// Consecutive separators are combined; empty or separator-only input yields no fields.
 
 	// Example: FieldsSeq

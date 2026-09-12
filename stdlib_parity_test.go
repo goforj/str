@@ -306,7 +306,7 @@ func TestStandardLibraryParity(t *testing.T) {
 	}
 }
 
-// TestStandardIterators preserves laziness, early-stop consumption, and single-use state.
+// TestStandardIterators preserves laziness, early-stop consumption, and operation-specific reuse behavior.
 func TestStandardIterators(t *testing.T) {
 	for _, name := range []string{"Lines", "FieldsSeq", "FieldsFuncSeq", "SplitSeq", "SplitAfterSeq"} {
 		t.Run(name, func(t *testing.T) {

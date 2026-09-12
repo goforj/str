@@ -7,7 +7,8 @@ import "github.com/goforj/str/v3"
 func main() {
 	// Swap replaces multiple values in one pass using strings.Replacer built from a map.
 	// Longer keys take priority at the same position; replacements are not rescanned.
-	// Empty keys insert values at the boundaries handled by strings.Replacer.
+	// Empty keys follow strings.Replacer byte boundaries and can split a multibyte UTF-8 rune.
+	// Use ReplaceAll for empty-search insertion at UTF-8 sequence boundaries.
 	// Similar: ReplaceArray.
 
 	// Example: swap map

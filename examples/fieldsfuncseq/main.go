@@ -11,7 +11,9 @@ import (
 
 // main keeps this generated example directly runnable with go run.
 func main() {
-	// FieldsFuncSeq returns a single-use iterator over fields separated by runes satisfying f.
+	// FieldsFuncSeq returns an iterator over fields separated by runes satisfying f.
+	// Each iteration starts again from the beginning of the string.
+	// The predicate must return the same result for a given rune; its call order is unspecified.
 	// Consecutive separators are combined; empty or separator-only input yields no fields.
 
 	// Example: FieldsFuncSeq

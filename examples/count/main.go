@@ -6,7 +6,7 @@ import "github.com/goforj/str/v3"
 // main keeps this generated example directly runnable with go run.
 func main() {
 	// Count counts non-overlapping occurrences of sub.
-	// An empty sub matches before and after each UTF-8 sequence.
+	// An empty sub matches at the beginning and after each UTF-8 sequence.
 
 	// Example: Count
 	v := str.Of("gogophergo").Count("go")

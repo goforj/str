@@ -80,7 +80,15 @@ The conversion example assumes a rune-aligned match. Standard byte searches can 
 
 `ContainsFold`, `HasPrefixFold`, and `HasSuffixFold` also match empty searches. `ReplaceFold` and each entry in `ReplaceArray` use the same empty-search insertion rule as `ReplaceAll`. `Swap` continues to follow `strings.Replacer`: replacements happen in one pass, longer keys win at the same position, and empty keys retain the standard replacer's behavior. Replacement values are not rescanned by `Swap`; `ReplaceArray` remains sequential.
 
-For non-ASCII input, empty replacement insertion occurs at UTF-8 sequence boundaries, not between the bytes of a valid rune. Applications that require the v2 no-op behavior should reject or skip empty input explicitly before calling a search or replacement operation.
+For non-ASCII input, `Replace`, `ReplaceAll`, `ReplaceFold`, and entries in `ReplaceArray` insert empty-search replacements at UTF-8 sequence boundaries. `Swap` follows `strings.Replacer` byte boundaries, so an empty key can split a multibyte rune and produce invalid UTF-8. Applications that require the v2 no-op behavior should reject or skip empty input explicitly before calling a search or replacement operation.
+
+```go
+fmt.Println(str.Of("é").ReplaceAll("", "-").String())
+// -é-
+
+fmt.Printf("% x\n", str.Of("é").Swap(map[string]string{"": "-"}).String())
+// 2d c3 2d a9 2d
+```
 
 `Before`, `After`, `BeforeLast`, and `AfterLast` retain their original-string result for an empty separator. `Between` and `Excerpt` retain their documented no-match results for empty markers. These application helpers do not replace `Cut`, `CutPrefix`, or `CutSuffix`, whose result includes a `found` flag and follows the standard empty-boundary rules.
 
@@ -98,7 +106,7 @@ for line := range str.Of("a\r\nb\n").Lines() {
 
 Use `slices.Collect(value.Lines())` when a slice of these exact lines is needed. A standard line iterator yields values with `for line := range ...`; keeping `for line := range ...` from a v2 slice loop changes `line` from an integer index to a string. Review range loops as well as compile errors.
 
-All sequence methods follow the standard iterator contract. Consume each iterator once; obtain a fresh iterator for a new pass. `Split`, `SplitN`, `SplitAfter`, `SplitAfterN`, `Fields`, and `FieldsFunc` return slices.
+`Lines`, `SplitSeq`, and `SplitAfterSeq` are single-use iterators; obtain a fresh iterator for a new pass. `FieldsSeq` and `FieldsFuncSeq` restart from the beginning on each iteration. `Split`, `SplitN`, `SplitAfter`, `SplitAfterN`, `Fields`, and `FieldsFunc` return slices.
 
 ## Casing and invalid counts
 

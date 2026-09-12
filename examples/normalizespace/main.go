@@ -6,7 +6,7 @@ import "github.com/goforj/str/v3"
 // main keeps this generated example directly runnable with go run.
 func main() {
 	// NormalizeSpace removes surrounding whitespace and collapses internal whitespace to single spaces.
-	// Similar: Trim.
+	// Similar: TrimSpace.
 
 	// Example: normalize whitespace
 	v := str.Of("  go   forj  ").NormalizeSpace().String()

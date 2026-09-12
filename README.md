@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str"><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3" alt="Coverage"></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-387-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-401-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -500,7 +500,7 @@ println(v)
 #### <a id="normalizespace"></a>NormalizeSpace
 
 NormalizeSpace removes surrounding whitespace and collapses internal whitespace to single spaces.
-Similar: Trim.
+Similar: TrimSpace.
 
 ```go
 v := str.Of("  go   forj  ").NormalizeSpace().String()
@@ -929,7 +929,8 @@ println(v)
 
 Swap replaces multiple values in one pass using strings.Replacer built from a map.
 Longer keys take priority at the same position; replacements are not rescanned.
-Empty keys insert values at the boundaries handled by strings.Replacer.
+Empty keys follow strings.Replacer byte boundaries and can split a multibyte UTF-8 rune.
+Use ReplaceAll for empty-search insertion at UTF-8 sequence boundaries.
 Similar: ReplaceArray.
 
 ```go
@@ -1008,7 +1009,7 @@ println(v)
 #### <a id="count"></a>Count
 
 Count counts non-overlapping occurrences of sub.
-An empty sub matches before and after each UTF-8 sequence.
+An empty sub matches at the beginning and after each UTF-8 sequence.
 
 ```go
 v := str.Of("gogophergo").Count("go")
@@ -1201,6 +1202,7 @@ fmt.Println(v)
 #### <a id="fieldsfunc"></a>FieldsFunc
 
 FieldsFunc splits the string into fields separated by runes satisfying f.
+The predicate must return the same result for a given rune; its call order is unspecified.
 Consecutive separators are combined; empty or separator-only input yields no fields.
 
 ```go
@@ -1211,7 +1213,9 @@ fmt.Println(v)
 
 #### <a id="fieldsfuncseq"></a>FieldsFuncSeq
 
-FieldsFuncSeq returns a single-use iterator over fields separated by runes satisfying f.
+FieldsFuncSeq returns an iterator over fields separated by runes satisfying f.
+Each iteration starts again from the beginning of the string.
+The predicate must return the same result for a given rune; its call order is unspecified.
 Consecutive separators are combined; empty or separator-only input yields no fields.
 
 ```go
@@ -1222,7 +1226,8 @@ fmt.Println(v)
 
 #### <a id="fieldsseq"></a>FieldsSeq
 
-FieldsSeq returns a single-use iterator over fields separated by Unicode whitespace.
+FieldsSeq returns an iterator over fields separated by Unicode whitespace.
+Each iteration starts again from the beginning of the string.
 Consecutive separators are combined; empty or separator-only input yields no fields.
 
 ```go

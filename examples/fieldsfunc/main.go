@@ -11,6 +11,7 @@ import (
 // main keeps this generated example directly runnable with go run.
 func main() {
 	// FieldsFunc splits the string into fields separated by runes satisfying f.
+	// The predicate must return the same result for a given rune; its call order is unspecified.
 	// Consecutive separators are combined; empty or separator-only input yields no fields.
 
 	// Example: FieldsFunc
