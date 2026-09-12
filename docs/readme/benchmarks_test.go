@@ -30,7 +30,7 @@ func TestParseBenchmarkSnapshot(t *testing.T) {
 	}
 
 	first := snapshot.results[0]
-	if first.name != "TrimComparison" || first.label != "Trim" {
+	if first.name != "TrimComparison" || first.label != "TrimSpace" {
 		t.Fatalf("first result = %#v", first)
 	}
 	if first.standardLibrary.nanoseconds != 15.5 || first.standardLibrary.bytes != 16 || first.standardLibrary.allocations != 1 {
@@ -117,10 +117,10 @@ func TestRenderPerformance(t *testing.T) {
 
 	got := renderPerformance(snapshot)
 	wantRows := []string{
-		"| Trim | 15.5 ns/op · 16 B/op · 1 allocs/op | 25.5 ns/op · 32 B/op · 2 allocs/op |",
+		"| TrimSpace | 15.5 ns/op · 16 B/op · 1 allocs/op | 25.5 ns/op · 32 B/op · 2 allocs/op |",
 		"| ToLower | 115.5 ns/op · 32 B/op · 2 allocs/op | 125.5 ns/op · 64 B/op · 3 allocs/op |",
 		"| NormalizeSpace (Fields + Join) | 215.5 ns/op · 48 B/op · 3 allocs/op | 225.5 ns/op · 96 B/op · 4 allocs/op |",
-		"| Trim → ToLower | 315.5 ns/op · 64 B/op · 4 allocs/op | 325.5 ns/op · 128 B/op · 5 allocs/op |",
+		"| TrimSpace → ToLower | 315.5 ns/op · 64 B/op · 4 allocs/op | 325.5 ns/op · 128 B/op · 5 allocs/op |",
 		"| ReplaceAll × 3 | 415.5 ns/op · 80 B/op · 5 allocs/op | 425.5 ns/op · 160 B/op · 6 allocs/op |",
 	}
 	lastPosition := -1
@@ -206,7 +206,7 @@ func benchmarkFixture() []byte {
 	var output strings.Builder
 	fmt.Fprintf(&output, "%s%s\n", benchmarkVersionPrefix, "go version go1.24.5 linux/arm64")
 	fmt.Fprintf(&output, "%s%s\n\n", benchmarkCommandPrefix, benchmarkCommandDisplay())
-	output.WriteString("goos: linux\ngoarch: arm64\npkg: github.com/goforj/str/v2\ncpu: fixture\n")
+	output.WriteString("goos: linux\ngoarch: arm64\npkg: github.com/goforj/str/v3\ncpu: fixture\n")
 
 	timingOrder := []int{10, 1, 8, 3, 6, 2, 9, 4, 7, 5}
 	for workloadIndex, definition := range benchmarkDefinitions {
@@ -227,7 +227,7 @@ func benchmarkFixture() []byte {
 			}
 		}
 	}
-	output.WriteString("PASS\nok\tgithub.com/goforj/str/v2\t1.000s\n")
+	output.WriteString("PASS\nok\tgithub.com/goforj/str/v3\t1.000s\n")
 
 	return []byte(output.String())
 }

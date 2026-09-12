@@ -6,6 +6,7 @@ import (
 )
 
 // ReplaceFirst replaces the first occurrence of old with repl.
+// An empty old inserts repl at the beginning.
 // Similar: ReplaceLast and ReplaceAll.
 // @group Replace
 //
@@ -15,13 +16,11 @@ import (
 //	println(v)
 //	// #string go gopher
 func (s String) ReplaceFirst(old, repl string) String {
-	if old == "" {
-		return s
-	}
 	return String{s: strings.Replace(s.s, old, repl, 1)}
 }
 
 // ReplaceLast replaces the last occurrence of old with repl.
+// An empty old inserts repl at the end.
 // Similar: ReplaceFirst and ReplaceAll.
 // @group Replace
 //
@@ -32,7 +31,7 @@ func (s String) ReplaceFirst(old, repl string) String {
 //	// #string gopher go
 func (s String) ReplaceLast(old, repl string) String {
 	idx := strings.LastIndex(s.s, old)
-	if idx == -1 || old == "" {
+	if idx == -1 {
 		return s
 	}
 	var b strings.Builder
@@ -44,6 +43,8 @@ func (s String) ReplaceLast(old, repl string) String {
 }
 
 // ReplaceArray replaces all occurrences of each old in olds with repl.
+// Entries are applied sequentially, including replacements produced by earlier entries.
+// Empty entries insert repl at UTF-8 boundaries, like ReplaceAll.
 // Similar: ReplaceAll and Swap.
 // @group Replace
 //
@@ -55,15 +56,15 @@ func (s String) ReplaceLast(old, repl string) String {
 func (s String) ReplaceArray(olds []string, repl string) String {
 	out := s.s
 	for _, old := range olds {
-		if old == "" {
-			continue
-		}
 		out = strings.ReplaceAll(out, old, repl)
 	}
 	return String{s: out}
 }
 
-// Swap replaces multiple values using strings.Replacer built from a map.
+// Swap replaces multiple values in one pass using strings.Replacer built from a map.
+// Longer keys take priority at the same position; replacements are not rescanned.
+// Empty keys follow strings.Replacer byte boundaries and can split a multibyte UTF-8 rune.
+// Use ReplaceAll for empty-search insertion at UTF-8 sequence boundaries.
 // Similar: ReplaceArray.
 // @group Replace
 //

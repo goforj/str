@@ -2,27 +2,15 @@ package str
 
 import "strings"
 
-// Count returns the number of non-overlapping occurrences of sub.
+// Count counts non-overlapping occurrences of sub.
+// An empty sub matches at the beginning and after each UTF-8 sequence.
 // @group Search
 //
-// Example: count substring
+// Example: Count
 //
 //	v := str.Of("gogophergo").Count("go")
 //	println(v)
 //	// #int 3
 func (s String) Count(sub string) int {
-	if sub == "" {
-		return 0
-	}
-	count := 0
-	remain := s.s
-	for {
-		idx := strings.Index(remain, sub)
-		if idx == -1 {
-			break
-		}
-		count++
-		remain = remain[idx+len(sub):]
-	}
-	return count
+	return strings.Count(s.s, sub)
 }

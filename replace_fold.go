@@ -3,7 +3,7 @@ package str
 import "strings"
 
 // ReplaceFold replaces all non-overlapping occurrences of old with repl using Unicode simple case folding.
-// An empty old string leaves the receiver unchanged.
+// An empty old inserts repl at UTF-8 boundaries, like ReplaceAll.
 // Similar: ReplaceAll.
 // @group Replace
 //
@@ -14,7 +14,7 @@ import "strings"
 //	// #string Go Gopher Go
 func (s String) ReplaceFold(old, repl string) String {
 	if old == "" {
-		return s
+		return s.ReplaceAll(old, repl)
 	}
 	out, ok := replaceFoldAll(s.s, old, repl)
 	if !ok {

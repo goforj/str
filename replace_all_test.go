@@ -14,7 +14,7 @@ func TestReplaceAll(t *testing.T) {
 		t.Fatalf("expected unchanged when no matches, got %s", got)
 	}
 
-	if got := Of("gopher").ReplaceAll("", "x").String(); got != "gopher" {
-		t.Fatalf("expected unchanged when old is empty, got %s", got)
+	if got := Of("gopher").ReplaceAll("", "x").String(); got != "xgxoxpxhxexrx" {
+		t.Fatalf("expected insertion at UTF-8 boundaries, got %s", got)
 	}
 }

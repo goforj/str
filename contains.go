@@ -3,7 +3,7 @@ package str
 import "strings"
 
 // Contains reports whether the string contains sub using a case-sensitive comparison.
-// An empty substring is not a match.
+// An empty substring always matches.
 // Similar: ContainsFold.
 // @group Search
 //
@@ -13,11 +13,11 @@ import "strings"
 //	println(v)
 //	// #bool true
 func (s String) Contains(sub string) bool {
-	return sub != "" && strings.Contains(s.s, sub)
+	return strings.Contains(s.s, sub)
 }
 
 // ContainsFold reports whether the string contains sub using Unicode simple case folding.
-// An empty substring is not a match.
+// An empty substring always matches.
 // Similar: Contains.
 // @group Search
 //
@@ -27,6 +27,9 @@ func (s String) Contains(sub string) bool {
 //	println(v)
 //	// #bool true
 func (s String) ContainsFold(sub string) bool {
+	if sub == "" {
+		return true
+	}
 	_, _, ok := foldMatchRange(s.s, sub, 0)
 	return ok
 }

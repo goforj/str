@@ -1,13 +1,14 @@
 // Command count is generated as a standalone program so the documented Count example can be run directly.
 package main
 
-import "github.com/goforj/str/v2"
+import "github.com/goforj/str/v3"
 
 // main keeps this generated example directly runnable with go run.
 func main() {
-	// Count returns the number of non-overlapping occurrences of sub.
+	// Count counts non-overlapping occurrences of sub.
+	// An empty sub matches at the beginning and after each UTF-8 sequence.
 
-	// Example: count substring
+	// Example: Count
 	v := str.Of("gogophergo").Count("go")
 	println(v)
 	// #int 3

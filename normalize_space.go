@@ -7,7 +7,7 @@ import (
 )
 
 // NormalizeSpace removes surrounding whitespace and collapses internal whitespace to single spaces.
-// Similar: Trim.
+// Similar: TrimSpace.
 // @group Cleanup
 //
 // Example: normalize whitespace

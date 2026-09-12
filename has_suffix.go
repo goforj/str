@@ -3,7 +3,7 @@ package str
 import "strings"
 
 // HasSuffix reports whether the string ends with suffix using a case-sensitive comparison.
-// An empty suffix is not a match.
+// An empty suffix always matches.
 // Similar: HasSuffixFold and HasPrefix.
 // @group Search
 //
@@ -13,11 +13,11 @@ import "strings"
 //	println(v)
 //	// #bool true
 func (s String) HasSuffix(suffix string) bool {
-	return suffix != "" && strings.HasSuffix(s.s, suffix)
+	return strings.HasSuffix(s.s, suffix)
 }
 
 // HasSuffixFold reports whether the string ends with suffix using Unicode simple case folding.
-// An empty suffix is not a match.
+// An empty suffix always matches.
 // Similar: HasSuffix and HasPrefixFold.
 // @group Search
 //
@@ -27,6 +27,9 @@ func (s String) HasSuffix(suffix string) bool {
 //	println(v)
 //	// #bool true
 func (s String) HasSuffixFold(suffix string) bool {
+	if suffix == "" {
+		return true
+	}
 	start, ok := foldSuffixStart(s.s, suffix)
 	if !ok {
 		return false

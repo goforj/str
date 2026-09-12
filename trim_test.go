@@ -1,19 +1,22 @@
 package str
 
-import "testing"
+import (
+	"testing"
+	"unicode"
+)
 
 // TestTrim guards its covered contract against regressions.
 func TestTrim(t *testing.T) {
 	t.Parallel()
 
-	if got := Of("\u2003GoForj\u00a0").Trim().String(); got != "GoForj" {
+	if got := Of("\u2003GoForj\u00a0").TrimSpace().String(); got != "GoForj" {
 		t.Fatalf("Trim = %q", got)
 	}
-	if got := Of("..GoForj!!").TrimChars(".!").String(); got != "GoForj" {
-		t.Fatalf("TrimChars = %q", got)
+	if got := Of("..GoForj!!").Trim(".!").String(); got != "GoForj" {
+		t.Fatalf("Trim = %q", got)
 	}
-	if got := Of("GoForj").TrimChars("").String(); got != "GoForj" {
-		t.Fatalf("TrimChars with an empty cutset = %q", got)
+	if got := Of("GoForj").Trim("").String(); got != "GoForj" {
+		t.Fatalf("Trim with an empty cutset = %q", got)
 	}
 }
 
@@ -21,7 +24,7 @@ func TestTrim(t *testing.T) {
 func TestTrimLeft(t *testing.T) {
 	t.Parallel()
 
-	if got := Of("\u2003GoForj  ").TrimLeft().String(); got != "GoForj  " {
+	if got := Of("\u2003GoForj  ").TrimLeftFunc(unicode.IsSpace).String(); got != "GoForj  " {
 		t.Fatalf("TrimLeft = %q", got)
 	}
 }
@@ -30,7 +33,7 @@ func TestTrimLeft(t *testing.T) {
 func TestTrimRight(t *testing.T) {
 	t.Parallel()
 
-	if got := Of("  GoForj\u00a0").TrimRight().String(); got != "  GoForj" {
+	if got := Of("  GoForj\u00a0").TrimRightFunc(unicode.IsSpace).String(); got != "  GoForj" {
 		t.Fatalf("TrimRight = %q", got)
 	}
 }

@@ -26,11 +26,11 @@ func FuzzStringInvariants(f *testing.F) {
 
 		wrapped := Of(value)
 		if got := wrapped.Reverse().Reverse().String(); got != value {
-			t.Fatalf("double Reverse = %q, want %q", got, value)
+			t.Fatalf("double Reverse = %q, want standard insertion for %q", got, value)
 		}
 
-		trimmed := wrapped.Trim()
-		if got := trimmed.Trim().String(); got != trimmed.String() {
+		trimmed := wrapped.TrimSpace()
+		if got := trimmed.TrimSpace().String(); got != trimmed.String() {
 			t.Fatalf("Trim is not idempotent: %q then %q", trimmed.String(), got)
 		}
 
@@ -42,14 +42,14 @@ func FuzzStringInvariants(f *testing.F) {
 			t.Fatalf("NormalizeSpace is not idempotent: %q then %q", normalized.String(), got)
 		}
 
-		if got := wrapped.ReplaceAll("", "x").String(); got != value {
-			t.Fatalf("ReplaceAll with empty search = %q, want %q", got, value)
+		if got := wrapped.ReplaceAll("", "x").String(); got != strings.ReplaceAll(value, "", "x") {
+			t.Fatalf("ReplaceAll with empty search = %q, want standard insertion for %q", got, value)
 		}
-		if got := wrapped.ReplaceFirst("", "x").String(); got != value {
-			t.Fatalf("ReplaceFirst with empty search = %q, want %q", got, value)
+		if got := wrapped.ReplaceFirst("", "x").String(); got != "x"+value {
+			t.Fatalf("ReplaceFirst with empty search = %q, want standard insertion for %q", got, value)
 		}
-		if got := wrapped.ReplaceLast("", "x").String(); got != value {
-			t.Fatalf("ReplaceLast with empty search = %q, want %q", got, value)
+		if got := wrapped.ReplaceLast("", "x").String(); got != value+"x" {
+			t.Fatalf("ReplaceLast with empty search = %q, want standard insertion for %q", got, value)
 		}
 	})
 }

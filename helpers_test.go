@@ -29,18 +29,6 @@ func TestClampAndRuneHelpers(t *testing.T) {
 		t.Fatalf("runeSubstring start>=end")
 	}
 
-	if got := runeIndex("gopher", "ph", false); got != 2 {
-		t.Fatalf("runeIndex first %d", got)
-	}
-	if got := runeIndex("gopher gopher", "go", true); got != 7 {
-		t.Fatalf("runeIndex last %d", got)
-	}
-	if got := runeIndex("go", "", false); got != -1 {
-		t.Fatalf("runeIndex empty sub")
-	}
-	if got := runeIndex("go", "z", true); got != -1 {
-		t.Fatalf("runeIndex missing")
-	}
 }
 
 // TestTokenizeWords guards its covered contract against regressions.

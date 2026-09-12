@@ -26,7 +26,7 @@ const (
 	performanceEnd   = "<!-- performance:embed:end -->"
 	testCountStart   = "<!-- test-count:embed:start -->"
 	testCountEnd     = "<!-- test-count:embed:end -->"
-	documentation    = "https://pkg.go.dev/github.com/goforj/str/v2"
+	documentation    = "https://pkg.go.dev/github.com/goforj/str/v3"
 )
 
 var (

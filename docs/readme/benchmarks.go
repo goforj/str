@@ -23,10 +23,10 @@ const (
 
 var (
 	benchmarkDefinitions = []benchmarkDefinition{
-		{name: "TrimComparison", label: "Trim"},
+		{name: "TrimComparison", label: "TrimSpace"},
 		{name: "ToLowerComparison", label: "ToLower"},
 		{name: "NormalizeSpaceComparison", label: "NormalizeSpace (Fields + Join)"},
-		{name: "NormalizationPipeline", label: "Trim → ToLower"},
+		{name: "NormalizationPipeline", label: "TrimSpace → ToLower"},
 		{name: "ReplaceAllPipeline", label: "ReplaceAll × 3"},
 	}
 	benchmarkImplementations = []string{"StandardLibrary", "Fluent"}

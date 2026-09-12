@@ -7,10 +7,10 @@ func TestIndexing(t *testing.T) {
 	t.Parallel()
 
 	val := Of("héllo gopher")
-	if got := val.Index("llo"); got != 2 {
+	if got := val.Index("llo"); got != 3 {
 		t.Fatalf("Index = %d", got)
 	}
-	if got := val.LastIndex("o"); got != 7 {
+	if got := val.LastIndex("o"); got != 8 {
 		t.Fatalf("LastIndex = %d", got)
 	}
 	if got := val.Slice(2, 6).String(); got != "llo " {
@@ -22,10 +22,10 @@ func TestIndexing(t *testing.T) {
 	if got := val.Slice(5, 3).String(); got != "" {
 		t.Fatalf("Slice start>=end %q", got)
 	}
-	if got := val.Index(""); got != -1 {
+	if got := val.Index(""); got != 0 {
 		t.Fatalf("Index empty = %d", got)
 	}
-	if got := val.LastIndex(""); got != -1 {
+	if got := val.LastIndex(""); got != len(val.String()) {
 		t.Fatalf("LastIndex empty = %d", got)
 	}
 }

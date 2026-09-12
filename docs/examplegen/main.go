@@ -416,6 +416,11 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 	}
 
 	for _, ex := range fd.Examples {
+		for _, name := range []string{"unicode", "slices"} {
+			if strings.Contains(ex.Code, name+".") {
+				imports[name] = true
+			}
+		}
 		if strings.Contains(ex.Code, "fmt.") {
 			imports["fmt"] = true
 		}
@@ -465,7 +470,7 @@ func writeMain(base string, fd *FuncDoc, importPath string) error {
 	// Description
 	if fd.Description != "" {
 		for _, line := range strings.Split(fd.Description, "\n") {
-			buf.WriteString("\t// " + line + "\n")
+			buf.WriteString(strings.TrimRight("\t// "+line, " \t") + "\n")
 		}
 		buf.WriteString("\n")
 	}

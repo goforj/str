@@ -1,9 +1,7 @@
 package str
 
 import (
-	"strings"
 	"unicode"
-	"unicode/utf8"
 )
 
 // wordToken keeps source boundaries so callers can preserve punctuation without
@@ -39,24 +37,6 @@ func runeSubstring(s string, start, end int) string {
 		return ""
 	}
 	return string(runes[start:end])
-}
-
-// runeIndex translates string-search byte offsets into rune offsets; empty or
-// missing searches use -1 to honor the package-wide search contract.
-func runeIndex(s, sub string, last bool) int {
-	if sub == "" {
-		return -1
-	}
-	var byteIdx int
-	if last {
-		byteIdx = strings.LastIndex(s, sub)
-	} else {
-		byteIdx = strings.Index(s, sub)
-	}
-	if byteIdx == -1 {
-		return -1
-	}
-	return utf8.RuneCountInString(s[:byteIdx])
 }
 
 // tokenizeWords applies the package's shared Unicode and acronym boundary rules.
