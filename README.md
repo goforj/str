@@ -1677,3 +1677,7 @@ println(v)
 Use `make test`, `make test-race`, `make vet`, and `make generate`. The test and vet targets cover all three modules; generation rebuilds the examples and README.
 
 Licensed under the [MIT License](./LICENSE).
+
+## Documentation
+
+Read the [str library documentation](https://goforj.dev/str) for standalone installation, usage, and API reference.
