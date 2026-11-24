@@ -4,6 +4,7 @@ import "strings"
 
 // Excerpt returns a snippet around the first occurrence of needle with the given radius.
 // If needle is not found, an empty string is returned. If radius <= 0, a default of 100 is used.
+// The radius is clamped to the available text on each side of needle.
 // Omission is used at the start/end when text is trimmed (default "...").
 // @group Snippet
 //
@@ -38,10 +39,7 @@ func (s String) Excerpt(needle string, radius int, omission string) String {
 	if lo < 0 {
 		lo = 0
 	}
-	hi := endRune + radius
-	if hi > len(runes) {
-		hi = len(runes)
-	}
+	hi := endRune + min(radius, len(runes)-endRune)
 
 	var out strings.Builder
 	if lo > 0 {

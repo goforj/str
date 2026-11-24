@@ -1,6 +1,10 @@
 package str
 
-import "testing"
+import (
+	"math"
+	"strings"
+	"testing"
+)
 
 // TestExcerpt guards its covered contract against regressions.
 func TestExcerpt(t *testing.T) {
@@ -27,5 +31,36 @@ func TestExcerpt(t *testing.T) {
 	prefix := Of("gopher").Excerpt("go", 2, "...").String()
 	if prefix != "goph..." {
 		t.Fatalf("expected goph..., got %s", prefix)
+	}
+}
+
+func TestExcerptRadius(t *testing.T) {
+	t.Parallel()
+
+	longText := strings.Repeat("a", 101) + "x" + strings.Repeat("b", 101)
+	defaultExcerpt := "..." + strings.Repeat("a", 100) + "x" + strings.Repeat("b", 100) + "..."
+	tests := []struct {
+		name   string
+		input  string
+		needle string
+		radius int
+		want   string
+	}{
+		{"max_radius_ascii", "abcde", "c", math.MaxInt, "abcde"},
+		{"max_radius_unicode", "あいうえお", "う", math.MaxInt, "あいうえお"},
+		{"exact_bounds_ascii", "abcde", "c", 2, "abcde"},
+		{"exact_bounds_unicode", "あいうえお", "う", 2, "あいうえお"},
+		{"right_edge", "abcde", "de", 2, "...bcde"},
+		{"negative_radius", longText, "x", -1, defaultExcerpt},
+		{"minimum_radius", longText, "x", math.MinInt, defaultExcerpt},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Of(tt.input).Excerpt(tt.needle, tt.radius, "...").String()
+			if got != tt.want {
+				t.Errorf("Excerpt(%q, %d) = %q, want %q", tt.needle, tt.radius, got, tt.want)
+			}
+		})
 	}
 }
