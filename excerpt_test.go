@@ -34,6 +34,7 @@ func TestExcerpt(t *testing.T) {
 	}
 }
 
+// TestExcerptRadius guards against overflow and preserves the default radius behavior.
 func TestExcerptRadius(t *testing.T) {
 	t.Parallel()
 
