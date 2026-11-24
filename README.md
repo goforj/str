@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/tag/goforj/str?label=version&sort=semver" alt="Latest tag">
     <a href="https://codecov.io/gh/goforj/str"><img src="https://codecov.io/github/goforj/str/graph/badge.svg?token=9KT46ZORP3" alt="Coverage"></a>
 <!-- test-count:embed:start -->
-    <img src="https://img.shields.io/badge/tests-417-brightgreen" alt="Tests">
+    <img src="https://img.shields.io/badge/tests-425-brightgreen" alt="Tests">
 <!-- test-count:embed:end -->
 </p>
 
@@ -1178,6 +1178,7 @@ println(v)
 
 Excerpt returns a snippet around the first occurrence of needle with the given radius.
 If needle is not found, an empty string is returned. If radius <= 0, a default of 100 is used.
+The radius is clamped to the available text on each side of needle.
 Omission is used at the start/end when text is trimmed (default "...").
 
 ```go

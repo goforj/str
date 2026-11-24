@@ -7,6 +7,7 @@ import "github.com/goforj/str/v3"
 func main() {
 	// Excerpt returns a snippet around the first occurrence of needle with the given radius.
 	// If needle is not found, an empty string is returned. If radius <= 0, a default of 100 is used.
+	// The radius is clamped to the available text on each side of needle.
 	// Omission is used at the start/end when text is trimmed (default "...").
 
 	// Example: excerpt with radius
